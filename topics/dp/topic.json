@@ -1,410 +1,508 @@
 {
- "id": "dp",
- "title": "Dynamic Programming",
- "order": 2,
- "views": [
-  {
-   "id": "dp-linear",
-   "title": "Linear DP & State Machines",
-   "intro": "Run the six-step framework on every problem: state, choice, transition, base, order, shrink. One climbing-stairs problem is written three ways (memo, table, O(1)) so you can move between them on demand.",
-   "table": [
-    [
-     "1D recurrence",
-     "Count ways or min cost where step i reads a few earlier steps",
-     "O(n)"
-    ],
-    [
-     "Take / skip",
-     "House robber family",
-     "O(n)"
-    ],
-    [
-     "Kadane",
-     "Best subarray ending here (track max and min for products)",
-     "O(n)"
-    ],
-    [
-     "Stock state machine",
-     "Holding / not holding, transactions used, cooldown, fee",
-     "O(nk)"
-    ]
-   ],
-   "files": [
+  "id": "dp",
+  "title": "Dynamic Programming",
+  "order": 2,
+  "views": [
     {
-     "file": "DPLinear.java",
-     "desc": "Climbing stairs x3, rob, decode ways, Kadane, max product, stock I-IV + cooldown + fee",
-     "badge": "O(n)"
-    }
-   ],
-   "pitfalls": [
-    "Max product needs both max AND min: a negative flips them.",
-    "Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.",
-    "Stock with k transactions: if k >= n/2 it degenerates to unlimited."
-   ],
-   "group": "Dynamic Programming"
-  },
-  {
-   "id": "dp-knapsack",
-   "title": "Knapsack Family",
-   "intro": "Loop direction over capacity decides reuse: downward means each item once, upward means reusable. For counting, coins outer gives combinations; amount outer gives ordered sequences.",
-   "table": [
-    [
-     "0/1",
-     "Subset under a capacity, each item once",
-     "O(nW)"
-    ],
-    [
-     "Unbounded",
-     "Items reusable (coin change, perfect squares)",
-     "O(nW)"
-    ],
-    [
-     "Bounded",
-     "Split count into 1,2,4,... chunks then run 0/1",
-     "O(nW log c)"
-    ],
-    [
-     "Subset-sum reductions",
-     "Partition, target sum, last stone II",
-     "O(n * sum)"
-    ]
-   ],
-   "files": [
+      "id": "dp-linear",
+      "title": "Linear DP & State Machines",
+      "intro": "Run the six-step framework on every problem: state, choice, transition, base, order, shrink. One climbing-stairs problem is written three ways (memo, table, O(1)) so you can move between them on demand.",
+      "table": [
+        [
+          "1D recurrence",
+          "Count ways or min cost where step i reads a few earlier steps",
+          "O(n)"
+        ],
+        [
+          "Take / skip",
+          "House robber family",
+          "O(n)"
+        ],
+        [
+          "Kadane",
+          "Best subarray ending here (track max and min for products)",
+          "O(n)"
+        ],
+        [
+          "Stock state machine",
+          "Holding / not holding, transactions used, cooldown, fee",
+          "O(nk)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPLinear.java",
+          "desc": "Climbing stairs x3, rob, decode ways, Kadane, max product, stock I-IV + cooldown + fee",
+          "badge": "O(n)"
+        }
+      ],
+      "pitfalls": [
+        "Max product needs both max AND min: a negative flips them.",
+        "Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.",
+        "Stock with k transactions: if k >= n/2 it degenerates to unlimited."
+      ],
+      "group": "Dynamic Programming"
+    },
     {
-     "file": "DPKnapsack.java",
-     "desc": "0/1, unbounded, bounded, subset sum, partition, target sum, coin change min/ways, combination sum IV, perfect squares, ones and zeroes",
-     "badge": "O(nW)"
-    }
-   ],
-   "pitfalls": [
-    "Iterating capacity upward in a 0/1 problem silently reuses items.",
-    "Coin Change II (combinations) vs Combination Sum IV (sequences) differ only in loop order.",
-    "Target Sum: the reduction is subsets summing to (total + target) / 2; check parity and range first."
-   ],
-   "group": "Dynamic Programming"
-  },
-  {
-   "id": "dp-sequences",
-   "title": "Sequences & Strings",
-   "intro": "Two sequences give a prefix table dp[i][j]. One sequence with a pairwise condition gives LIS-style dp or the O(n log n) tails array. Palindromes use interval dp or center expansion.",
-   "table": [
-    [
-     "LIS",
-     "Longest chain, each element larger than the previous",
-     "O(n log n)"
-    ],
-    [
-     "LCS / edit distance",
-     "Two strings, match or edit prefixes",
-     "O(nm)"
-    ],
-    [
-     "Palindromes",
-     "Interval dp or expand around a center",
-     "O(n^2)"
-    ],
-    [
-     "Matching",
-     "Wildcard, regex, interleave, distinct subsequences",
-     "O(nm)"
-    ]
-   ],
-   "files": [
+      "id": "dp-knapsack",
+      "title": "Knapsack Family",
+      "intro": "Loop direction over capacity decides reuse: downward means each item once, upward means reusable. For counting, coins outer gives combinations; amount outer gives ordered sequences.",
+      "table": [
+        [
+          "0/1",
+          "Subset under a capacity, each item once",
+          "O(nW)"
+        ],
+        [
+          "Unbounded",
+          "Items reusable (coin change, perfect squares)",
+          "O(nW)"
+        ],
+        [
+          "Bounded",
+          "Split count into 1,2,4,... chunks then run 0/1",
+          "O(nW log c)"
+        ],
+        [
+          "Subset-sum reductions",
+          "Partition, target sum, last stone II",
+          "O(n * sum)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPKnapsack.java",
+          "desc": "0/1, unbounded, bounded, subset sum, partition, target sum, coin change min/ways, combination sum IV, perfect squares, ones and zeroes",
+          "badge": "O(nW)"
+        }
+      ],
+      "pitfalls": [
+        "Iterating capacity upward in a 0/1 problem silently reuses items.",
+        "Coin Change II (combinations) vs Combination Sum IV (sequences) differ only in loop order.",
+        "Target Sum: the reduction is subsets summing to (total + target) / 2; check parity and range first."
+      ],
+      "group": "Dynamic Programming"
+    },
     {
-     "file": "DPSequences.java",
-     "desc": "LIS (both forms), count of LIS, envelopes, LCS, edit distance, palindromes, distinct subsequences, word break, wildcard, regex, interleave",
-     "badge": "O(nm)"
-    }
-   ],
-   "pitfalls": [
-    "Russian Doll: sort width ascending and height DESCENDING so equal widths cannot chain.",
-    "Subsequence means order kept, substring means contiguous: contiguous resets to 0 on mismatch.",
-    "Regex star: zero copies is dp[i][j-2]; one more copy needs the preceding char to match."
-   ],
-   "group": "Dynamic Programming"
-  },
-  {
-   "id": "dp-grid-interval",
-   "title": "Grid & Interval DP",
-   "intro": "Grids depend on up/left (or backward for dungeon-style). Interval dp answers a range [i, j] by trying every split k; loop by length. In burst balloons, k is the LAST item processed.",
-   "table": [
-    [
-     "Grid paths",
-     "Right/down moves, count or min/max path sum",
-     "O(mn)"
-    ],
-    [
-     "Max square",
-     "Min of three neighbors plus one",
-     "O(mn)"
-    ],
-    [
-     "Interval",
-     "Matrix chain, burst balloons, cut stick, strange printer",
-     "O(n^3)"
-    ],
-    [
-     "Game dp",
-     "Score difference the mover can force",
-     "O(n^2)"
-    ]
-   ],
-   "files": [
+      "id": "dp-sequences",
+      "title": "Sequences & Strings",
+      "intro": "Two sequences give a prefix table dp[i][j]. One sequence with a pairwise condition gives LIS-style dp or the O(n log n) tails array. Palindromes use interval dp or center expansion.",
+      "table": [
+        [
+          "LIS",
+          "Longest chain, each element larger than the previous",
+          "O(n log n)"
+        ],
+        [
+          "LCS / edit distance",
+          "Two strings, match or edit prefixes",
+          "O(nm)"
+        ],
+        [
+          "Palindromes",
+          "Interval dp or expand around a center",
+          "O(n^2)"
+        ],
+        [
+          "Matching",
+          "Wildcard, regex, interleave, distinct subsequences",
+          "O(nm)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPSequences.java",
+          "desc": "LIS (both forms), count of LIS, envelopes, LCS, edit distance, palindromes, distinct subsequences, word break, wildcard, regex, interleave",
+          "badge": "O(nm)"
+        }
+      ],
+      "pitfalls": [
+        "Russian Doll: sort width ascending and height DESCENDING so equal widths cannot chain.",
+        "Subsequence means order kept, substring means contiguous: contiguous resets to 0 on mismatch.",
+        "Regex star: zero copies is dp[i][j-2]; one more copy needs the preceding char to match."
+      ],
+      "group": "Dynamic Programming"
+    },
     {
-     "file": "DPGridInterval.java",
-     "desc": "Unique paths, min path sum, triangle, maximal square, dungeon, cherry pickup II, burst balloons, matrix chain, cut stick, palindrome cuts, strange printer, stone game",
-     "badge": "O(n^3)"
-    }
-   ],
-   "pitfalls": [
-    "Dungeon must run backward: the minimum health needed depends on what comes AFTER.",
-    "Burst balloons: think \"last to burst\" so the two sides become independent.",
-    "Pad the array with sentinels (1 at both ends) instead of special-casing borders."
-   ],
-   "group": "Dynamic Programming"
-  },
-  {
-   "id": "dp-bitmask-digit",
-   "title": "Bitmask & Digit DP",
-   "intro": "Bitmask dp when n <= 20 and you must use each item once: dp[mask]. Digit dp when counting numbers up to N with a digit property: state is (position, tight, started, property).",
-   "table": [
-    [
-     "Assignment",
-     "Each worker takes one task, position = popcount(mask)",
-     "O(2^n n)"
-    ],
-    [
-     "Subset partition",
-     "Fill buckets, track sum mod target",
-     "O(2^n n)"
-    ],
-    [
-     "Game on a set",
-     "Memoize on the set of numbers taken",
-     "O(2^n n)"
-    ],
-    [
-     "Digit dp",
-     "Count x in [0, N] with a property",
-     "O(digits * states)"
-    ]
-   ],
-   "files": [
+      "id": "dp-grid-interval",
+      "title": "Grid & Interval DP",
+      "intro": "Grids depend on up/left (or backward for dungeon-style). Interval dp answers a range [i, j] by trying every split k; loop by length. In burst balloons, k is the LAST item processed.",
+      "table": [
+        [
+          "Grid paths",
+          "Right/down moves, count or min/max path sum",
+          "O(mn)"
+        ],
+        [
+          "Max square",
+          "Min of three neighbors plus one",
+          "O(mn)"
+        ],
+        [
+          "Interval",
+          "Matrix chain, burst balloons, cut stick, strange printer",
+          "O(n^3)"
+        ],
+        [
+          "Game dp",
+          "Score difference the mover can force",
+          "O(n^2)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPGridInterval.java",
+          "desc": "Unique paths, min path sum, triangle, maximal square, dungeon, cherry pickup II, burst balloons, matrix chain, cut stick, palindrome cuts, strange printer, stone game",
+          "badge": "O(n^3)"
+        }
+      ],
+      "pitfalls": [
+        "Dungeon must run backward: the minimum health needed depends on what comes AFTER.",
+        "Burst balloons: think \"last to burst\" so the two sides become independent.",
+        "Pad the array with sentinels (1 at both ends) instead of special-casing borders."
+      ],
+      "group": "Dynamic Programming"
+    },
     {
-     "file": "DPBitmaskDigit.java",
-     "desc": "Assignment, k equal subsets, beautiful arrangement, can I win, digit one count, digit set, repeated digits",
-     "badge": "O(2^n n)"
-    }
-   ],
-   "pitfalls": [
-    "Digit dp: `tight` is only true while every prefix digit equals the bound; `started` handles leading zeros.",
-    "Subset enumeration `sub = (sub - 1) & mask` totals 3^n across all masks.",
-    "Use Integer.bitCount(mask) as the implicit \"how many placed\" index."
-   ],
-   "group": "Dynamic Programming"
-  },
-  {
-   "id": "dp-combined",
-   "title": "DP + Other Structures",
-   "intro": "The hard-round combinations: dp with binary search (job scheduling), dp with a monotonic deque (jump game VI), probability dp, hash-map state, and memoized DFS on an implicit DAG.",
-   "table": [
-    [
-     "dp + binary search",
-     "Weighted job scheduling: best profit up to the last compatible job",
-     "O(n log n)"
-    ],
-    [
-     "dp + deque",
-     "Window max over earlier dp values",
-     "O(n)"
-    ],
-    [
-     "Probability dp",
-     "Distribution over states after k steps",
-     "O(k * states)"
-    ],
-    [
-     "Memo DFS",
-     "Longest increasing path in a grid",
-     "O(mn)"
-    ]
-   ],
-   "files": [
+      "id": "dp-bitmask-digit",
+      "title": "Bitmask & Digit DP",
+      "intro": "Bitmask dp when n <= 20 and you must use each item once: dp[mask]. Digit dp when counting numbers up to N with a digit property: state is (position, tight, started, property).",
+      "table": [
+        [
+          "Assignment",
+          "Each worker takes one task, position = popcount(mask)",
+          "O(2^n n)"
+        ],
+        [
+          "Subset partition",
+          "Fill buckets, track sum mod target",
+          "O(2^n n)"
+        ],
+        [
+          "Game on a set",
+          "Memoize on the set of numbers taken",
+          "O(2^n n)"
+        ],
+        [
+          "Digit dp",
+          "Count x in [0, N] with a property",
+          "O(digits * states)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPBitmaskDigit.java",
+          "desc": "Assignment, k equal subsets, beautiful arrangement, can I win, digit one count, digit set, repeated digits",
+          "badge": "O(2^n n)"
+        }
+      ],
+      "pitfalls": [
+        "Digit dp: `tight` is only true while every prefix digit equals the bound; `started` handles leading zeros.",
+        "Subset enumeration `sub = (sub - 1) & mask` totals 3^n across all masks.",
+        "Use Integer.bitCount(mask) as the implicit \"how many placed\" index."
+      ],
+      "group": "Dynamic Programming"
+    },
     {
-     "file": "DPCombined.java",
-     "desc": "Job scheduling, constrained subset sum, jump game VI, knight probability, new 21 game, arithmetic subsequence, longest increasing path",
-     "badge": "O(n log n)"
+      "id": "dp-combined",
+      "title": "DP + Other Structures",
+      "intro": "The hard-round combinations: dp with binary search (job scheduling), dp with a monotonic deque (jump game VI), probability dp, hash-map state, and memoized DFS on an implicit DAG.",
+      "table": [
+        [
+          "dp + binary search",
+          "Weighted job scheduling: best profit up to the last compatible job",
+          "O(n log n)"
+        ],
+        [
+          "dp + deque",
+          "Window max over earlier dp values",
+          "O(n)"
+        ],
+        [
+          "Probability dp",
+          "Distribution over states after k steps",
+          "O(k * states)"
+        ],
+        [
+          "Memo DFS",
+          "Longest increasing path in a grid",
+          "O(mn)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPCombined.java",
+          "desc": "Job scheduling, constrained subset sum, jump game VI, knight probability, new 21 game, arithmetic subsequence, longest increasing path",
+          "badge": "O(n log n)"
+        }
+      ],
+      "pitfalls": [
+        "When transitions look at a sliding window of earlier dp values, reach for a monotonic deque before a segment tree.",
+        "Longest increasing path needs no visited set: strictly increasing values make the graph a DAG."
+      ],
+      "group": "Dynamic Programming"
+    },
+    {
+      "id": "dp-variants",
+      "title": "DP: Hard Variants",
+      "intro": "Hard DP adds an extra dimension to a known shape: attached count (remove boxes), pile count (merge stones), two walkers (cherry pickup), difference as state (tallest billboard), or flipping the question (egg drop).",
+      "table": [
+        [
+          "Interval + extra state",
+          "Remove boxes, merge stones, palindromic subsequences",
+          "O(n^3)"
+        ],
+        [
+          "Two walkers",
+          "Cherry pickup",
+          "O(n^3)"
+        ],
+        [
+          "Difference as state",
+          "Equal towers",
+          "O(n x sum)"
+        ],
+        [
+          "Flip the question",
+          "Egg drop: floors per move count",
+          "O(k log n)"
+        ],
+        [
+          "Reconstruction",
+          "Supersequence, divisible subset",
+          "O(nm)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "DPVariants.java",
+          "desc": "Frog jump, stone game II, predict the winner, super egg drop, dice rolls to target, paint house II, cherry pickup, out of boundary paths, domino tiling, distinct palindromic subsequences, profitable schemes, tallest billboard, best team score, remove boxes, merge stones, min cost tree from leaf values, shortest common supersequence, minimum insertions, three non-overlapping subarrays, delete and earn, integer break, divisible subset, string chain, vowel permutations, attendance record",
+          "badge": "Hard variants"
+        }
+      ],
+      "pitfalls": [
+        "State the dimension you added and what it stands for before writing the recurrence.",
+        "Interval DP with an extra state: memoize with the extra dimension, not just (l, r).",
+        "Reconstruction: keep a parent pointer or walk the table backwards, never recompute."
+      ],
+      "group": "Dynamic Programming"
     }
-   ],
-   "pitfalls": [
-    "When transitions look at a sliding window of earlier dp values, reach for a monotonic deque before a segment tree.",
-    "Longest increasing path needs no visited set: strictly increasing values make the graph a DAG."
-   ],
-   "group": "Dynamic Programming"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Count ways / min cost where step i reads a few earlier steps?</strong>",
-   "a": "1D dp, then shrink to O(1) space",
-   "template": "DPLinear#climbStairsO1"
-  },
-  {
-   "q": "<strong>Pick or skip adjacent items?</strong>",
-   "a": "Take / skip state machine",
-   "template": "DPLinear#rob"
-  },
-  {
-   "q": "<strong>Best contiguous subarray?</strong>",
-   "a": "Kadane (track max AND min if products)",
-   "template": "DPLinear#maxSubArray"
-  },
-  {
-   "q": "<strong>Buy / sell with limits, cooldown or fee?</strong>",
-   "a": "Stock state machine (hold / sold / rest)",
-   "template": "DPLinear#maxProfitK"
-  },
-  {
-   "q": "<strong>Choose a subset under a capacity, each item once?</strong>",
-   "a": "0/1 knapsack, capacity loop DOWNWARD",
-   "template": "DPKnapsack#knapsack01"
-  },
-  {
-   "q": "<strong>Items reusable, fewest items?</strong>",
-   "a": "Unbounded dp, capacity loop upward",
-   "template": "DPKnapsack#coinChangeMin"
-  },
-  {
-   "q": "<strong>Count combinations vs ordered sequences?</strong>",
-   "a": "Coins OUTER = combinations, amount OUTER = sequences",
-   "template": "DPKnapsack#coinChangeWays"
-  },
-  {
-   "q": "<strong>Can the array be split into equal halves / signs assigned to hit a target?</strong>",
-   "a": "Subset-sum reduction",
-   "template": "DPKnapsack#findTargetSumWays"
-  },
-  {
-   "q": "<strong>Longest increasing chain?</strong>",
-   "a": "Tails array with binary search, O(n log n)",
-   "template": "DPSequences#lengthOfLIS"
-  },
-  {
-   "q": "<strong>Two strings, edits or common parts?</strong>",
-   "a": "Prefix table dp[i][j]",
-   "template": "DPSequences#minDistance"
-  },
-  {
-   "q": "<strong>Does a pattern with wildcards match?</strong>",
-   "a": "Prefix table; star means skip or consume",
-   "template": "DPSequences#isMatchRegex"
-  },
-  {
-   "q": "<strong>Can the string be segmented into dictionary words?</strong>",
-   "a": "dp over prefix length",
-   "template": "DPSequences#wordBreak"
-  },
-  {
-   "q": "<strong>Grid with right/down moves?</strong>",
-   "a": "Row-rolling dp",
-   "template": "DPGridInterval#minPathSum"
-  },
-  {
-   "q": "<strong>Answer for range [i, j] from splitting at k?</strong>",
-   "a": "Interval dp, loop by length",
-   "template": "DPGridInterval#maxCoins"
-  },
-  {
-   "q": "<strong>n &le; 20, each item used once?</strong>",
-   "a": "Bitmask dp over subsets",
-   "template": "DPBitmaskDigit#minCostAssignment"
-  },
-  {
-   "q": "<strong>Count numbers up to N with a digit property?</strong>",
-   "a": "Digit dp with tight flag",
-   "template": "DPBitmaskDigit#countDigitOne"
-  },
-  {
-   "q": "<strong>dp transition looks at a sliding window of earlier values?</strong>",
-   "a": "Monotonic deque on dp",
-   "template": "DPCombined#maxResult"
-  },
-  {
-   "q": "<strong>Intervals with weights, pick a compatible set?</strong>",
-   "a": "Sort by end, binary-search the last compatible job",
-   "template": "DPCombined#jobScheduling"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> climbing stairs, house robber, coin change, LIS, LCS, edit distance, unique paths, word break &mdash; define state and transition out loud, then code it, with the space optimization when asked.",
-  "<strong>SDE3 bar:</strong> knapsack variants and the loop-order rules, interval dp (burst balloons), bitmask dp, stock state machines, regex/wildcard matching, and converting memo to table without prompting.",
-  "<strong>Staff bar (for context):</strong> digit dp, dp + data structure optimizations (deque, binary search, segment tree), proving a greedy fails and DP is needed, and estimating state-space size to choose between memo and bottom-up."
- ],
- "practice": [
-  [
-   "1D / state machine",
-   [
-    "70 Climbing Stairs",
-    "198 House Robber",
-    "91 Decode Ways",
-    "53 Maximum Subarray",
-    "152 Maximum Product Subarray",
-    "188 Best Time to Buy and Sell Stock IV",
-    "309 With Cooldown"
-   ]
   ],
-  [
-   "Knapsack",
-   [
-    "416 Partition Equal Subset Sum",
-    "494 Target Sum",
-    "322 Coin Change",
-    "518 Coin Change II",
-    "377 Combination Sum IV",
-    "474 Ones and Zeroes"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Count ways / min cost where step i reads a few earlier steps?</strong>",
+      "a": "1D dp, then shrink to O(1) space",
+      "template": "DPLinear#climbStairsO1"
+    },
+    {
+      "q": "<strong>Pick or skip adjacent items?</strong>",
+      "a": "Take / skip state machine",
+      "template": "DPLinear#rob"
+    },
+    {
+      "q": "<strong>Best contiguous subarray?</strong>",
+      "a": "Kadane (track max AND min if products)",
+      "template": "DPLinear#maxSubArray"
+    },
+    {
+      "q": "<strong>Buy / sell with limits, cooldown or fee?</strong>",
+      "a": "Stock state machine (hold / sold / rest)",
+      "template": "DPLinear#maxProfitK"
+    },
+    {
+      "q": "<strong>Choose a subset under a capacity, each item once?</strong>",
+      "a": "0/1 knapsack, capacity loop DOWNWARD",
+      "template": "DPKnapsack#knapsack01"
+    },
+    {
+      "q": "<strong>Items reusable, fewest items?</strong>",
+      "a": "Unbounded dp, capacity loop upward",
+      "template": "DPKnapsack#coinChangeMin"
+    },
+    {
+      "q": "<strong>Count combinations vs ordered sequences?</strong>",
+      "a": "Coins OUTER = combinations, amount OUTER = sequences",
+      "template": "DPKnapsack#coinChangeWays"
+    },
+    {
+      "q": "<strong>Can the array be split into equal halves / signs assigned to hit a target?</strong>",
+      "a": "Subset-sum reduction",
+      "template": "DPKnapsack#findTargetSumWays"
+    },
+    {
+      "q": "<strong>Longest increasing chain?</strong>",
+      "a": "Tails array with binary search, O(n log n)",
+      "template": "DPSequences#lengthOfLIS"
+    },
+    {
+      "q": "<strong>Two strings, edits or common parts?</strong>",
+      "a": "Prefix table dp[i][j]",
+      "template": "DPSequences#minDistance"
+    },
+    {
+      "q": "<strong>Does a pattern with wildcards match?</strong>",
+      "a": "Prefix table; star means skip or consume",
+      "template": "DPSequences#isMatchRegex"
+    },
+    {
+      "q": "<strong>Can the string be segmented into dictionary words?</strong>",
+      "a": "dp over prefix length",
+      "template": "DPSequences#wordBreak"
+    },
+    {
+      "q": "<strong>Grid with right/down moves?</strong>",
+      "a": "Row-rolling dp",
+      "template": "DPGridInterval#minPathSum"
+    },
+    {
+      "q": "<strong>Answer for range [i, j] from splitting at k?</strong>",
+      "a": "Interval dp, loop by length",
+      "template": "DPGridInterval#maxCoins"
+    },
+    {
+      "q": "<strong>n &le; 20, each item used once?</strong>",
+      "a": "Bitmask dp over subsets",
+      "template": "DPBitmaskDigit#minCostAssignment"
+    },
+    {
+      "q": "<strong>Count numbers up to N with a digit property?</strong>",
+      "a": "Digit dp with tight flag",
+      "template": "DPBitmaskDigit#countDigitOne"
+    },
+    {
+      "q": "<strong>dp transition looks at a sliding window of earlier values?</strong>",
+      "a": "Monotonic deque on dp",
+      "template": "DPCombined#maxResult"
+    },
+    {
+      "q": "<strong>Intervals with weights, pick a compatible set?</strong>",
+      "a": "Sort by end, binary-search the last compatible job",
+      "template": "DPCombined#jobScheduling"
+    },
+    {
+      "q": "<strong>Interval DP where equal items attach to a group?</strong>",
+      "a": "dp[l][r][k] with k attached on the left",
+      "template": "DPVariants#removeBoxes"
+    },
+    {
+      "q": "<strong>Merge k adjacent piles into one?</strong>",
+      "a": "dp[i][j][piles]",
+      "template": "DPVariants#mergeStones"
+    },
+    {
+      "q": "<strong>Two walkers on one grid?</strong>",
+      "a": "Step index + both rows",
+      "template": "DPVariants#cherryPickup"
+    },
+    {
+      "q": "<strong>Two groups must end up equal?</strong>",
+      "a": "dp over the difference",
+      "template": "DPVariants#tallestBillboard"
+    },
+    {
+      "q": "<strong>Eggs and floors?</strong>",
+      "a": "Flip: floors covered with m moves",
+      "template": "DPVariants#superEggDrop"
+    },
+    {
+      "q": "<strong>Return the actual supersequence, not just its length?</strong>",
+      "a": "LCS table, walk back merging",
+      "template": "DPVariants#shortestCommonSupersequence"
+    },
+    {
+      "q": "<strong>Count distinct palindromic subsequences?</strong>",
+      "a": "Interval DP, subtract the double count",
+      "template": "DPVariants#countPalindromicSubsequences"
+    }
   ],
-  [
-   "Sequences",
-   [
-    "300 Longest Increasing Subsequence",
-    "354 Russian Doll Envelopes",
-    "1143 Longest Common Subsequence",
-    "72 Edit Distance",
-    "139 Word Break",
-    "10 Regular Expression Matching",
-    "97 Interleaving String"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> climbing stairs, house robber, coin change, LIS, LCS, edit distance, unique paths, word break &mdash; define state and transition out loud, then code it, with the space optimization when asked.",
+    "<strong>SDE3 bar:</strong> knapsack variants and the loop-order rules, interval dp (burst balloons), bitmask dp, stock state machines, regex/wildcard matching, and converting memo to table without prompting.",
+    "<strong>Staff bar (for context):</strong> digit dp, dp + data structure optimizations (deque, binary search, segment tree), proving a greedy fails and DP is needed, and estimating state-space size to choose between memo and bottom-up.",
+    "<strong>Staff bar:</strong> explain the extra state and prove the transition is exhaustive; reconstruct the answer, not only its value."
   ],
-  [
-   "Grid / interval",
-   [
-    "62 Unique Paths",
-    "64 Minimum Path Sum",
-    "221 Maximal Square",
-    "174 Dungeon Game",
-    "312 Burst Balloons",
-    "1547 Minimum Cost to Cut a Stick"
-   ]
-  ],
-  [
-   "Bitmask / digit",
-   [
-    "698 Partition to K Equal Sum Subsets",
-    "526 Beautiful Arrangement",
-    "464 Can I Win",
-    "233 Number of Digit One",
-    "902 Numbers At Most N Given Digit Set"
-   ]
-  ],
-  [
-   "Combined",
-   [
-    "1235 Maximum Profit in Job Scheduling",
-    "1696 Jump Game VI",
-    "329 Longest Increasing Path in a Matrix",
-    "837 New 21 Game"
-   ]
+  "practice": [
+    [
+      "1D / state machine",
+      [
+        "70 Climbing Stairs",
+        "198 House Robber",
+        "91 Decode Ways",
+        "53 Maximum Subarray",
+        "152 Maximum Product Subarray",
+        "188 Best Time to Buy and Sell Stock IV",
+        "309 With Cooldown"
+      ]
+    ],
+    [
+      "Knapsack",
+      [
+        "416 Partition Equal Subset Sum",
+        "494 Target Sum",
+        "322 Coin Change",
+        "518 Coin Change II",
+        "377 Combination Sum IV",
+        "474 Ones and Zeroes"
+      ]
+    ],
+    [
+      "Sequences",
+      [
+        "300 Longest Increasing Subsequence",
+        "354 Russian Doll Envelopes",
+        "1143 Longest Common Subsequence",
+        "72 Edit Distance",
+        "139 Word Break",
+        "10 Regular Expression Matching",
+        "97 Interleaving String"
+      ]
+    ],
+    [
+      "Grid / interval",
+      [
+        "62 Unique Paths",
+        "64 Minimum Path Sum",
+        "221 Maximal Square",
+        "174 Dungeon Game",
+        "312 Burst Balloons",
+        "1547 Minimum Cost to Cut a Stick"
+      ]
+    ],
+    [
+      "Bitmask / digit",
+      [
+        "698 Partition to K Equal Sum Subsets",
+        "526 Beautiful Arrangement",
+        "464 Can I Win",
+        "233 Number of Digit One",
+        "902 Numbers At Most N Given Digit Set"
+      ]
+    ],
+    [
+      "Combined",
+      [
+        "1235 Maximum Profit in Job Scheduling",
+        "1696 Jump Game VI",
+        "329 Longest Increasing Path in a Matrix",
+        "837 New 21 Game"
+      ]
+    ],
+    [
+      "Hard DP",
+      [
+        "546 Remove Boxes",
+        "1000 Minimum Cost to Merge Stones",
+        "741 Cherry Pickup",
+        "956 Tallest Billboard",
+        "887 Super Egg Drop",
+        "1092 Shortest Common Supersequence",
+        "730 Count Different Palindromic Subsequences",
+        "879 Profitable Schemes",
+        "1130 Minimum Cost Tree From Leaf Values",
+        "1140 Stone Game II",
+        "403 Frog Jump",
+        "552 Student Attendance Record II"
+      ]
+    ]
   ]
- ]
 }

@@ -146,7 +146,7 @@ public class SCC_Bridges_2SAT {
     }
 
     // ---------- 2-SAT ----------
-    // n variables, clauses as (var, isNegated) pairs meaning (a OR b).
+    // n variables; each clause is {a, negA, b, negB} meaning (lit(a) OR lit(b)), where neg = 1 means the literal is NOT var.
     // Build implication graph: for clause (a OR b): ¬a -> b, ¬b -> a
     static boolean solve2SAT(int numVars, List<int[]> clauses) {
         int n = 2 * numVars; // node 2i = var i true, node 2i+1 = var i false

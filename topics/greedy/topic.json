@@ -1,121 +1,213 @@
 {
- "id": "greedy",
- "title": "Greedy",
- "order": 11,
- "views": [
-  {
-   "id": "greedy",
-   "title": "Greedy",
-   "intro": "Greedy is right when an exchange argument or a \"stays ahead\" invariant holds. State the argument in one sentence before coding; if you cannot, think DP. Typical shapes: furthest reach, sort by a key, two passes, ratio ordering, heap of options.",
-   "table": [
-    [
-     "Reach / jumps",
-     "Track the furthest frontier",
-     "O(n)"
-    ],
-    [
-     "Two-pass",
-     "Candy, gas station style prefix logic",
-     "O(n)"
-    ],
-    [
-     "Sort then sweep",
-     "Assign cookies, boats, largest number",
-     "O(n log n)"
-    ],
-    [
-     "Greedy + heap",
-     "Refueling stops, scheduling with choices",
-     "O(n log n)"
-    ]
-   ],
-   "files": [
+  "id": "greedy",
+  "title": "Greedy",
+  "order": 11,
+  "views": [
     {
-     "file": "Greedy.java",
-     "desc": "Jump game I/II, gas station, candy, partition labels, queue reconstruction, cookies, largest number, units, valid parenthesis string, boats, refueling, straights, lemonade",
-     "badge": "O(n log n)"
+      "id": "greedy",
+      "title": "Greedy",
+      "intro": "Greedy is right when an exchange argument or a \"stays ahead\" invariant holds. State the argument in one sentence before coding; if you cannot, think DP. Typical shapes: furthest reach, sort by a key, two passes, ratio ordering, heap of options.",
+      "table": [
+        [
+          "Reach / jumps",
+          "Track the furthest frontier",
+          "O(n)"
+        ],
+        [
+          "Two-pass",
+          "Candy, gas station style prefix logic",
+          "O(n)"
+        ],
+        [
+          "Sort then sweep",
+          "Assign cookies, boats, largest number",
+          "O(n log n)"
+        ],
+        [
+          "Greedy + heap",
+          "Refueling stops, scheduling with choices",
+          "O(n log n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "Greedy.java",
+          "desc": "Jump game I/II, gas station, candy, partition labels, queue reconstruction, cookies, largest number, units, valid parenthesis string, boats, refueling, straights, lemonade",
+          "badge": "O(n log n)"
+        }
+      ],
+      "pitfalls": [
+        "Without a proof sketch, test the greedy against brute force on small inputs.",
+        "Largest Number: compare a+b with b+a, and special-case an all-zero result.",
+        "Valid Parenthesis String: carry a range [lo, hi] of possible open counts, not a single count."
+      ],
+      "group": "Greedy"
+    },
+    {
+      "id": "greedy-variants",
+      "title": "Greedy: Exchange & Construction",
+      "intro": "Most hard greedy problems are one of: sort by a derived key, construct digit by digit, repair a violation locally, or work backwards. If you cannot state the exchange argument, prove it on a tiny case first.",
+      "table": [
+        [
+          "Sort by derived key",
+          "Difference, ratio, end time",
+          "O(n log n)"
+        ],
+        [
+          "Monotone stack construction",
+          "Lexicographically smallest subsequence",
+          "O(n)"
+        ],
+        [
+          "Work backwards",
+          "Operations that are easier to undo than to do",
+          "O(log n)"
+        ],
+        [
+          "Digit construction",
+          "Largest number by one swap / merge",
+          "O(n)"
+        ],
+        [
+          "Local repair",
+          "Make array non-decreasing with one change",
+          "O(n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "GreedyVariants.java",
+          "desc": "Remove duplicate letters, wiggle subsequence, two-city scheduling, bag of tokens, broken calculator, monotone increasing digits, split array into consecutive subsequences, maximum swap, non-decreasing array, advantage shuffle, fractional knapsack, domino rotations, create maximum number, min add to make valid, min operations to form a target, longest pair chain",
+          "badge": "Hard variants"
+        }
+      ],
+      "pitfalls": [
+        "Greedy without a proof fails on a counterexample; test the rule on 3-4 element inputs.",
+        "Work-backwards problems: divide or subtract from the target instead of multiplying from the start.",
+        "Sort stability and ties matter when the derived key can be equal."
+      ],
+      "group": "Greedy"
     }
-   ],
-   "pitfalls": [
-    "Without a proof sketch, test the greedy against brute force on small inputs.",
-    "Largest Number: compare a+b with b+a, and special-case an all-zero result.",
-    "Valid Parenthesis String: carry a range [lo, hi] of possible open counts, not a single count."
-   ],
-   "group": "Greedy"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Can you reach the end / minimum jumps?</strong>",
-   "a": "Furthest-reach frontier",
-   "template": "Greedy#jump"
-  },
-  {
-   "q": "<strong>Circular route, find the start?</strong>",
-   "a": "Restart after any negative prefix",
-   "template": "Greedy#canCompleteCircuit"
-  },
-  {
-   "q": "<strong>Neighbor-dependent minimum assignment?</strong>",
-   "a": "Left pass and right pass",
-   "template": "Greedy#candy"
-  },
-  {
-   "q": "<strong>Split into the most self-contained segments?</strong>",
-   "a": "Extend to the last occurrence",
-   "template": "Greedy#partitionLabels"
-  },
-  {
-   "q": "<strong>Custom ordering decides the answer?</strong>",
-   "a": "Comparator from an exchange argument",
-   "template": "Greedy#largestNumber"
-  },
-  {
-   "q": "<strong>Pair heaviest with lightest?</strong>",
-   "a": "Sort + two pointers",
-   "template": "Greedy#numRescueBoats"
-  },
-  {
-   "q": "<strong>Need the best past option when stuck?</strong>",
-   "a": "Heap of passed options",
-   "template": "Greedy#minRefuelStops"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> jump game I/II, gas station, assign cookies, best time to buy and sell II, merge intervals.",
-  "<strong>SDE3 bar:</strong> candy, queue reconstruction, partition labels, largest number, task scheduler, valid parenthesis string, with a stated exchange argument.",
-  "<strong>Staff bar (for context):</strong> proving optimality or finding a counterexample fast, matroid-style greedy, and recognizing when greedy gives a good approximation but not an exact answer."
- ],
- "practice": [
-  [
-   "Reach / scan",
-   [
-    "55 Jump Game",
-    "45 Jump Game II",
-    "134 Gas Station",
-    "135 Candy",
-    "763 Partition Labels",
-    "678 Valid Parenthesis String"
-   ]
   ],
-  [
-   "Sort based",
-   [
-    "455 Assign Cookies",
-    "179 Largest Number",
-    "406 Queue Reconstruction by Height",
-    "881 Boats to Save People",
-    "846 Hand of Straights",
-    "1710 Maximum Units on a Truck"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Can you reach the end / minimum jumps?</strong>",
+      "a": "Furthest-reach frontier",
+      "template": "Greedy#jump"
+    },
+    {
+      "q": "<strong>Circular route, find the start?</strong>",
+      "a": "Restart after any negative prefix",
+      "template": "Greedy#canCompleteCircuit"
+    },
+    {
+      "q": "<strong>Neighbor-dependent minimum assignment?</strong>",
+      "a": "Left pass and right pass",
+      "template": "Greedy#candy"
+    },
+    {
+      "q": "<strong>Split into the most self-contained segments?</strong>",
+      "a": "Extend to the last occurrence",
+      "template": "Greedy#partitionLabels"
+    },
+    {
+      "q": "<strong>Custom ordering decides the answer?</strong>",
+      "a": "Comparator from an exchange argument",
+      "template": "Greedy#largestNumber"
+    },
+    {
+      "q": "<strong>Pair heaviest with lightest?</strong>",
+      "a": "Sort + two pointers",
+      "template": "Greedy#numRescueBoats"
+    },
+    {
+      "q": "<strong>Need the best past option when stuck?</strong>",
+      "a": "Heap of passed options",
+      "template": "Greedy#minRefuelStops"
+    },
+    {
+      "q": "<strong>Smallest lexicographic subsequence using each letter once?</strong>",
+      "a": "Monotone stack with last occurrence",
+      "template": "GreedyVariants#removeDuplicateLetters"
+    },
+    {
+      "q": "<strong>Assign people to two groups minimizing total cost?</strong>",
+      "a": "Sort by cost difference",
+      "template": "GreedyVariants#twoCitySchedCost"
+    },
+    {
+      "q": "<strong>Forward moves branch a lot, reverse moves are forced?</strong>",
+      "a": "Work backwards from the target",
+      "template": "GreedyVariants#brokenCalc"
+    },
+    {
+      "q": "<strong>Largest number from one swap?</strong>",
+      "a": "Last-occurrence table, swap with the best later digit",
+      "template": "GreedyVariants#maximumSwap"
+    },
+    {
+      "q": "<strong>Order to beat opponent elements?</strong>",
+      "a": "Sort and match greedily",
+      "template": "GreedyVariants#advantageCount"
+    },
+    {
+      "q": "<strong>Merge two digit sequences into the maximum number?</strong>",
+      "a": "Best subsequence per length, merge by suffix comparison",
+      "template": "GreedyVariants#maxNumber"
+    }
   ],
-  [
-   "Greedy + heap",
-   [
-    "871 Minimum Number of Refueling Stops",
-    "621 Task Scheduler",
-    "767 Reorganize String"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> jump game I/II, gas station, assign cookies, best time to buy and sell II, merge intervals.",
+    "<strong>SDE3 bar:</strong> candy, queue reconstruction, partition labels, largest number, task scheduler, valid parenthesis string, with a stated exchange argument.",
+    "<strong>Staff bar (for context):</strong> proving optimality or finding a counterexample fast, matroid-style greedy, and recognizing when greedy gives a good approximation but not an exact answer.",
+    "<strong>Staff bar:</strong> justify each greedy with an exchange argument out loud; digit-construction problems (maximum number, remove duplicate letters) are the common hard ones."
+  ],
+  "practice": [
+    [
+      "Reach / scan",
+      [
+        "55 Jump Game",
+        "45 Jump Game II",
+        "134 Gas Station",
+        "135 Candy",
+        "763 Partition Labels",
+        "678 Valid Parenthesis String"
+      ]
+    ],
+    [
+      "Sort based",
+      [
+        "455 Assign Cookies",
+        "179 Largest Number",
+        "406 Queue Reconstruction by Height",
+        "881 Boats to Save People",
+        "846 Hand of Straights",
+        "1710 Maximum Units on a Truck"
+      ]
+    ],
+    [
+      "Greedy + heap",
+      [
+        "871 Minimum Number of Refueling Stops",
+        "621 Task Scheduler",
+        "767 Reorganize String"
+      ]
+    ],
+    [
+      "Greedy variants",
+      [
+        "316 Remove Duplicate Letters",
+        "376 Wiggle Subsequence",
+        "1029 Two City Scheduling",
+        "948 Bag of Tokens",
+        "991 Broken Calculator",
+        "402 Remove K Digits",
+        "670 Maximum Swap",
+        "665 Non-decreasing Array",
+        "870 Advantage Shuffle",
+        "321 Create Maximum Number",
+        "659 Split Array into Consecutive Subsequences"
+      ]
+    ]
   ]
- ]
 }

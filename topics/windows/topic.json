@@ -1,122 +1,213 @@
 {
- "id": "windows",
- "title": "Sliding Window & Two Pointers",
- "order": 5,
- "views": [
-  {
-   "id": "sliding-window-pointers",
-   "title": "Sliding Window & Two Pointers",
-   "intro": "Variable window: grow right, shrink left while invalid. \"Longest valid\" updates after the shrink; \"shortest valid\" updates inside the shrink loop; \"count subarrays\" uses atMost(k) - atMost(k - 1). Two pointers on sorted data move the pointer that cannot improve.",
-   "table": [
-    [
-     "Variable window",
-     "Longest / shortest substring or subarray under a condition",
-     "O(n)"
-    ],
-    [
-     "Exact-K counting",
-     "atMost(k) minus atMost(k - 1)",
-     "O(n)"
-    ],
-    [
-     "Fixed window",
-     "Anagrams, max average",
-     "O(n)"
-    ],
-    [
-     "Two pointers",
-     "Sorted pair sums, 3Sum, container, dedupe, merge",
-     "O(n) after sort"
-    ]
-   ],
-   "files": [
+  "id": "windows",
+  "title": "Sliding Window & Two Pointers",
+  "order": 5,
+  "views": [
     {
-     "file": "SlidingWindowPointers.java",
-     "desc": "Longest unique substring, character replacement, minimum window, min subarray length, K distinct, exactly K, ones III, anagrams, 2Sum/3Sum, container, dedupe, merge",
-     "badge": "O(n)"
+      "id": "sliding-window-pointers",
+      "title": "Sliding Window & Two Pointers",
+      "intro": "Variable window: grow right, shrink left while invalid. \"Longest valid\" updates after the shrink; \"shortest valid\" updates inside the shrink loop; \"count subarrays\" uses atMost(k) - atMost(k - 1). Two pointers on sorted data move the pointer that cannot improve.",
+      "table": [
+        [
+          "Variable window",
+          "Longest / shortest substring or subarray under a condition",
+          "O(n)"
+        ],
+        [
+          "Exact-K counting",
+          "atMost(k) minus atMost(k - 1)",
+          "O(n)"
+        ],
+        [
+          "Fixed window",
+          "Anagrams, max average",
+          "O(n)"
+        ],
+        [
+          "Two pointers",
+          "Sorted pair sums, 3Sum, container, dedupe, merge",
+          "O(n) after sort"
+        ]
+      ],
+      "files": [
+        {
+          "file": "SlidingWindowPointers.java",
+          "desc": "Longest unique substring, character replacement, minimum window, min subarray length, K distinct, exactly K, ones III, anagrams, 2Sum/3Sum, container, dedupe, merge",
+          "badge": "O(n)"
+        }
+      ],
+      "pitfalls": [
+        "Sliding window with negatives breaks the \"shrink\" logic; use prefix sums + map or a deque instead.",
+        "3Sum: skip duplicates for the fixed element AND after recording a triple.",
+        "Minimum window: track `missing` as a count so validity is O(1) per step."
+      ],
+      "group": "Windows & Pointers"
+    },
+    {
+      "id": "windows-variants",
+      "title": "Windows: Beyond the Basics",
+      "intro": "The extra patterns: window over a subsequence, window over fixed-size words, fix a parameter and slide (unique count 1..26), complement windows, and a TreeSet window for value-closeness.",
+      "table": [
+        [
+          "Forward match + backward tighten",
+          "Window containing t as a subsequence",
+          "O(nm)"
+        ],
+        [
+          "Fix distinct count",
+          "Every char at least k times",
+          "O(26 n)"
+        ],
+        [
+          "Complement window",
+          "Take from both ends",
+          "O(n)"
+        ],
+        [
+          "atMost difference",
+          "Exactly k odd / distinct",
+          "O(n)"
+        ],
+        [
+          "TreeSet window",
+          "Values within t, indices within k",
+          "O(n log k)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "WindowsVariants.java",
+          "desc": "Minimum window subsequence, concatenation of all words, longest substring with at least k repeats, max card score, nice subarrays, reduce x to zero, turbulent subarray, almost-duplicate with TreeSet, k-sum recursion, substrings with a, b and c, fixed-window vowels, most frequent element after k increments",
+          "badge": "Window variants"
+        }
+      ],
+      "pitfalls": [
+        "Window of a subsequence cannot use counts: use the forward-then-backward greedy.",
+        "Words of fixed length: run one pass per offset 0..w-1.",
+        "Exactly k = atMost(k) - atMost(k - 1); handle k - 1 < 0."
+      ],
+      "group": "Windows & Pointers"
     }
-   ],
-   "pitfalls": [
-    "Sliding window with negatives breaks the \"shrink\" logic; use prefix sums + map or a deque instead.",
-    "3Sum: skip duplicates for the fixed element AND after recording a triple.",
-    "Minimum window: track `missing` as a count so validity is O(1) per step."
-   ],
-   "group": "Windows & Pointers"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Longest substring / subarray satisfying a condition?</strong>",
-   "a": "Variable window; update after shrinking",
-   "template": "SlidingWindowPointers#lengthOfLongestSubstring"
-  },
-  {
-   "q": "<strong>Shortest window covering requirements?</strong>",
-   "a": "Variable window; update inside the shrink loop",
-   "template": "SlidingWindowPointers#minWindow"
-  },
-  {
-   "q": "<strong>Count subarrays with exactly K distinct?</strong>",
-   "a": "atMost(K) minus atMost(K - 1)",
-   "template": "SlidingWindowPointers#subarraysWithKDistinct"
-  },
-  {
-   "q": "<strong>Window of fixed size, anagram check?</strong>",
-   "a": "Fixed window with a difference counter",
-   "template": "SlidingWindowPointers#findAnagrams"
-  },
-  {
-   "q": "<strong>Sorted array, pair or triple sums?</strong>",
-   "a": "Sort + two pointers",
-   "template": "SlidingWindowPointers#threeSum"
-  },
-  {
-   "q": "<strong>Maximize area between two walls?</strong>",
-   "a": "Move the shorter wall",
-   "template": "SlidingWindowPointers#maxArea"
-  },
-  {
-   "q": "<strong>Product / sum below a bound with positives?</strong>",
-   "a": "Variable window with running product or sum",
-   "template": "SlidingWindowPointers#numSubarrayProductLessThanK"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> longest substring without repeats, 3Sum, container with most water, minimum size subarray sum, move zeroes, merge sorted arrays.",
-  "<strong>SDE3 bar:</strong> minimum window substring, exactly-K distinct, character replacement, anagram windows, and explaining why the window logic fails with negatives.",
-  "<strong>Staff bar (for context):</strong> windows combined with deques (limit-bounded subarrays), streaming windows, and amortized analysis arguments."
- ],
- "practice": [
-  [
-   "Variable window",
-   [
-    "3 Longest Substring Without Repeating",
-    "424 Longest Repeating Character Replacement",
-    "76 Minimum Window Substring",
-    "209 Minimum Size Subarray Sum",
-    "340 At Most K Distinct",
-    "992 Subarrays with K Different Integers",
-    "1004 Max Consecutive Ones III"
-   ]
   ],
-  [
-   "Fixed window",
-   [
-    "438 Find All Anagrams",
-    "567 Permutation in String",
-    "643 Maximum Average Subarray I"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Longest substring / subarray satisfying a condition?</strong>",
+      "a": "Variable window; update after shrinking",
+      "template": "SlidingWindowPointers#lengthOfLongestSubstring"
+    },
+    {
+      "q": "<strong>Shortest window covering requirements?</strong>",
+      "a": "Variable window; update inside the shrink loop",
+      "template": "SlidingWindowPointers#minWindow"
+    },
+    {
+      "q": "<strong>Count subarrays with exactly K distinct?</strong>",
+      "a": "atMost(K) minus atMost(K - 1)",
+      "template": "SlidingWindowPointers#subarraysWithKDistinct"
+    },
+    {
+      "q": "<strong>Window of fixed size, anagram check?</strong>",
+      "a": "Fixed window with a difference counter",
+      "template": "SlidingWindowPointers#findAnagrams"
+    },
+    {
+      "q": "<strong>Sorted array, pair or triple sums?</strong>",
+      "a": "Sort + two pointers",
+      "template": "SlidingWindowPointers#threeSum"
+    },
+    {
+      "q": "<strong>Maximize area between two walls?</strong>",
+      "a": "Move the shorter wall",
+      "template": "SlidingWindowPointers#maxArea"
+    },
+    {
+      "q": "<strong>Product / sum below a bound with positives?</strong>",
+      "a": "Variable window with running product or sum",
+      "template": "SlidingWindowPointers#numSubarrayProductLessThanK"
+    },
+    {
+      "q": "<strong>Window must contain t as a subsequence?</strong>",
+      "a": "Forward match then backward tighten",
+      "template": "WindowsVariants#minWindowSubsequence"
+    },
+    {
+      "q": "<strong>Every character in the window appears at least k times?</strong>",
+      "a": "Fix distinct count 1..26, slide",
+      "template": "WindowsVariants#longestSubstringAtLeastK"
+    },
+    {
+      "q": "<strong>Take items from both ends?</strong>",
+      "a": "Complement: slide a window in the middle",
+      "template": "WindowsVariants#maxScoreCards"
+    },
+    {
+      "q": "<strong>Exactly k odd numbers or distinct values?</strong>",
+      "a": "atMost(k) - atMost(k - 1)",
+      "template": "WindowsVariants#numberOfSubarrays"
+    },
+    {
+      "q": "<strong>Values within t and indices within k?</strong>",
+      "a": "TreeSet floor / ceiling over the window",
+      "template": "WindowsVariants#containsNearbyAlmostDuplicate"
+    },
+    {
+      "q": "<strong>4-sum or k-sum?</strong>",
+      "a": "Recursive kSum down to two pointers",
+      "template": "WindowsVariants#fourSum"
+    }
   ],
-  [
-   "Two pointers",
-   [
-    "15 3Sum",
-    "16 3Sum Closest",
-    "11 Container With Most Water",
-    "26 Remove Duplicates",
-    "125 Valid Palindrome",
-    "713 Subarray Product Less Than K"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> longest substring without repeats, 3Sum, container with most water, minimum size subarray sum, move zeroes, merge sorted arrays.",
+    "<strong>SDE3 bar:</strong> minimum window substring, exactly-K distinct, character replacement, anagram windows, and explaining why the window logic fails with negatives.",
+    "<strong>Staff bar (for context):</strong> windows combined with deques (limit-bounded subarrays), streaming windows, and amortized analysis arguments.",
+    "<strong>Staff bar:</strong> the non-obvious window problems (subsequence window, at-least-k, concatenated words) and fluent atMost(k) subtraction."
+  ],
+  "practice": [
+    [
+      "Variable window",
+      [
+        "3 Longest Substring Without Repeating",
+        "424 Longest Repeating Character Replacement",
+        "76 Minimum Window Substring",
+        "209 Minimum Size Subarray Sum",
+        "340 At Most K Distinct",
+        "992 Subarrays with K Different Integers",
+        "1004 Max Consecutive Ones III"
+      ]
+    ],
+    [
+      "Fixed window",
+      [
+        "438 Find All Anagrams",
+        "567 Permutation in String",
+        "643 Maximum Average Subarray I"
+      ]
+    ],
+    [
+      "Two pointers",
+      [
+        "15 3Sum",
+        "16 3Sum Closest",
+        "11 Container With Most Water",
+        "26 Remove Duplicates",
+        "125 Valid Palindrome",
+        "713 Subarray Product Less Than K"
+      ]
+    ],
+    [
+      "Window variants",
+      [
+        "727 Minimum Window Subsequence",
+        "30 Substring with Concatenation of All Words",
+        "395 Longest Substring with At Least K Repeating Characters",
+        "1423 Maximum Points You Can Obtain from Cards",
+        "1248 Count Number of Nice Subarrays",
+        "1658 Minimum Operations to Reduce X to Zero",
+        "220 Contains Duplicate III",
+        "18 4Sum",
+        "1358 Number of Substrings Containing All Three Characters",
+        "1838 Frequency of the Most Frequent Element"
+      ]
+    ]
   ]
- ]
 }

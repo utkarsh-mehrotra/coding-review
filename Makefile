@@ -1,6 +1,6 @@
 # Compiles every template, runs every test suite, and enforces the template-first rule.
 SRC := common/Check.java $(wildcard topics/*/*.java) $(wildcard topics/*/tests/*.java)
-TESTS := GraphCoreTest GraphVariantsTest GraphExtrasTest DPTest TreesTest PatternsTest StructuresTest
+TESTS := GraphCoreTest GraphVariantsTest GraphExtrasTest GraphRandomTest DPTest TreesTest PatternsTest StructuresTest Deepen1Test Deepen2Test Deepen3Test
 
 .PHONY: test check site all clean
 all: test check site

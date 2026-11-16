@@ -1,121 +1,211 @@
 {
- "id": "heaps",
- "title": "Heaps & Top-K",
- "order": 7,
- "views": [
-  {
-   "id": "heaps-topk",
-   "title": "Heaps & Top-K",
-   "intro": "For K largest keep a MIN-heap of size K; for K smallest keep a MAX-heap. Two heaps track a median. K-way merge pushes the next element of whichever list just emitted. Greedy scheduling problems often pair a sort with a heap.",
-   "table": [
-    [
-     "Top K",
-     "K largest / closest / most frequent",
-     "O(n log k)"
-    ],
-    [
-     "Quickselect",
-     "Kth element, average linear",
-     "O(n) avg"
-    ],
-    [
-     "Two heaps",
-     "Running median",
-     "O(log n) per add"
-    ],
-    [
-     "K-way merge",
-     "Merge sorted lists, kth in sorted matrix, smallest range",
-     "O(N log k)"
-    ]
-   ],
-   "files": [
+  "id": "heaps",
+  "title": "Heaps & Top-K",
+  "order": 7,
+  "views": [
     {
-     "file": "HeapsTopK.java",
-     "desc": "Kth largest (heap + quickselect), K closest, top words, median finder, K-way merge, task scheduler, reorganize string, meeting rooms, IPO, furthest building, ugly numbers",
-     "badge": "O(n log k)"
+      "id": "heaps-topk",
+      "title": "Heaps & Top-K",
+      "intro": "For K largest keep a MIN-heap of size K; for K smallest keep a MAX-heap. Two heaps track a median. K-way merge pushes the next element of whichever list just emitted. Greedy scheduling problems often pair a sort with a heap.",
+      "table": [
+        [
+          "Top K",
+          "K largest / closest / most frequent",
+          "O(n log k)"
+        ],
+        [
+          "Quickselect",
+          "Kth element, average linear",
+          "O(n) avg"
+        ],
+        [
+          "Two heaps",
+          "Running median",
+          "O(log n) per add"
+        ],
+        [
+          "K-way merge",
+          "Merge sorted lists, kth in sorted matrix, smallest range",
+          "O(N log k)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "HeapsTopK.java",
+          "desc": "Kth largest (heap + quickselect), K closest, top words, median finder, K-way merge, task scheduler, reorganize string, meeting rooms, IPO, furthest building, ugly numbers",
+          "badge": "O(n log k)"
+        }
+      ],
+      "pitfalls": [
+        "Heap of size K for K largest is a MIN-heap; people reach for a max-heap by reflex.",
+        "PriorityQueue has no decrease-key: push duplicates and skip stale entries on pop.",
+        "Comparator subtraction can overflow; use Integer.compare for large values."
+      ],
+      "group": "Heaps"
+    },
+    {
+      "id": "heaps-variants",
+      "title": "Heaps: Hard Variants",
+      "intro": "The senior-level heap problems add one twist to the basic Top-K: a ratio sort first, removal from the middle, a decrease-key, or a boundary that expands from its lowest point. Learn to spot which twist it is.",
+      "table": [
+        [
+          "Sort + heap",
+          "Pick k items minimizing a ratio-weighted cost",
+          "O(n log n)"
+        ],
+        [
+          "Two ordered sets",
+          "Median or order statistic of a sliding window (needs removal)",
+          "O(n log k)"
+        ],
+        [
+          "Indexed PQ",
+          "Decrease-key for Dijkstra / Prim",
+          "O(log n) per update"
+        ],
+        [
+          "Boundary heap",
+          "3D flooding: always expand from the lowest wall",
+          "O(mn log mn)"
+        ],
+        [
+          "Deadline + max-heap",
+          "Schedule maximum tasks, evict the longest",
+          "O(n log n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "HeapsVariants.java",
+          "desc": "Sliding window median (two TreeSets), min cost to hire workers, max performance, k smallest pairs, kth smallest prime fraction, course schedule III, connect sticks, trapping rain water II, single-threaded CPU, minimum deviation, KthLargest stream, indexed min-PQ with decrease-key",
+          "badge": "Hard variants"
+        }
+      ],
+      "pitfalls": [
+        "A PriorityQueue cannot remove from the middle in O(log n); use TreeSet of (value, index) pairs when a window slides.",
+        "Ratio problems: sort by the ratio first, then the heap holds the quantity you want to drop.",
+        "Duplicate values in a TreeSet collapse; key by index, or by (value, index)."
+      ],
+      "group": "Heaps"
     }
-   ],
-   "pitfalls": [
-    "Heap of size K for K largest is a MIN-heap; people reach for a max-heap by reflex.",
-    "PriorityQueue has no decrease-key: push duplicates and skip stale entries on pop.",
-    "Comparator subtraction can overflow; use Integer.compare for large values."
-   ],
-   "group": "Heaps"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>K largest / smallest / closest / most frequent?</strong>",
-   "a": "Heap of size K",
-   "template": "HeapsTopK#findKthLargest"
-  },
-  {
-   "q": "<strong>Single Kth element, average O(n)?</strong>",
-   "a": "Quickselect with random pivot",
-   "template": "HeapsTopK#quickselectKthLargest"
-  },
-  {
-   "q": "<strong>Median of a stream?</strong>",
-   "a": "Two heaps (max-heap lower half, min-heap upper half)",
-   "template": "HeapsTopK#MedianFinder"
-  },
-  {
-   "q": "<strong>Merge K sorted sequences?</strong>",
-   "a": "Heap of (value, list, index)",
-   "template": "HeapsTopK#mergeKSorted"
-  },
-  {
-   "q": "<strong>Fewest rooms / concurrent intervals?</strong>",
-   "a": "Sort by start + min-heap of end times",
-   "template": "HeapsTopK#minMeetingRooms"
-  },
-  {
-   "q": "<strong>Rearrange so equal items are not adjacent?</strong>",
-   "a": "Max-heap by count, hold back the previous item",
-   "template": "HeapsTopK#reorganizeString"
-  },
-  {
-   "q": "<strong>Repeatedly pick the best available option as capacity grows?</strong>",
-   "a": "Sort by unlock key + max-heap of rewards",
-   "template": "HeapsTopK#findMaximizedCapital"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> kth largest, top K frequent, K closest points, merge K sorted lists, meeting rooms II.",
-  "<strong>SDE3 bar:</strong> find median from data stream, task scheduler, reorganize string, IPO-style greedy with heaps, smallest range covering K lists.",
-  "<strong>Staff bar (for context):</strong> sliding window median with lazy deletion, external-memory top K, and quickselect vs heap tradeoffs under streaming constraints."
- ],
- "practice": [
-  [
-   "Top K",
-   [
-    "215 Kth Largest Element",
-    "347 Top K Frequent Elements",
-    "973 K Closest Points to Origin",
-    "692 Top K Frequent Words"
-   ]
   ],
-  [
-   "Two heaps / merge",
-   [
-    "295 Find Median from Data Stream",
-    "480 Sliding Window Median",
-    "23 Merge k Sorted Lists",
-    "378 Kth Smallest in Sorted Matrix",
-    "632 Smallest Range Covering K Lists"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>K largest / smallest / closest / most frequent?</strong>",
+      "a": "Heap of size K",
+      "template": "HeapsTopK#findKthLargest"
+    },
+    {
+      "q": "<strong>Single Kth element, average O(n)?</strong>",
+      "a": "Quickselect with random pivot",
+      "template": "HeapsTopK#quickselectKthLargest"
+    },
+    {
+      "q": "<strong>Median of a stream?</strong>",
+      "a": "Two heaps (max-heap lower half, min-heap upper half)",
+      "template": "HeapsTopK#MedianFinder"
+    },
+    {
+      "q": "<strong>Merge K sorted sequences?</strong>",
+      "a": "Heap of (value, list, index)",
+      "template": "HeapsTopK#mergeKSorted"
+    },
+    {
+      "q": "<strong>Fewest rooms / concurrent intervals?</strong>",
+      "a": "Sort by start + min-heap of end times",
+      "template": "HeapsTopK#minMeetingRooms"
+    },
+    {
+      "q": "<strong>Rearrange so equal items are not adjacent?</strong>",
+      "a": "Max-heap by count, hold back the previous item",
+      "template": "HeapsTopK#reorganizeString"
+    },
+    {
+      "q": "<strong>Repeatedly pick the best available option as capacity grows?</strong>",
+      "a": "Sort by unlock key + max-heap of rewards",
+      "template": "HeapsTopK#findMaximizedCapital"
+    },
+    {
+      "q": "<strong>Median of every sliding window?</strong>",
+      "a": "Two ordered sets of indices (removal is required)",
+      "template": "HeapsVariants#medianSlidingWindowTwoSets"
+    },
+    {
+      "q": "<strong>Choose k workers, minimize cost when pay depends on a ratio?</strong>",
+      "a": "Sort by wage/quality, keep a max-heap of qualities",
+      "template": "HeapsVariants#mincostToHireWorkers"
+    },
+    {
+      "q": "<strong>Need decrease-key (Dijkstra, Prim) in a heap?</strong>",
+      "a": "Indexed min priority queue",
+      "template": "HeapsVariants#IndexedMinPQ"
+    },
+    {
+      "q": "<strong>Maximum number of tasks with deadlines?</strong>",
+      "a": "Sort by deadline, max-heap of durations, evict the longest",
+      "template": "HeapsVariants#scheduleCourse"
+    },
+    {
+      "q": "<strong>3D water level or flooding from the edges?</strong>",
+      "a": "Min-heap on the boundary, expand from the lowest wall",
+      "template": "HeapsVariants#trapRainWater"
+    },
+    {
+      "q": "<strong>Smallest k pairs from two sorted arrays?</strong>",
+      "a": "Seed (i, 0), push (i, j + 1) after each pop",
+      "template": "HeapsVariants#kSmallestPairs"
+    }
   ],
-  [
-   "Greedy + heap",
-   [
-    "621 Task Scheduler",
-    "767 Reorganize String",
-    "253 Meeting Rooms II",
-    "502 IPO",
-    "1642 Furthest Building You Can Reach",
-    "871 Minimum Number of Refueling Stops"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> kth largest, top K frequent, K closest points, merge K sorted lists, meeting rooms II.",
+    "<strong>SDE3 bar:</strong> find median from data stream, task scheduler, reorganize string, IPO-style greedy with heaps, smallest range covering K lists.",
+    "<strong>Staff bar (for context):</strong> sliding window median with lazy deletion, external-memory top K, and quickselect vs heap tradeoffs under streaming constraints.",
+    "<strong>Staff bar:</strong> sliding window median with removal, decrease-key via an indexed PQ, and ratio-sort-then-heap problems (hire workers, team performance)."
+  ],
+  "practice": [
+    [
+      "Top K",
+      [
+        "215 Kth Largest Element",
+        "347 Top K Frequent Elements",
+        "973 K Closest Points to Origin",
+        "692 Top K Frequent Words"
+      ]
+    ],
+    [
+      "Two heaps / merge",
+      [
+        "295 Find Median from Data Stream",
+        "480 Sliding Window Median",
+        "23 Merge k Sorted Lists",
+        "378 Kth Smallest in Sorted Matrix",
+        "632 Smallest Range Covering K Lists"
+      ]
+    ],
+    [
+      "Greedy + heap",
+      [
+        "621 Task Scheduler",
+        "767 Reorganize String",
+        "253 Meeting Rooms II",
+        "502 IPO",
+        "1642 Furthest Building You Can Reach",
+        "871 Minimum Number of Refueling Stops"
+      ]
+    ],
+    [
+      "Heap variants",
+      [
+        "480 Sliding Window Median",
+        "857 Minimum Cost to Hire K Workers",
+        "1383 Maximum Performance of a Team",
+        "373 Find K Pairs with Smallest Sums",
+        "786 K-th Smallest Prime Fraction",
+        "630 Course Schedule III",
+        "407 Trapping Rain Water II",
+        "1834 Single-Threaded CPU",
+        "1675 Minimize Deviation in Array"
+      ]
+    ]
   ]
- ]
 }

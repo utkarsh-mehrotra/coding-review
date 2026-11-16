@@ -38,17 +38,16 @@ npx vercel --prod   # deploy site/ to production
 ## Topics (15)
 Graphs, Dynamic Programming, Trees & Range Structures, Arrays & Hashing, Sliding Window & Two Pointers,
 Monotonic Stack & Deque, Heaps & Top-K, Intervals & Sweep, Binary Search, Backtracking, Greedy, Linked Lists,
-String Algorithms, Bits & Math, Data-Structure Design. 37 template files, 144 decision-tree entries, 38 page views.
+String Algorithms, Bits & Math, Data-Structure Design. 51 template files, 232 decision-tree entries, 52 page views.
 
 ## Tests
-`make test` runs 7 suites (about 16,500 checks): LeetCode examples for every template, plus seeded randomized
+`make test` runs 11 suites (about 132,000 checks): LeetCode examples for every template, plus seeded randomized
 cross-checks where a brute force exists (LIS, knapsack, coin change, edit distance, Fenwick / segment / lazy tree /
 sparse table, KMP / Z / Rabin-Karp / Manacher, quickselect, binary search bounds, sliding window max, histogram,
 interval merge, LRU vs LinkedHashMap, and more).
 
 ## Not built yet
 - drill log and spaced-review loop
-- stress tests for graph templates beyond the known-input suites (flow, SCC, 2-SAT)
 
 ## Conventions
 - One public class per file, file named after the class, so every template compiles with plain `javac`.

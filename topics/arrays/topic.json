@@ -1,128 +1,225 @@
 {
- "id": "arrays",
- "title": "Arrays & Hashing",
- "order": 4,
- "views": [
-  {
-   "id": "arrays-hashing",
-   "title": "Arrays & Hashing",
-   "intro": "The core move is turning a nested loop into one pass plus a map: store what you have seen (value, prefix sum, balance) and look up what you need. Most \"count subarrays\" problems are prefix sum + frequency map.",
-   "table": [
-    [
-     "Complement map",
-     "Two sum, pair conditions",
-     "O(n)"
-    ],
-    [
-     "Prefix sum + map",
-     "Subarray sum = k, divisible by k, balanced 0/1",
-     "O(n)"
-    ],
-    [
-     "Index as hash",
-     "First missing positive, find duplicate",
-     "O(n)"
-    ],
-    [
-     "In-place passes",
-     "Dutch flag, rotate, next permutation, matrices",
-     "O(n)"
-    ]
-   ],
-   "files": [
+  "id": "arrays",
+  "title": "Arrays & Hashing",
+  "order": 4,
+  "views": [
     {
-     "file": "ArraysHashing.java",
-     "desc": "Two sum, subarray sums, product except self, anagram groups, longest consecutive, top K, cyclic sort, Boyer-Moore, Dutch flag, next permutation, rotations, matrix ops, trapping water",
-     "badge": "O(n)"
+      "id": "arrays-hashing",
+      "title": "Arrays & Hashing",
+      "intro": "The core move is turning a nested loop into one pass plus a map: store what you have seen (value, prefix sum, balance) and look up what you need. Most \"count subarrays\" problems are prefix sum + frequency map.",
+      "table": [
+        [
+          "Complement map",
+          "Two sum, pair conditions",
+          "O(n)"
+        ],
+        [
+          "Prefix sum + map",
+          "Subarray sum = k, divisible by k, balanced 0/1",
+          "O(n)"
+        ],
+        [
+          "Index as hash",
+          "First missing positive, find duplicate",
+          "O(n)"
+        ],
+        [
+          "In-place passes",
+          "Dutch flag, rotate, next permutation, matrices",
+          "O(n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "ArraysHashing.java",
+          "desc": "Two sum, subarray sums, product except self, anagram groups, longest consecutive, top K, cyclic sort, Boyer-Moore, Dutch flag, next permutation, rotations, matrix ops, trapping water",
+          "badge": "O(n)"
+        }
+      ],
+      "pitfalls": [
+        "Prefix-sum maps must be seeded with {0: 1} (or {0: -1} for earliest index).",
+        "Negative mod: normalize with ((x % k) + k) % k.",
+        "Longest consecutive: only start counting at sequence heads to stay O(n)."
+      ],
+      "group": "Arrays"
+    },
+    {
+      "id": "arrays-variants",
+      "title": "Arrays: Counting & Chunking",
+      "intro": "Harder array problems are rarely about the array itself: they are counting pairs (merge sort or Fenwick), choosing chunk boundaries (prefix max vs suffix min), or linear-time sorting when keys are bounded.",
+      "table": [
+        [
+          "Merge-sort counting",
+          "Count pairs i < j with a value relation",
+          "O(n log n)"
+        ],
+        [
+          "Prefix / suffix scan",
+          "Chunks, unsorted window, sightseeing pair",
+          "O(n)"
+        ],
+        [
+          "Boyer-Moore k",
+          "Elements appearing more than n/k times",
+          "O(n)"
+        ],
+        [
+          "Sign marking",
+          "Duplicates / missing in range 1..n",
+          "O(n), O(1) space"
+        ],
+        [
+          "Radix / counting sort",
+          "Bounded keys",
+          "O(n + range)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "ArraysVariants.java",
+          "desc": "Circular max subarray, majority II, find duplicates, count of range sum, reverse pairs, max chunks I and II, longest mountain, best sightseeing pair, bounded-max subarrays, shortest unsorted subarray, max width ramp, two non-overlapping subarrays, radix sort, counting sort, 3-way quicksort",
+          "badge": "Counting & chunking"
+        }
+      ],
+      "pitfalls": [
+        "Use long for prefix sums and for 2 * a[j] comparisons in pair counting.",
+        "Circular max subarray: if all values are negative the answer is the linear max, not total - min.",
+        "Count pairs during merge, before merging, while both halves are still sorted."
+      ],
+      "group": "Arrays"
     }
-   ],
-   "pitfalls": [
-    "Prefix-sum maps must be seeded with {0: 1} (or {0: -1} for earliest index).",
-    "Negative mod: normalize with ((x % k) + k) % k.",
-    "Longest consecutive: only start counting at sequence heads to stay O(n)."
-   ],
-   "group": "Arrays"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Pair that hits a target?</strong>",
-   "a": "Value to index map",
-   "template": "ArraysHashing#twoSum"
-  },
-  {
-   "q": "<strong>Count contiguous subarrays with a sum condition (negatives allowed)?</strong>",
-   "a": "Prefix sum + frequency map",
-   "template": "ArraysHashing#subarraySum"
-  },
-  {
-   "q": "<strong>Longest subarray with equal 0s and 1s?</strong>",
-   "a": "Map 0 to -1, first-seen index of each balance",
-   "template": "ArraysHashing#findMaxLength"
-  },
-  {
-   "q": "<strong>Product / aggregate of everything except self?</strong>",
-   "a": "Left pass then right pass",
-   "template": "ArraysHashing#productExceptSelf"
-  },
-  {
-   "q": "<strong>Values in 1..n, find missing or duplicate?</strong>",
-   "a": "Cyclic sort or Floyd on i to a[i]",
-   "template": "ArraysHashing#firstMissingPositive"
-  },
-  {
-   "q": "<strong>Majority element?</strong>",
-   "a": "Boyer-Moore vote",
-   "template": "ArraysHashing#majorityElement"
-  },
-  {
-   "q": "<strong>Sort three kinds in place?</strong>",
-   "a": "Dutch national flag",
-   "template": "ArraysHashing#sortColors"
-  },
-  {
-   "q": "<strong>Top K by frequency in O(n)?</strong>",
-   "a": "Bucket by frequency",
-   "template": "ArraysHashing#topKFrequent"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> two sum, group anagrams, product except self, longest consecutive, subarray sum equals k, merge sorted arrays.",
-  "<strong>SDE3 bar:</strong> first missing positive in O(1) space, next permutation, matrix rotations, trapping rain water, reservoir sampling and shuffle correctness.",
-  "<strong>Staff bar (for context):</strong> proving in-place algorithms correct, streaming variants (reservoir sampling, approximate counts), and choosing between sorting and hashing by memory limits."
- ],
- "practice": [
-  [
-   "Hash / prefix sum",
-   [
-    "1 Two Sum",
-    "560 Subarray Sum Equals K",
-    "974 Subarray Sums Divisible by K",
-    "525 Contiguous Array",
-    "49 Group Anagrams",
-    "128 Longest Consecutive Sequence"
-   ]
   ],
-  [
-   "In-place",
-   [
-    "41 First Missing Positive",
-    "287 Find the Duplicate Number",
-    "75 Sort Colors",
-    "31 Next Permutation",
-    "189 Rotate Array",
-    "48 Rotate Image",
-    "73 Set Matrix Zeroes"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Pair that hits a target?</strong>",
+      "a": "Value to index map",
+      "template": "ArraysHashing#twoSum"
+    },
+    {
+      "q": "<strong>Count contiguous subarrays with a sum condition (negatives allowed)?</strong>",
+      "a": "Prefix sum + frequency map",
+      "template": "ArraysHashing#subarraySum"
+    },
+    {
+      "q": "<strong>Longest subarray with equal 0s and 1s?</strong>",
+      "a": "Map 0 to -1, first-seen index of each balance",
+      "template": "ArraysHashing#findMaxLength"
+    },
+    {
+      "q": "<strong>Product / aggregate of everything except self?</strong>",
+      "a": "Left pass then right pass",
+      "template": "ArraysHashing#productExceptSelf"
+    },
+    {
+      "q": "<strong>Values in 1..n, find missing or duplicate?</strong>",
+      "a": "Cyclic sort or Floyd on i to a[i]",
+      "template": "ArraysHashing#firstMissingPositive"
+    },
+    {
+      "q": "<strong>Majority element?</strong>",
+      "a": "Boyer-Moore vote",
+      "template": "ArraysHashing#majorityElement"
+    },
+    {
+      "q": "<strong>Sort three kinds in place?</strong>",
+      "a": "Dutch national flag",
+      "template": "ArraysHashing#sortColors"
+    },
+    {
+      "q": "<strong>Top K by frequency in O(n)?</strong>",
+      "a": "Bucket by frequency",
+      "template": "ArraysHashing#topKFrequent"
+    },
+    {
+      "q": "<strong>Count pairs i < j with a value relation?</strong>",
+      "a": "Merge sort counting (or Fenwick on ranks)",
+      "template": "ArraysVariants#countRangeSum"
+    },
+    {
+      "q": "<strong>Maximum subarray on a circular array?</strong>",
+      "a": "max(linear best, total - linear worst)",
+      "template": "ArraysVariants#maxSubarraySumCircular"
+    },
+    {
+      "q": "<strong>Elements appearing more than n/k times?</strong>",
+      "a": "Boyer-Moore with k - 1 candidates, then verify",
+      "template": "ArraysVariants#majorityElementII"
+    },
+    {
+      "q": "<strong>Most independent chunks to sort?</strong>",
+      "a": "Cut where prefix max <= suffix min",
+      "template": "ArraysVariants#maxChunksToSortedII"
+    },
+    {
+      "q": "<strong>Furthest pair with a[i] <= a[j]?</strong>",
+      "a": "Decreasing stack of left candidates, sweep right",
+      "template": "ArraysVariants#maxWidthRamp"
+    },
+    {
+      "q": "<strong>Values in 1..n, find duplicates in O(1) space?</strong>",
+      "a": "Negate a[|x| - 1] as a visited mark",
+      "template": "ArraysVariants#findDuplicates"
+    },
+    {
+      "q": "<strong>Sort integers in linear time?</strong>",
+      "a": "Radix or counting sort",
+      "template": "ArraysVariants#radixSort"
+    }
   ],
-  [
-   "Other",
-   [
-    "238 Product of Array Except Self",
-    "169 Majority Element",
-    "42 Trapping Rain Water",
-    "54 Spiral Matrix"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> two sum, group anagrams, product except self, longest consecutive, subarray sum equals k, merge sorted arrays.",
+    "<strong>SDE3 bar:</strong> first missing positive in O(1) space, next permutation, matrix rotations, trapping rain water, reservoir sampling and shuffle correctness.",
+    "<strong>Staff bar (for context):</strong> proving in-place algorithms correct, streaming variants (reservoir sampling, approximate counts), and choosing between sorting and hashing by memory limits.",
+    "<strong>Staff bar:</strong> recognize \"count pairs with a relation\" as merge-sort counting or Fenwick, and justify the chunk boundary rule."
+  ],
+  "practice": [
+    [
+      "Hash / prefix sum",
+      [
+        "1 Two Sum",
+        "560 Subarray Sum Equals K",
+        "974 Subarray Sums Divisible by K",
+        "525 Contiguous Array",
+        "49 Group Anagrams",
+        "128 Longest Consecutive Sequence"
+      ]
+    ],
+    [
+      "In-place",
+      [
+        "41 First Missing Positive",
+        "287 Find the Duplicate Number",
+        "75 Sort Colors",
+        "31 Next Permutation",
+        "189 Rotate Array",
+        "48 Rotate Image",
+        "73 Set Matrix Zeroes"
+      ]
+    ],
+    [
+      "Other",
+      [
+        "238 Product of Array Except Self",
+        "169 Majority Element",
+        "42 Trapping Rain Water",
+        "54 Spiral Matrix"
+      ]
+    ],
+    [
+      "Array variants",
+      [
+        "327 Count of Range Sum",
+        "493 Reverse Pairs",
+        "918 Maximum Sum Circular Subarray",
+        "229 Majority Element II",
+        "442 Find All Duplicates",
+        "768 Max Chunks To Make Sorted II",
+        "845 Longest Mountain",
+        "1014 Best Sightseeing Pair",
+        "581 Shortest Unsorted Continuous Subarray",
+        "962 Maximum Width Ramp",
+        "1031 Max Sum of Two Non-Overlapping Subarrays"
+      ]
+    ]
   ]
- ]
 }

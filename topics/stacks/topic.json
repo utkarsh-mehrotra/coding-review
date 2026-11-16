@@ -1,123 +1,215 @@
 {
- "id": "stacks",
- "title": "Monotonic Stack & Deque",
- "order": 6,
- "views": [
-  {
-   "id": "monotonic-structures",
-   "title": "Monotonic Stack, Deque & Parsers",
-   "intro": "A monotonic stack answers \"nearest bigger/smaller element\" for every index: pop while the new element breaks the order and the pop IS the answer. A monotonic deque keeps the window maximum. A plain stack parses brackets, calculators and nested encodings.",
-   "table": [
-    [
-     "Next greater / smaller",
-     "Daily temperatures, next greater element",
-     "O(n)"
-    ],
-    [
-     "Histogram",
-     "Largest rectangle, maximal rectangle, subarray minimums",
-     "O(n)"
-    ],
-    [
-     "Monotonic deque",
-     "Sliding window max, shortest subarray with negatives",
-     "O(n)"
-    ],
-    [
-     "Stack parsers",
-     "Parentheses, calculators, decode string, RPN",
-     "O(n)"
-    ]
-   ],
-   "files": [
+  "id": "stacks",
+  "title": "Monotonic Stack & Deque",
+  "order": 6,
+  "views": [
     {
-     "file": "MonotonicStructures.java",
-     "desc": "Next greater (plain + circular), daily temps, histogram, maximal rectangle, subarray minimums, remove K digits, stock span, parsers, min stack, sliding max, shortest subarray, limit window",
-     "badge": "O(n)"
+      "id": "monotonic-structures",
+      "title": "Monotonic Stack, Deque & Parsers",
+      "intro": "A monotonic stack answers \"nearest bigger/smaller element\" for every index: pop while the new element breaks the order and the pop IS the answer. A monotonic deque keeps the window maximum. A plain stack parses brackets, calculators and nested encodings.",
+      "table": [
+        [
+          "Next greater / smaller",
+          "Daily temperatures, next greater element",
+          "O(n)"
+        ],
+        [
+          "Histogram",
+          "Largest rectangle, maximal rectangle, subarray minimums",
+          "O(n)"
+        ],
+        [
+          "Monotonic deque",
+          "Sliding window max, shortest subarray with negatives",
+          "O(n)"
+        ],
+        [
+          "Stack parsers",
+          "Parentheses, calculators, decode string, RPN",
+          "O(n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "MonotonicStructures.java",
+          "desc": "Next greater (plain + circular), daily temps, histogram, maximal rectangle, subarray minimums, remove K digits, stock span, parsers, min stack, sliding max, shortest subarray, limit window",
+          "badge": "O(n)"
+        }
+      ],
+      "pitfalls": [
+        "Use strict vs non-strict comparison on exactly one side to avoid double-counting equal elements (sum of subarray minimums).",
+        "Append a sentinel 0 height to flush the stack in the histogram problem.",
+        "Deque stores indices so expired elements can be dropped from the front."
+      ],
+      "group": "Stacks & Deques"
+    },
+    {
+      "id": "stacks-variants",
+      "title": "Stacks: Contribution & Parsing",
+      "intro": "Beyond next-greater: sum over all subarrays via per-element contribution, collision simulation, expression parsing with precedence, and stack-built queues and frequency stacks.",
+      "table": [
+        [
+          "Contribution counting",
+          "Sum of subarray min / max / ranges",
+          "O(n)"
+        ],
+        [
+          "Right-to-left stack",
+          "132 pattern, visible people",
+          "O(n)"
+        ],
+        [
+          "Simulation stack",
+          "Asteroids, adjacent duplicates",
+          "O(n)"
+        ],
+        [
+          "Recursive descent",
+          "Calculator with parentheses",
+          "O(n)"
+        ],
+        [
+          "Composite structures",
+          "Frequency stack, queue from stacks",
+          "O(1) amortized"
+        ]
+      ],
+      "files": [
+        {
+          "file": "StacksVariants.java",
+          "desc": "Asteroid collision, remove adjacent duplicates II, car fleet, score of parentheses, minimum remove to make valid, basic calculator III, exclusive time, simplify path, 132 pattern, sum of subarray ranges, visible people, max frequency stack, queue via two stacks, longest well-performing interval, trapping rain water (stack form)",
+          "badge": "Stack variants"
+        }
+      ],
+      "pitfalls": [
+        "Contribution counting needs strict on one side and non-strict on the other to count ties once.",
+        "Calculator III: recurse on \"(\" and return at \")\", sharing one index.",
+        "Queue from two stacks moves elements only when the output stack is empty."
+      ],
+      "group": "Stacks & Deques"
     }
-   ],
-   "pitfalls": [
-    "Use strict vs non-strict comparison on exactly one side to avoid double-counting equal elements (sum of subarray minimums).",
-    "Append a sentinel 0 height to flush the stack in the histogram problem.",
-    "Deque stores indices so expired elements can be dropped from the front."
-   ],
-   "group": "Stacks & Deques"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Nearest greater or smaller element for each index?</strong>",
-   "a": "Monotonic stack of indices",
-   "template": "MonotonicStructures#nextGreater"
-  },
-  {
-   "q": "<strong>Largest rectangle / contribution of each element as min or max?</strong>",
-   "a": "Monotonic stack with left and right bounds",
-   "template": "MonotonicStructures#largestRectangleArea"
-  },
-  {
-   "q": "<strong>Max or min of every window of size k?</strong>",
-   "a": "Monotonic deque",
-   "template": "MonotonicStructures#maxSlidingWindow"
-  },
-  {
-   "q": "<strong>Shortest subarray with sum at least K and negatives present?</strong>",
-   "a": "Deque over prefix sums",
-   "template": "MonotonicStructures#shortestSubarray"
-  },
-  {
-   "q": "<strong>Evaluate an expression?</strong>",
-   "a": "Stack with operator precedence",
-   "template": "MonotonicStructures#calculate2"
-  },
-  {
-   "q": "<strong>Nested brackets or encodings?</strong>",
-   "a": "Stack of partial results",
-   "template": "MonotonicStructures#decodeString"
-  },
-  {
-   "q": "<strong>Smallest number after removing K digits?</strong>",
-   "a": "Greedy monotonic stack",
-   "template": "MonotonicStructures#removeKdigits"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> valid parentheses, min stack, daily temperatures, evaluate RPN, next greater element.",
-  "<strong>SDE3 bar:</strong> largest rectangle in histogram, maximal rectangle, sliding window maximum, basic calculator I/II, decode string, remove K digits.",
-  "<strong>Staff bar (for context):</strong> contribution-counting with stacks (sum of subarray minimums), deque + prefix sums with negatives, and amortized O(n) proofs."
- ],
- "practice": [
-  [
-   "Monotonic stack",
-   [
-    "739 Daily Temperatures",
-    "496 Next Greater Element I",
-    "84 Largest Rectangle in Histogram",
-    "85 Maximal Rectangle",
-    "907 Sum of Subarray Minimums",
-    "402 Remove K Digits",
-    "901 Online Stock Span"
-   ]
   ],
-  [
-   "Monotonic deque",
-   [
-    "239 Sliding Window Maximum",
-    "862 Shortest Subarray with Sum at Least K",
-    "1438 Longest Subarray With Limit"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Nearest greater or smaller element for each index?</strong>",
+      "a": "Monotonic stack of indices",
+      "template": "MonotonicStructures#nextGreater"
+    },
+    {
+      "q": "<strong>Largest rectangle / contribution of each element as min or max?</strong>",
+      "a": "Monotonic stack with left and right bounds",
+      "template": "MonotonicStructures#largestRectangleArea"
+    },
+    {
+      "q": "<strong>Max or min of every window of size k?</strong>",
+      "a": "Monotonic deque",
+      "template": "MonotonicStructures#maxSlidingWindow"
+    },
+    {
+      "q": "<strong>Shortest subarray with sum at least K and negatives present?</strong>",
+      "a": "Deque over prefix sums",
+      "template": "MonotonicStructures#shortestSubarray"
+    },
+    {
+      "q": "<strong>Evaluate an expression?</strong>",
+      "a": "Stack with operator precedence",
+      "template": "MonotonicStructures#calculate2"
+    },
+    {
+      "q": "<strong>Nested brackets or encodings?</strong>",
+      "a": "Stack of partial results",
+      "template": "MonotonicStructures#decodeString"
+    },
+    {
+      "q": "<strong>Smallest number after removing K digits?</strong>",
+      "a": "Greedy monotonic stack",
+      "template": "MonotonicStructures#removeKdigits"
+    },
+    {
+      "q": "<strong>Sum over all subarrays of min or max?</strong>",
+      "a": "Per-element contribution with left and right boundaries",
+      "template": "StacksVariants#subArrayRanges"
+    },
+    {
+      "q": "<strong>Pattern a < c < b in order i < j < k?</strong>",
+      "a": "Scan right to left with a stack",
+      "template": "StacksVariants#find132pattern"
+    },
+    {
+      "q": "<strong>Collisions processed in order?</strong>",
+      "a": "Stack of survivors",
+      "template": "StacksVariants#asteroidCollision"
+    },
+    {
+      "q": "<strong>Expression with parentheses and precedence?</strong>",
+      "a": "Recursive descent with a stack of terms",
+      "template": "StacksVariants#calculate3"
+    },
+    {
+      "q": "<strong>Pop the most frequent, ties by recency?</strong>",
+      "a": "Frequency buckets of stacks",
+      "template": "StacksVariants#FreqStack"
+    },
+    {
+      "q": "<strong>Queue built from stacks?</strong>",
+      "a": "Two stacks, transfer only when empty",
+      "template": "StacksVariants#MyQueue"
+    }
   ],
-  [
-   "Parsers",
-   [
-    "20 Valid Parentheses",
-    "32 Longest Valid Parentheses",
-    "224 Basic Calculator",
-    "227 Basic Calculator II",
-    "394 Decode String",
-    "150 Evaluate RPN",
-    "155 Min Stack"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> valid parentheses, min stack, daily temperatures, evaluate RPN, next greater element.",
+    "<strong>SDE3 bar:</strong> largest rectangle in histogram, maximal rectangle, sliding window maximum, basic calculator I/II, decode string, remove K digits.",
+    "<strong>Staff bar (for context):</strong> contribution-counting with stacks (sum of subarray minimums), deque + prefix sums with negatives, and amortized O(n) proofs.",
+    "<strong>Staff bar:</strong> derive the contribution formula (left span x right span x value) and handle ties without double counting."
+  ],
+  "practice": [
+    [
+      "Monotonic stack",
+      [
+        "739 Daily Temperatures",
+        "496 Next Greater Element I",
+        "84 Largest Rectangle in Histogram",
+        "85 Maximal Rectangle",
+        "907 Sum of Subarray Minimums",
+        "402 Remove K Digits",
+        "901 Online Stock Span"
+      ]
+    ],
+    [
+      "Monotonic deque",
+      [
+        "239 Sliding Window Maximum",
+        "862 Shortest Subarray with Sum at Least K",
+        "1438 Longest Subarray With Limit"
+      ]
+    ],
+    [
+      "Parsers",
+      [
+        "20 Valid Parentheses",
+        "32 Longest Valid Parentheses",
+        "224 Basic Calculator",
+        "227 Basic Calculator II",
+        "394 Decode String",
+        "150 Evaluate RPN",
+        "155 Min Stack"
+      ]
+    ],
+    [
+      "Stack variants",
+      [
+        "735 Asteroid Collision",
+        "1209 Remove All Adjacent Duplicates in String II",
+        "853 Car Fleet",
+        "856 Score of Parentheses",
+        "772 Basic Calculator III",
+        "636 Exclusive Time of Functions",
+        "456 132 Pattern",
+        "2104 Sum of Subarray Ranges",
+        "1944 Number of Visible People in a Queue",
+        "895 Maximum Frequency Stack",
+        "1124 Longest Well-Performing Interval"
+      ]
+    ]
   ]
- ]
 }

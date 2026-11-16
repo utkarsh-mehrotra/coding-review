@@ -1,133 +1,225 @@
 {
- "id": "binary-search",
- "title": "Binary Search",
- "order": 9,
- "views": [
-  {
-   "id": "binary-search",
-   "title": "Binary Search",
-   "intro": "One template covers everything: find the FIRST index in [lo, hi] where a monotone predicate ok(i) becomes true, with `while (lo < hi)` and `hi = mid` on true. Searching on the answer is the same loop with ok(x) = \"is x feasible?\".",
-   "table": [
-    [
-     "Bounds",
-     "lowerBound / upperBound, first and last position",
-     "O(log n)"
-    ],
-    [
-     "Rotated arrays",
-     "One half is always sorted",
-     "O(log n)"
-    ],
-    [
-     "Search on answer",
-     "Min speed / capacity / days such that feasible",
-     "O(n log range)"
-    ],
-    [
-     "Partition search",
-     "Median of two sorted arrays",
-     "O(log min(m, n))"
-    ]
-   ],
-   "files": [
+  "id": "binary-search",
+  "title": "Binary Search",
+  "order": 9,
+  "views": [
     {
-     "file": "BinarySearch.java",
-     "desc": "Lower/upper bound, range, rotated search and min, peak, matrices, Koko, shipping, split array, bouquets, multiplication table, two-array median, sqrt, time map, K closest",
-     "badge": "O(log n)"
+      "id": "binary-search",
+      "title": "Binary Search",
+      "intro": "One template covers everything: find the FIRST index in [lo, hi] where a monotone predicate ok(i) becomes true, with `while (lo < hi)` and `hi = mid` on true. Searching on the answer is the same loop with ok(x) = \"is x feasible?\".",
+      "table": [
+        [
+          "Bounds",
+          "lowerBound / upperBound, first and last position",
+          "O(log n)"
+        ],
+        [
+          "Rotated arrays",
+          "One half is always sorted",
+          "O(log n)"
+        ],
+        [
+          "Search on answer",
+          "Min speed / capacity / days such that feasible",
+          "O(n log range)"
+        ],
+        [
+          "Partition search",
+          "Median of two sorted arrays",
+          "O(log min(m, n))"
+        ]
+      ],
+      "files": [
+        {
+          "file": "BinarySearch.java",
+          "desc": "Lower/upper bound, range, rotated search and min, peak, matrices, Koko, shipping, split array, bouquets, multiplication table, two-array median, sqrt, time map, K closest",
+          "badge": "O(log n)"
+        }
+      ],
+      "pitfalls": [
+        "Compute mid as lo + (hi - lo) / 2 to avoid overflow.",
+        "Search-on-answer needs a monotone predicate: if feasible(x) does not imply feasible(x + 1) you cannot binary search.",
+        "With duplicates in a rotated array, equal ends force a linear shrink (worst case O(n))."
+      ],
+      "group": "Binary Search"
+    },
+    {
+      "id": "binary-search-variants",
+      "title": "Binary Search: On The Answer",
+      "intro": "The same loop with a different predicate. Write ok(x), decide whether the first true or last true is wanted, and round the midpoint the right way.",
+      "table": [
+        [
+          "First true",
+          "Minimum feasible value (capacity, divisor, time)",
+          "O(n log range)"
+        ],
+        [
+          "Last true",
+          "Maximize the minimum (aggressive cows)",
+          "O(n log range)"
+        ],
+        [
+          "Count <= mid",
+          "k-th smallest of an implicit set",
+          "O(n log range)"
+        ],
+        [
+          "Real valued",
+          "Fixed iteration count",
+          "O(n x 100)"
+        ],
+        [
+          "Two-phase",
+          "Find the peak, then search each side",
+          "O(log n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "BinarySearchVariants.java",
+          "desc": "K-th smallest pair distance, smallest divisor, magnetic force / aggressive cows, minimize max distance to gas station, k-th missing positive, single element in sorted array, max value at index, minimum time for trips, minimize max difference of pairs, H-index II, find right interval, max sum rectangle no larger than k, search a mountain array",
+          "badge": "On the answer"
+        }
+      ],
+      "pitfalls": [
+        "Maximize-the-minimum searches the last true: use mid = lo + (hi - lo + 1) / 2.",
+        "Real-valued search: iterate a fixed count instead of testing hi - lo > eps.",
+        "Check the feasibility function is monotone before building on it."
+      ],
+      "group": "Binary Search"
     }
-   ],
-   "pitfalls": [
-    "Compute mid as lo + (hi - lo) / 2 to avoid overflow.",
-    "Search-on-answer needs a monotone predicate: if feasible(x) does not imply feasible(x + 1) you cannot binary search.",
-    "With duplicates in a rotated array, equal ends force a linear shrink (worst case O(n))."
-   ],
-   "group": "Binary Search"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>First index meeting a monotone condition?</strong>",
-   "a": "Lower-bound template: while (lo < hi), hi = mid on true",
-   "template": "BinarySearch#lowerBound"
-  },
-  {
-   "q": "<strong>First and last position of a value?</strong>",
-   "a": "lowerBound and upperBound",
-   "template": "BinarySearch#searchRange"
-  },
-  {
-   "q": "<strong>Rotated sorted array?</strong>",
-   "a": "Decide which half is sorted",
-   "template": "BinarySearch#searchRotated"
-  },
-  {
-   "q": "<strong>Minimize the maximum (or maximize the minimum) with a feasibility check?</strong>",
-   "a": "Binary search on the answer",
-   "template": "BinarySearch#shipWithinDays"
-  },
-  {
-   "q": "<strong>Smallest rate finishing in time?</strong>",
-   "a": "Binary search on the answer",
-   "template": "BinarySearch#minEatingSpeed"
-  },
-  {
-   "q": "<strong>Median or kth of two sorted arrays?</strong>",
-   "a": "Partition the smaller array",
-   "template": "BinarySearch#findMedianSortedArrays"
-  },
-  {
-   "q": "<strong>Latest value at or before a timestamp?</strong>",
-   "a": "Binary search the history list",
-   "template": "BinarySearch#TimeMap"
-  },
-  {
-   "q": "<strong>Real-valued answer?</strong>",
-   "a": "Fixed iteration count, not an epsilon test",
-   "template": "BinarySearch#sqrt"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> classic search, first/last position, rotated array search, search insert, peak element.",
-  "<strong>SDE3 bar:</strong> search on the answer (Koko, shipping, split array), 2D matrix search, K closest elements, time-based map.",
-  "<strong>Staff bar (for context):</strong> median of two sorted arrays, binary search combined with other structures (rolling hash for longest duplicate substring), and arguing monotonicity precisely."
- ],
- "practice": [
-  [
-   "Bounds",
-   [
-    "34 First and Last Position",
-    "35 Search Insert Position",
-    "704 Binary Search",
-    "658 Find K Closest Elements"
-   ]
   ],
-  [
-   "Rotated / peak",
-   [
-    "33 Search in Rotated Sorted Array",
-    "153 Find Minimum in Rotated Sorted Array",
-    "154 With Duplicates",
-    "162 Find Peak Element"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>First index meeting a monotone condition?</strong>",
+      "a": "Lower-bound template: while (lo < hi), hi = mid on true",
+      "template": "BinarySearch#lowerBound"
+    },
+    {
+      "q": "<strong>First and last position of a value?</strong>",
+      "a": "lowerBound and upperBound",
+      "template": "BinarySearch#searchRange"
+    },
+    {
+      "q": "<strong>Rotated sorted array?</strong>",
+      "a": "Decide which half is sorted",
+      "template": "BinarySearch#searchRotated"
+    },
+    {
+      "q": "<strong>Minimize the maximum (or maximize the minimum) with a feasibility check?</strong>",
+      "a": "Binary search on the answer",
+      "template": "BinarySearch#shipWithinDays"
+    },
+    {
+      "q": "<strong>Smallest rate finishing in time?</strong>",
+      "a": "Binary search on the answer",
+      "template": "BinarySearch#minEatingSpeed"
+    },
+    {
+      "q": "<strong>Median or kth of two sorted arrays?</strong>",
+      "a": "Partition the smaller array",
+      "template": "BinarySearch#findMedianSortedArrays"
+    },
+    {
+      "q": "<strong>Latest value at or before a timestamp?</strong>",
+      "a": "Binary search the history list",
+      "template": "BinarySearch#TimeMap"
+    },
+    {
+      "q": "<strong>Real-valued answer?</strong>",
+      "a": "Fixed iteration count, not an epsilon test",
+      "template": "BinarySearch#sqrt"
+    },
+    {
+      "q": "<strong>Maximize the minimum (or minimize the maximum)?</strong>",
+      "a": "Binary search the answer with a greedy feasibility check",
+      "template": "BinarySearchVariants#maxDistance"
+    },
+    {
+      "q": "<strong>k-th smallest of an implicit set such as pair distances?</strong>",
+      "a": "Search the value, count <= mid with two pointers",
+      "template": "BinarySearchVariants#smallestDistancePair"
+    },
+    {
+      "q": "<strong>Answer is a real number?</strong>",
+      "a": "Fixed iteration count",
+      "template": "BinarySearchVariants#minmaxGasDist"
+    },
+    {
+      "q": "<strong>Where does the missing count cross k?</strong>",
+      "a": "Search on a[i] - (i + 1)",
+      "template": "BinarySearchVariants#findKthPositive"
+    },
+    {
+      "q": "<strong>Best rectangle with sum at most k?</strong>",
+      "a": "Fix column pair, prefix sums with TreeSet.ceiling",
+      "template": "BinarySearchVariants#maxSumSubmatrix"
+    },
+    {
+      "q": "<strong>Peak then two monotone sides?</strong>",
+      "a": "Find the peak, search both sides",
+      "template": "BinarySearchVariants#searchMountain"
+    }
   ],
-  [
-   "On the answer",
-   [
-    "875 Koko Eating Bananas",
-    "1011 Capacity To Ship Packages",
-    "410 Split Array Largest Sum",
-    "1482 Minimum Days to Make m Bouquets",
-    "668 Kth Smallest in Multiplication Table"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> classic search, first/last position, rotated array search, search insert, peak element.",
+    "<strong>SDE3 bar:</strong> search on the answer (Koko, shipping, split array), 2D matrix search, K closest elements, time-based map.",
+    "<strong>Staff bar (for context):</strong> median of two sorted arrays, binary search combined with other structures (rolling hash for longest duplicate substring), and arguing monotonicity precisely.",
+    "<strong>Staff bar:</strong> convert \"min of max\" and \"max of min\" into a monotone predicate and name the feasibility check before coding."
   ],
-  [
-   "Hard",
-   [
-    "4 Median of Two Sorted Arrays",
-    "981 Time Based Key-Value Store",
-    "74 Search a 2D Matrix",
-    "240 Search a 2D Matrix II"
-   ]
+  "practice": [
+    [
+      "Bounds",
+      [
+        "34 First and Last Position",
+        "35 Search Insert Position",
+        "704 Binary Search",
+        "658 Find K Closest Elements"
+      ]
+    ],
+    [
+      "Rotated / peak",
+      [
+        "33 Search in Rotated Sorted Array",
+        "153 Find Minimum in Rotated Sorted Array",
+        "154 With Duplicates",
+        "162 Find Peak Element"
+      ]
+    ],
+    [
+      "On the answer",
+      [
+        "875 Koko Eating Bananas",
+        "1011 Capacity To Ship Packages",
+        "410 Split Array Largest Sum",
+        "1482 Minimum Days to Make m Bouquets",
+        "668 Kth Smallest in Multiplication Table"
+      ]
+    ],
+    [
+      "Hard",
+      [
+        "4 Median of Two Sorted Arrays",
+        "981 Time Based Key-Value Store",
+        "74 Search a 2D Matrix",
+        "240 Search a 2D Matrix II"
+      ]
+    ],
+    [
+      "Search on answer",
+      [
+        "719 Find K-th Smallest Pair Distance",
+        "1283 Smallest Divisor Given a Threshold",
+        "1552 Magnetic Force Between Two Balls",
+        "774 Minimize Max Distance to Gas Station",
+        "1539 Kth Missing Positive Number",
+        "540 Single Element in a Sorted Array",
+        "1802 Maximum Value at a Given Index",
+        "2187 Minimum Time to Complete Trips",
+        "2616 Minimize the Maximum Difference of Pairs",
+        "363 Max Sum of Rectangle No Larger Than K",
+        "1095 Find in Mountain Array"
+      ]
+    ]
   ]
- ]
 }

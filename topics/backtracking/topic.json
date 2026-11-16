@@ -1,122 +1,213 @@
 {
- "id": "backtracking",
- "title": "Backtracking",
- "order": 10,
- "views": [
-  {
-   "id": "backtracking",
-   "title": "Backtracking",
-   "intro": "Choose, explore, undo. Subsets and combinations move a START index forward; permutations use a used[] array. For duplicate inputs sort first and skip equal siblings at the same depth. Prune early with a cheap feasibility bound.",
-   "table": [
-    [
-     "Subsets / combinations",
-     "Start index moves forward",
-     "O(2^n)"
-    ],
-    [
-     "Permutations",
-     "used[] array, with duplicate skip rule",
-     "O(n!)"
-    ],
-    [
-     "Constraint search",
-     "N-Queens, sudoku with occupancy sets or bitmasks",
-     "exp"
-    ],
-    [
-     "Strings",
-     "Parentheses, partitions, IP addresses, operators",
-     "exp"
-    ]
-   ],
-   "files": [
+  "id": "backtracking",
+  "title": "Backtracking",
+  "order": 10,
+  "views": [
     {
-     "file": "Backtracking.java",
-     "desc": "Subsets (+dup), permutations (+unique), combinations, combination sum I/II, parentheses, phone, palindrome partition, word search, N-Queens, sudoku, IP addresses, add operators, gray code",
-     "badge": "O(2^n) / O(n!)"
+      "id": "backtracking",
+      "title": "Backtracking",
+      "intro": "Choose, explore, undo. Subsets and combinations move a START index forward; permutations use a used[] array. For duplicate inputs sort first and skip equal siblings at the same depth. Prune early with a cheap feasibility bound.",
+      "table": [
+        [
+          "Subsets / combinations",
+          "Start index moves forward",
+          "O(2^n)"
+        ],
+        [
+          "Permutations",
+          "used[] array, with duplicate skip rule",
+          "O(n!)"
+        ],
+        [
+          "Constraint search",
+          "N-Queens, sudoku with occupancy sets or bitmasks",
+          "exp"
+        ],
+        [
+          "Strings",
+          "Parentheses, partitions, IP addresses, operators",
+          "exp"
+        ]
+      ],
+      "files": [
+        {
+          "file": "Backtracking.java",
+          "desc": "Subsets (+dup), permutations (+unique), combinations, combination sum I/II, parentheses, phone, palindrome partition, word search, N-Queens, sudoku, IP addresses, add operators, gray code",
+          "badge": "O(2^n) / O(n!)"
+        }
+      ],
+      "pitfalls": [
+        "Add a COPY of the current path to the result, not the live list.",
+        "Duplicates: `i > start && a[i] == a[i-1]` for combinations; `used[i-1]` check for permutations.",
+        "Prune before recursing (remaining sum < 0, not enough elements left) instead of after."
+      ],
+      "group": "Backtracking"
+    },
+    {
+      "id": "backtracking-variants",
+      "title": "Backtracking: Pruning & Structure",
+      "intro": "Hard backtracking is about cutting the tree: sort and skip symmetric branches, count by symmetry, use BFS when the question is \"minimum steps\", or skip the search entirely when a formula (factorial number system) picks the answer.",
+      "table": [
+        [
+          "Sort + symmetry skip",
+          "Bucket filling (matchsticks, k subsets)",
+          "Exponential, pruned"
+        ],
+        [
+          "Visit-all paths",
+          "Unique paths III",
+          "O(4^cells)"
+        ],
+        [
+          "BFS by removals",
+          "Minimum removals to be valid",
+          "O(2^n)"
+        ],
+        [
+          "No search needed",
+          "k-th permutation via factorials",
+          "O(n^2)"
+        ],
+        [
+          "Debt settling",
+          "Net balances, backtrack on first non-zero",
+          "Exponential, pruned"
+        ]
+      ],
+      "files": [
+        {
+          "file": "BacktrackingVariants.java",
+          "desc": "Matchsticks to square, unique paths III, combination sum III, permutation sequence, palindrome permutations, letter case permutation, different ways to add parentheses, remove invalid parentheses, max length of unique-char concatenation, Android unlock patterns, generalized abbreviation, optimal account balancing, all paths in a DAG",
+          "badge": "Pruned search"
+        }
+      ],
+      "pitfalls": [
+        "Equal-state siblings explore the same subtree: skip a bucket with the same load as an earlier one.",
+        "Undo exactly what you did (restore cells, pop path entries, reset lengths).",
+        "If the question asks for the k-th item, do not enumerate."
+      ],
+      "group": "Backtracking"
     }
-   ],
-   "pitfalls": [
-    "Add a COPY of the current path to the result, not the live list.",
-    "Duplicates: `i > start && a[i] == a[i-1]` for combinations; `used[i-1]` check for permutations.",
-    "Prune before recursing (remaining sum < 0, not enough elements left) instead of after."
-   ],
-   "group": "Backtracking"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>All subsets / combinations?</strong>",
-   "a": "Start-index recursion",
-   "template": "Backtracking#subsets"
-  },
-  {
-   "q": "<strong>All orderings?</strong>",
-   "a": "used[] array",
-   "template": "Backtracking#permute"
-  },
-  {
-   "q": "<strong>Inputs contain duplicates?</strong>",
-   "a": "Sort + skip equal siblings",
-   "template": "Backtracking#subsetsWithDup"
-  },
-  {
-   "q": "<strong>Reusable candidates summing to a target?</strong>",
-   "a": "Recurse with the same index",
-   "template": "Backtracking#combinationSum"
-  },
-  {
-   "q": "<strong>Generate valid strings?</strong>",
-   "a": "Track counts, only add legal characters",
-   "template": "Backtracking#generateParenthesis"
-  },
-  {
-   "q": "<strong>Place items under conflict constraints?</strong>",
-   "a": "Occupancy sets / bitmasks for O(1) validity",
-   "template": "Backtracking#solveNQueens"
-  },
-  {
-   "q": "<strong>Find a path of letters in a grid?</strong>",
-   "a": "Mark visited in place, restore on exit",
-   "template": "Backtracking#exist"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> subsets, permutations, combination sum, generate parentheses, letter combinations, word search.",
-  "<strong>SDE3 bar:</strong> duplicate handling, palindrome partitioning, N-Queens, sudoku solver, restore IP addresses, expression add operators.",
-  "<strong>Staff bar (for context):</strong> pruning heuristics, bitmask-based constraint propagation, and recognizing when DP or meet-in-the-middle replaces brute force."
- ],
- "practice": [
-  [
-   "Subsets / permutations",
-   [
-    "78 Subsets",
-    "90 Subsets II",
-    "46 Permutations",
-    "47 Permutations II",
-    "77 Combinations"
-   ]
   ],
-  [
-   "Sums / strings",
-   [
-    "39 Combination Sum",
-    "40 Combination Sum II",
-    "22 Generate Parentheses",
-    "17 Letter Combinations",
-    "131 Palindrome Partitioning",
-    "93 Restore IP Addresses",
-    "282 Expression Add Operators"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>All subsets / combinations?</strong>",
+      "a": "Start-index recursion",
+      "template": "Backtracking#subsets"
+    },
+    {
+      "q": "<strong>All orderings?</strong>",
+      "a": "used[] array",
+      "template": "Backtracking#permute"
+    },
+    {
+      "q": "<strong>Inputs contain duplicates?</strong>",
+      "a": "Sort + skip equal siblings",
+      "template": "Backtracking#subsetsWithDup"
+    },
+    {
+      "q": "<strong>Reusable candidates summing to a target?</strong>",
+      "a": "Recurse with the same index",
+      "template": "Backtracking#combinationSum"
+    },
+    {
+      "q": "<strong>Generate valid strings?</strong>",
+      "a": "Track counts, only add legal characters",
+      "template": "Backtracking#generateParenthesis"
+    },
+    {
+      "q": "<strong>Place items under conflict constraints?</strong>",
+      "a": "Occupancy sets / bitmasks for O(1) validity",
+      "template": "Backtracking#solveNQueens"
+    },
+    {
+      "q": "<strong>Find a path of letters in a grid?</strong>",
+      "a": "Mark visited in place, restore on exit",
+      "template": "Backtracking#exist"
+    },
+    {
+      "q": "<strong>k-th permutation, not all of them?</strong>",
+      "a": "Factorial number system, no search",
+      "template": "BacktrackingVariants#getPermutation"
+    },
+    {
+      "q": "<strong>Fill buckets equally (square, k subsets)?</strong>",
+      "a": "Sort descending, skip equal-load buckets",
+      "template": "BacktrackingVariants#makesquare"
+    },
+    {
+      "q": "<strong>Minimum removals to make a string valid?</strong>",
+      "a": "BFS by number of removals",
+      "template": "BacktrackingVariants#removeInvalidParentheses"
+    },
+    {
+      "q": "<strong>Symmetry cuts the search?</strong>",
+      "a": "Search one representative per orbit, multiply",
+      "template": "BacktrackingVariants#numberOfPatterns"
+    },
+    {
+      "q": "<strong>Settle debts with the fewest transfers?</strong>",
+      "a": "Net balances, backtrack on the first non-zero",
+      "template": "BacktrackingVariants#minTransfers"
+    },
+    {
+      "q": "<strong>Every way to parenthesize an expression?</strong>",
+      "a": "Split at each operator, memoize",
+      "template": "BacktrackingVariants#diffWaysToCompute"
+    }
   ],
-  [
-   "Constraint",
-   [
-    "51 N-Queens",
-    "52 N-Queens II",
-    "37 Sudoku Solver",
-    "79 Word Search"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> subsets, permutations, combination sum, generate parentheses, letter combinations, word search.",
+    "<strong>SDE3 bar:</strong> duplicate handling, palindrome partitioning, N-Queens, sudoku solver, restore IP addresses, expression add operators.",
+    "<strong>Staff bar (for context):</strong> pruning heuristics, bitmask-based constraint propagation, and recognizing when DP or meet-in-the-middle replaces brute force.",
+    "<strong>Staff bar:</strong> name the pruning rule (symmetry, bound, ordering) and show the effect on the search tree."
+  ],
+  "practice": [
+    [
+      "Subsets / permutations",
+      [
+        "78 Subsets",
+        "90 Subsets II",
+        "46 Permutations",
+        "47 Permutations II",
+        "77 Combinations"
+      ]
+    ],
+    [
+      "Sums / strings",
+      [
+        "39 Combination Sum",
+        "40 Combination Sum II",
+        "22 Generate Parentheses",
+        "17 Letter Combinations",
+        "131 Palindrome Partitioning",
+        "93 Restore IP Addresses",
+        "282 Expression Add Operators"
+      ]
+    ],
+    [
+      "Constraint",
+      [
+        "51 N-Queens",
+        "52 N-Queens II",
+        "37 Sudoku Solver",
+        "79 Word Search"
+      ]
+    ],
+    [
+      "Pruned backtracking",
+      [
+        "473 Matchsticks to Square",
+        "980 Unique Paths III",
+        "60 Permutation Sequence",
+        "267 Palindrome Permutation II",
+        "241 Different Ways to Add Parentheses",
+        "301 Remove Invalid Parentheses",
+        "1239 Maximum Length of a Concatenated String",
+        "351 Android Unlock Patterns",
+        "320 Generalized Abbreviation",
+        "465 Optimal Account Balancing"
+      ]
+    ]
   ]
- ]
 }

@@ -1,120 +1,211 @@
 {
- "id": "strings",
- "title": "String Algorithms",
- "order": 13,
- "views": [
-  {
-   "id": "string-algorithms",
-   "title": "String Algorithms",
-   "intro": "KMP and the Z-function give linear pattern matching and expose periodic structure; Rabin-Karp hashes windows (use two moduli and verify); Manacher finds the longest palindrome in O(n). The rest are careful big-number and parsing routines.",
-   "table": [
-    [
-     "KMP",
-     "Pattern search, repeated pattern, shortest palindrome",
-     "O(n + m)"
-    ],
-    [
-     "Z-function",
-     "All occurrences, prefix matches",
-     "O(n + m)"
-    ],
-    [
-     "Rabin-Karp",
-     "Rolling hash, duplicate substring with binary search",
-     "O(n) expected"
-    ],
-    [
-     "Manacher",
-     "Longest palindromic substring",
-     "O(n)"
-    ]
-   ],
-   "files": [
+  "id": "strings",
+  "title": "String Algorithms",
+  "order": 13,
+  "views": [
     {
-     "file": "StringAlgorithms.java",
-     "desc": "Prefix function, KMP, repeated pattern, shortest palindrome, Z, Rabin-Karp, Manacher, anagram, isomorphic, compress, reverse words, multiply, add, atoi, roman",
-     "badge": "O(n + m)"
+      "id": "string-algorithms",
+      "title": "String Algorithms",
+      "intro": "KMP and the Z-function give linear pattern matching and expose periodic structure; Rabin-Karp hashes windows (use two moduli and verify); Manacher finds the longest palindrome in O(n). The rest are careful big-number and parsing routines.",
+      "table": [
+        [
+          "KMP",
+          "Pattern search, repeated pattern, shortest palindrome",
+          "O(n + m)"
+        ],
+        [
+          "Z-function",
+          "All occurrences, prefix matches",
+          "O(n + m)"
+        ],
+        [
+          "Rabin-Karp",
+          "Rolling hash, duplicate substring with binary search",
+          "O(n) expected"
+        ],
+        [
+          "Manacher",
+          "Longest palindromic substring",
+          "O(n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "StringAlgorithms.java",
+          "desc": "Prefix function, KMP, repeated pattern, shortest palindrome, Z, Rabin-Karp, Manacher, anagram, isomorphic, compress, reverse words, multiply, add, atoi, roman",
+          "badge": "O(n + m)"
+        }
+      ],
+      "pitfalls": [
+        "KMP failure function: on mismatch fall back with k = pi[k - 1], never reset to 0.",
+        "Rabin-Karp: single mod hashes collide on adversarial inputs; use two moduli and verify with startsWith.",
+        "atoi: clamp as you accumulate, using long, before overflow."
+      ],
+      "group": "Strings"
+    },
+    {
+      "id": "strings-variants",
+      "title": "Strings: Suffix & Multi-Pattern",
+      "intro": "Beyond KMP and Z: suffix arrays answer substring-counting questions, Aho-Corasick matches many patterns at once, and a handful of parsing questions test careful state handling.",
+      "table": [
+        [
+          "Suffix array + LCP",
+          "Distinct substrings, longest repeated substring",
+          "O(n log n)"
+        ],
+        [
+          "Aho-Corasick",
+          "Many patterns in one pass",
+          "O(n + total + matches)"
+        ],
+        [
+          "KMP failure",
+          "Border / happy prefix, rotation checks",
+          "O(n)"
+        ],
+        [
+          "Hash + split",
+          "Palindrome pairs",
+          "O(n k²)"
+        ],
+        [
+          "State flags",
+          "Number parsing, text justification",
+          "O(n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "StringsVariants.java",
+          "desc": "Suffix array, Kasai LCP, distinct substrings, longest repeated / duplicate substring, Aho-Corasick, word break II, palindrome pairs, longest happy prefix, least rotation, text justification, valid number, encode / decode strings, compare version numbers, zigzag conversion",
+          "badge": "Advanced"
+        }
+      ],
+      "pitfalls": [
+        "Suffix array: sort by doubling ranks, then Kasai builds LCP in O(n).",
+        "Aho-Corasick needs fail links built by BFS, and output links to report all matches.",
+        "Parsing problems: write the state machine on paper first; flags beat regex."
+      ],
+      "group": "Strings"
     }
-   ],
-   "pitfalls": [
-    "KMP failure function: on mismatch fall back with k = pi[k - 1], never reset to 0.",
-    "Rabin-Karp: single mod hashes collide on adversarial inputs; use two moduli and verify with startsWith.",
-    "atoi: clamp as you accumulate, using long, before overflow."
-   ],
-   "group": "Strings"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Find a pattern in linear time?</strong>",
-   "a": "KMP prefix function",
-   "template": "StringAlgorithms#kmpSearch"
-  },
-  {
-   "q": "<strong>Does the string repeat a smaller unit?</strong>",
-   "a": "n % (n - pi[n-1]) == 0",
-   "template": "StringAlgorithms#repeatedSubstringPattern"
-  },
-  {
-   "q": "<strong>All occurrences / prefix-match lengths?</strong>",
-   "a": "Z-function on pattern#text",
-   "template": "StringAlgorithms#findAllZ"
-  },
-  {
-   "q": "<strong>Substring equality or duplicates at scale?</strong>",
-   "a": "Rolling hash",
-   "template": "StringAlgorithms#rabinKarp"
-  },
-  {
-   "q": "<strong>Longest palindromic substring in O(n)?</strong>",
-   "a": "Manacher",
-   "template": "StringAlgorithms#manacher"
-  },
-  {
-   "q": "<strong>Arithmetic on huge numbers as strings?</strong>",
-   "a": "Digit arrays with carry",
-   "template": "StringAlgorithms#multiply"
-  },
-  {
-   "q": "<strong>Parse with signs, spaces, overflow?</strong>",
-   "a": "Single pass with long accumulator and clamping",
-   "template": "StringAlgorithms#myAtoi"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> anagram checks, longest common prefix, reverse words, string compression, atoi, add/multiply strings.",
-  "<strong>SDE3 bar:</strong> KMP or rolling hash for substring search, repeated substring pattern, shortest palindrome, Z-function ideas.",
-  "<strong>Staff bar (for context):</strong> Manacher, suffix arrays or automata at a conceptual level, hash collision analysis, and streaming string matching."
- ],
- "practice": [
-  [
-   "Matching",
-   [
-    "28 Find the Index of the First Occurrence",
-    "459 Repeated Substring Pattern",
-    "214 Shortest Palindrome",
-    "1044 Longest Duplicate Substring",
-    "5 Longest Palindromic Substring"
-   ]
   ],
-  [
-   "Manipulation",
-   [
-    "14 Longest Common Prefix",
-    "443 String Compression",
-    "151 Reverse Words in a String",
-    "205 Isomorphic Strings",
-    "242 Valid Anagram"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Find a pattern in linear time?</strong>",
+      "a": "KMP prefix function",
+      "template": "StringAlgorithms#kmpSearch"
+    },
+    {
+      "q": "<strong>Does the string repeat a smaller unit?</strong>",
+      "a": "n % (n - pi[n-1]) == 0",
+      "template": "StringAlgorithms#repeatedSubstringPattern"
+    },
+    {
+      "q": "<strong>All occurrences / prefix-match lengths?</strong>",
+      "a": "Z-function on pattern#text",
+      "template": "StringAlgorithms#findAllZ"
+    },
+    {
+      "q": "<strong>Substring equality or duplicates at scale?</strong>",
+      "a": "Rolling hash",
+      "template": "StringAlgorithms#rabinKarp"
+    },
+    {
+      "q": "<strong>Longest palindromic substring in O(n)?</strong>",
+      "a": "Manacher",
+      "template": "StringAlgorithms#manacher"
+    },
+    {
+      "q": "<strong>Arithmetic on huge numbers as strings?</strong>",
+      "a": "Digit arrays with carry",
+      "template": "StringAlgorithms#multiply"
+    },
+    {
+      "q": "<strong>Parse with signs, spaces, overflow?</strong>",
+      "a": "Single pass with long accumulator and clamping",
+      "template": "StringAlgorithms#myAtoi"
+    },
+    {
+      "q": "<strong>Count distinct substrings / longest repeated substring?</strong>",
+      "a": "Suffix array + LCP",
+      "template": "StringsVariants#countDistinctSubstrings"
+    },
+    {
+      "q": "<strong>Many patterns in one scan?</strong>",
+      "a": "Aho-Corasick automaton",
+      "template": "StringsVariants#AhoCorasick"
+    },
+    {
+      "q": "<strong>Longest prefix that is also a suffix?</strong>",
+      "a": "KMP failure function",
+      "template": "StringsVariants#longestHappyPrefix"
+    },
+    {
+      "q": "<strong>Canonical form under rotation?</strong>",
+      "a": "Minimal rotation",
+      "template": "StringsVariants#leastRotation"
+    },
+    {
+      "q": "<strong>Pairs of words forming a palindrome?</strong>",
+      "a": "Hash all words, split each word at every index",
+      "template": "StringsVariants#palindromePairs"
+    },
+    {
+      "q": "<strong>Validate a number or format string?</strong>",
+      "a": "Finite-state flags",
+      "template": "StringsVariants#isNumber"
+    }
   ],
-  [
-   "Arithmetic / parsing",
-   [
-    "43 Multiply Strings",
-    "415 Add Strings",
-    "8 String to Integer (atoi)",
-    "13 Roman to Integer"
-   ]
+  "calibration": [
+    "<strong>SDE2 bar:</strong> anagram checks, longest common prefix, reverse words, string compression, atoi, add/multiply strings.",
+    "<strong>SDE3 bar:</strong> KMP or rolling hash for substring search, repeated substring pattern, shortest palindrome, Z-function ideas.",
+    "<strong>Staff bar (for context):</strong> Manacher, suffix arrays or automata at a conceptual level, hash collision analysis, and streaming string matching.",
+    "<strong>Staff bar:</strong> know suffix array + LCP and Aho-Corasick well enough to write them, and be able to say why a trie of patterns alone is not enough."
+  ],
+  "practice": [
+    [
+      "Matching",
+      [
+        "28 Find the Index of the First Occurrence",
+        "459 Repeated Substring Pattern",
+        "214 Shortest Palindrome",
+        "1044 Longest Duplicate Substring",
+        "5 Longest Palindromic Substring"
+      ]
+    ],
+    [
+      "Manipulation",
+      [
+        "14 Longest Common Prefix",
+        "443 String Compression",
+        "151 Reverse Words in a String",
+        "205 Isomorphic Strings",
+        "242 Valid Anagram"
+      ]
+    ],
+    [
+      "Arithmetic / parsing",
+      [
+        "43 Multiply Strings",
+        "415 Add Strings",
+        "8 String to Integer (atoi)",
+        "13 Roman to Integer"
+      ]
+    ],
+    [
+      "String variants",
+      [
+        "1044 Longest Duplicate Substring",
+        "212 Word Search II",
+        "140 Word Break II",
+        "336 Palindrome Pairs",
+        "1392 Longest Happy Prefix",
+        "68 Text Justification",
+        "65 Valid Number",
+        "271 Encode and Decode Strings",
+        "165 Compare Version Numbers",
+        "6 Zigzag Conversion"
+      ]
+    ]
   ]
- ]
 }

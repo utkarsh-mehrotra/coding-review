@@ -1,116 +1,214 @@
 {
- "id": "bits-math",
- "title": "Bits & Math",
- "order": 14,
- "views": [
-  {
-   "id": "bits-math",
-   "title": "Bits & Number Theory",
-   "intro": "Know the five bit identities cold (clear lowest set bit, isolate it, read, set, toggle). Number theory in interviews is gcd, fast power, sieve, factorization, modular inverse and nCr mod a prime, plus overflow discipline.",
-   "table": [
-    [
-     "XOR tricks",
-     "Single number I/II/III, missing number",
-     "O(n)"
-    ],
-    [
-     "Bit counting",
-     "popcount via n & (n - 1), counting bits dp",
-     "O(bits)"
-    ],
-    [
-     "Number theory",
-     "gcd/lcm, powMod, sieve, factorization",
-     "O(log) / O(n log log n)"
-    ],
-    [
-     "Combinatorics",
-     "nCr mod prime with factorial tables",
-     "O(1) per query"
-    ]
-   ],
-   "files": [
+  "id": "bits-math",
+  "title": "Bits & Math",
+  "order": 14,
+  "views": [
     {
-     "file": "BitsMath.java",
-     "desc": "Single number family, hamming weight, count bits, powers of two/four, reverse bits, missing number, add without +, range AND, subsets by mask, gcd/lcm, powMod, sieve, factorize, nCr, overflow-safe reverse, fraction to decimal",
-     "badge": "O(log n)"
+      "id": "bits-math",
+      "title": "Bits & Number Theory",
+      "intro": "Know the five bit identities cold (clear lowest set bit, isolate it, read, set, toggle). Number theory in interviews is gcd, fast power, sieve, factorization, modular inverse and nCr mod a prime, plus overflow discipline.",
+      "table": [
+        [
+          "XOR tricks",
+          "Single number I/II/III, missing number",
+          "O(n)"
+        ],
+        [
+          "Bit counting",
+          "popcount via n & (n - 1), counting bits dp",
+          "O(bits)"
+        ],
+        [
+          "Number theory",
+          "gcd/lcm, powMod, sieve, factorization",
+          "O(log) / O(n log log n)"
+        ],
+        [
+          "Combinatorics",
+          "nCr mod prime with factorial tables",
+          "O(1) per query"
+        ]
+      ],
+      "files": [
+        {
+          "file": "BitsMath.java",
+          "desc": "Single number family, hamming weight, count bits, powers of two/four, reverse bits, missing number, add without +, range AND, subsets by mask, gcd/lcm, powMod, sieve, factorize, nCr, overflow-safe reverse, fraction to decimal",
+          "badge": "O(log n)"
+        }
+      ],
+      "pitfalls": [
+        "Use `>>>` for logical shifts of negatives and `1L << k` once k reaches 31.",
+        "Check overflow BEFORE multiplying or adding (Reverse Integer), or widen to long.",
+        "Fermat inverse needs a PRIME modulus; otherwise use extended Euclid."
+      ],
+      "group": "Bits & Math"
+    },
+    {
+      "id": "bits-math-variants",
+      "title": "Bits & Math: Number Theory Toolkit",
+      "intro": "The toolkit for math-flavored questions: per-bit counting, Gray codes, modular arithmetic beyond Fermat, sieves with factor tables, matrix power for recurrences, and uniform random sampling.",
+      "table": [
+        [
+          "Per-bit counting",
+          "Sum of pairwise XOR / Hamming distances",
+          "O(32 n)"
+        ],
+        [
+          "Matrix power",
+          "Linear recurrence for huge n",
+          "O(k^3 log n)"
+        ],
+        [
+          "Extended Euclid",
+          "Inverse modulo any coprime modulus",
+          "O(log m)"
+        ],
+        [
+          "SPF sieve",
+          "Many factorizations",
+          "O(n log log n) setup"
+        ],
+        [
+          "Reservoir / weighted pick",
+          "Uniform or weighted sampling",
+          "O(1) / O(log n)"
+        ]
+      ],
+      "files": [
+        {
+          "file": "BitsMathVariants.java",
+          "desc": "Subset XOR sum, XOR triplets, min flips, Gray code and inverse, total Hamming distance, complement, divide without division, sqrt, super pow, ugly numbers, consecutive sums, bulb switcher, Josephus, totient, SPF sieve, extended gcd, fast doubling Fibonacci, matrix power, vowel permutations by matrix, reservoir sampling, Fisher-Yates, weighted random pick",
+          "badge": "Toolkit"
+        }
+      ],
+      "pitfalls": [
+        "Fermat inverse needs a prime modulus; use extended Euclid otherwise.",
+        "Cast to long before multiplying two ints, and mod after each multiplication.",
+        "Fisher-Yates must pick j in [i, n), not [0, n), to stay uniform."
+      ],
+      "group": "Bits & Math"
     }
-   ],
-   "pitfalls": [
-    "Use `>>>` for logical shifts of negatives and `1L << k` once k reaches 31.",
-    "Check overflow BEFORE multiplying or adding (Reverse Integer), or widen to long.",
-    "Fermat inverse needs a PRIME modulus; otherwise use extended Euclid."
-   ],
-   "group": "Bits & Math"
-  }
- ],
- "decisions": [
-  {
-   "q": "<strong>Everything appears twice except one (or two)?</strong>",
-   "a": "XOR fold; split by lowest set bit for two uniques",
-   "template": "BitsMath#singleNumberIII"
-  },
-  {
-   "q": "<strong>Count set bits, powers of two?</strong>",
-   "a": "n & (n - 1) clears the lowest set bit",
-   "template": "BitsMath#hammingWeight"
-  },
-  {
-   "q": "<strong>Small set, enumerate subsets?</strong>",
-   "a": "Bitmask loop 0 .. 2^n - 1",
-   "template": "BitsMath#subsetsMask"
-  },
-  {
-   "q": "<strong>Large exponent modulo m?</strong>",
-   "a": "Fast exponentiation",
-   "template": "BitsMath#powMod"
-  },
-  {
-   "q": "<strong>Count primes up to n?</strong>",
-   "a": "Sieve of Eratosthenes",
-   "template": "BitsMath#countPrimes"
-  },
-  {
-   "q": "<strong>nCr modulo a prime, many queries?</strong>",
-   "a": "Factorial and inverse-factorial tables",
-   "template": "BitsMath#modInverse"
-  },
-  {
-   "q": "<strong>Repeating decimals?</strong>",
-   "a": "Remainder to position map",
-   "template": "BitsMath#fractionToDecimal"
-  }
- ],
- "calibration": [
-  "<strong>SDE2 bar:</strong> single number, number of 1 bits, power of two, counting bits, missing number, reverse integer with overflow checks.",
-  "<strong>SDE3 bar:</strong> single number II/III, sum without plus, range AND, bitmask subsets, fast power, sieve, fraction to decimal.",
-  "<strong>Staff bar (for context):</strong> modular arithmetic with inverses and nCr, bit tricks inside dp, and reasoning about overflow and precision systematically."
- ],
- "practice": [
-  [
-   "Bits",
-   [
-    "136 Single Number",
-    "137 Single Number II",
-    "260 Single Number III",
-    "191 Number of 1 Bits",
-    "338 Counting Bits",
-    "190 Reverse Bits",
-    "268 Missing Number",
-    "371 Sum of Two Integers",
-    "201 Bitwise AND of Numbers Range"
-   ]
   ],
-  [
-   "Math",
-   [
-    "204 Count Primes",
-    "50 Pow(x, n)",
-    "166 Fraction to Recurring Decimal",
-    "202 Happy Number",
-    "7 Reverse Integer",
-    "168 Excel Sheet Column Title"
-   ]
+  "decisions": [
+    {
+      "q": "<strong>Everything appears twice except one (or two)?</strong>",
+      "a": "XOR fold; split by lowest set bit for two uniques",
+      "template": "BitsMath#singleNumberIII"
+    },
+    {
+      "q": "<strong>Count set bits, powers of two?</strong>",
+      "a": "n & (n - 1) clears the lowest set bit",
+      "template": "BitsMath#hammingWeight"
+    },
+    {
+      "q": "<strong>Small set, enumerate subsets?</strong>",
+      "a": "Bitmask loop 0 .. 2^n - 1",
+      "template": "BitsMath#subsetsMask"
+    },
+    {
+      "q": "<strong>Large exponent modulo m?</strong>",
+      "a": "Fast exponentiation",
+      "template": "BitsMath#powMod"
+    },
+    {
+      "q": "<strong>Count primes up to n?</strong>",
+      "a": "Sieve of Eratosthenes",
+      "template": "BitsMath#countPrimes"
+    },
+    {
+      "q": "<strong>nCr modulo a prime, many queries?</strong>",
+      "a": "Factorial and inverse-factorial tables",
+      "template": "BitsMath#modInverse"
+    },
+    {
+      "q": "<strong>Repeating decimals?</strong>",
+      "a": "Remainder to position map",
+      "template": "BitsMath#fractionToDecimal"
+    },
+    {
+      "q": "<strong>Sum of bit differences over all pairs?</strong>",
+      "a": "Per bit: ones x zeros",
+      "template": "BitsMathVariants#totalHammingDistance"
+    },
+    {
+      "q": "<strong>Linear recurrence for a huge n?</strong>",
+      "a": "Matrix exponentiation",
+      "template": "BitsMathVariants#matPow"
+    },
+    {
+      "q": "<strong>Modular inverse with a non-prime modulus?</strong>",
+      "a": "Extended Euclid",
+      "template": "BitsMathVariants#modInverseAny"
+    },
+    {
+      "q": "<strong>Factorize many numbers?</strong>",
+      "a": "Smallest-prime-factor sieve",
+      "template": "BitsMathVariants#spfSieve"
+    },
+    {
+      "q": "<strong>Pick uniformly from a stream?</strong>",
+      "a": "Reservoir sampling",
+      "template": "BitsMathVariants#Reservoir"
+    },
+    {
+      "q": "<strong>Weighted random pick?</strong>",
+      "a": "Prefix sums + binary search",
+      "template": "BitsMathVariants#WeightedPicker"
+    },
+    {
+      "q": "<strong>Josephus-style elimination?</strong>",
+      "a": "f(n) = (f(n - 1) + k) mod n",
+      "template": "BitsMathVariants#findTheWinner"
+    }
+  ],
+  "calibration": [
+    "<strong>SDE2 bar:</strong> single number, number of 1 bits, power of two, counting bits, missing number, reverse integer with overflow checks.",
+    "<strong>SDE3 bar:</strong> single number II/III, sum without plus, range AND, bitmask subsets, fast power, sieve, fraction to decimal.",
+    "<strong>Staff bar (for context):</strong> modular arithmetic with inverses and nCr, bit tricks inside dp, and reasoning about overflow and precision systematically.",
+    "<strong>Staff bar:</strong> per-bit decomposition, matrix power, and correct uniform sampling are the recurring themes."
+  ],
+  "practice": [
+    [
+      "Bits",
+      [
+        "136 Single Number",
+        "137 Single Number II",
+        "260 Single Number III",
+        "191 Number of 1 Bits",
+        "338 Counting Bits",
+        "190 Reverse Bits",
+        "268 Missing Number",
+        "371 Sum of Two Integers",
+        "201 Bitwise AND of Numbers Range"
+      ]
+    ],
+    [
+      "Math",
+      [
+        "204 Count Primes",
+        "50 Pow(x, n)",
+        "166 Fraction to Recurring Decimal",
+        "202 Happy Number",
+        "7 Reverse Integer",
+        "168 Excel Sheet Column Title"
+      ]
+    ],
+    [
+      "Bits and math variants",
+      [
+        "1863 Sum of All Subset XOR Totals",
+        "1442 Count Triplets That Can Form Two Arrays of Equal XOR",
+        "1318 Minimum Flips to Make a OR b Equal to c",
+        "89 Gray Code",
+        "477 Total Hamming Distance",
+        "29 Divide Two Integers",
+        "372 Super Pow",
+        "264 Ugly Number II",
+        "829 Consecutive Numbers Sum",
+        "1823 Find the Winner of the Circular Game",
+        "528 Random Pick with Weight",
+        "382 Linked List Random Node"
+      ]
+    ]
   ]
- ]
 }
