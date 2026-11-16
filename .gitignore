@@ -2,3 +2,5 @@ build/
 *.class
 .remember/
 .DS_Store
+.vercel/
+.vercel

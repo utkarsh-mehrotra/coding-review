@@ -3,6 +3,8 @@
 Java templates and an interactive reference page for FAANG coding-interview review (SDE2 / SDE3 / Staff).
 Coding rounds only: no system design or behavioral prep.
 
+**Live site:** https://coding-review-iota.vercel.app
+
 **Rule: every pattern has a template.** Paste-ready Java, tested, with the decision tree pointing at it.
 `make check` fails if a decision-tree entry does not link to a real `File#method` in a template.
 
@@ -25,6 +27,13 @@ make all         # all of the above
 | `site/build.py`, `site/assets/` | page generator, shared CSS and JS |
 | `site/index.html` | generated single-page reference (do not edit by hand) |
 | `docs/PLAN.md` | scope, conventions, roadmap |
+| `vercel.json` | Vercel config: serves `site/` as static files, no build step |
+
+## Deploy
+The site is hosted on Vercel at https://coding-review-iota.vercel.app. `site/index.html` is generated, so run `make site` and commit the result before deploying.
+```
+npx vercel --prod   # deploy site/ to production
+```
 
 ## Topics (15)
 Graphs, Dynamic Programming, Trees & Range Structures, Arrays & Hashing, Sliding Window & Two Pointers,
@@ -40,7 +49,6 @@ interval merge, LRU vs LinkedHashMap, and more).
 ## Not built yet
 - drill log and spaced-review loop
 - stress tests for graph templates beyond the known-input suites (flow, SCC, 2-SAT)
-- GitHub remote: the repo is local only; push it once an empty GitHub repo exists
 
 ## Conventions
 - One public class per file, file named after the class, so every template compiles with plain `javac`.
