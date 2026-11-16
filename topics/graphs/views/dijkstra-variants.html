@@ -1,0 +1,12 @@
+<h1 class="page-title">Dijkstra &amp; Shortest-Path Variants</h1>
+<p class="page-intro">Interviewers rarely ask for plain Dijkstra. They add a constraint, change what a path costs, or ask for more than a distance. Each row is one small change to the base template in section 02.</p>
+<table class="ref-table">
+<tr><th>Twist</th><th>What changes</th></tr>
+<tr><td>At most K stops, fuel, keys, obstacle budget</td><td>The state becomes (node, used). Dijkstra if costs differ, plain BFS if every step costs 1.</td></tr>
+<tr><td>Same limit, no heap</td><td>Bellman-Ford for K+1 rounds, relaxing from a copy of dist each round.</td></tr>
+<tr><td>Cost is the worst edge on the path</td><td>Combine with max() instead of +. Same heap loop.</td></tr>
+<tr><td>Need the route, not just the distance</td><td>Store prev[] on every relaxation, then walk back from the target.</td></tr>
+<tr><td>Count the shortest routes</td><td>ways[v] = ways[u] on a strict improvement, += ways[u] on a tie. Weights must be positive.</td></tr>
+</table>
+
+{{code:DijkstraVariants.java}}

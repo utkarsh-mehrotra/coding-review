@@ -1,0 +1,10 @@
+<h1 class="page-title">Network Flow &amp; Matching</h1>
+<p class="page-intro">Full implementations are rare asks at SDE2/3 &mdash; recognizing a problem as a flow/matching problem in disguise is the actual signal. Edmonds-Karp is the one worth knowing cold; Dinic's/Hopcroft-Karp are "know the name and complexity" level here.</p>
+<table class="ref-table">
+<tr><th>Algorithm</th><th>Solves</th><th>Complexity</th></tr>
+<tr><td>Ford-Fulkerson / Edmonds-Karp</td><td>Max flow / min cut</td><td class="complexity">O(VE&sup2;)</td></tr>
+<tr><td>Dinic's</td><td>Max flow, faster</td><td class="complexity">O(V&sup2;E) general, O(E&radic;V) unit-cap</td></tr>
+<tr><td>Hopcroft-Karp</td><td>Maximum bipartite matching</td><td class="complexity">O(E&radic;V)</td></tr>
+</table>
+
+{{code:NetworkFlow.java}}

@@ -1,0 +1,10 @@
+<h1 class="page-title">Disjoint Set Union / Union-Find</h1>
+<p class="page-intro">Manages partitions rather than traversing edges directly. Any problem with "connect/merge" operations interleaved with "are X and Y connected?" queries is DSU, not per-query BFS/DFS.</p>
+<table class="ref-table">
+<tr><th>Operation</th><th>Complexity</th></tr>
+<tr><td>find() with path compression</td><td class="complexity">O(&alpha;(N)) amortized</td></tr>
+<tr><td>union() by rank/size</td><td class="complexity">O(&alpha;(N)) amortized</td></tr>
+</table>
+<p class="page-intro" style="margin-bottom:0;">Primary uses: cycle detection in undirected graphs, connected-components queries, Kruskal's MST, offline queries, accounts-merge/equivalence-class problems.</p>
+
+{{code:DSU.java}}

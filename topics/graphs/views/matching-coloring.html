@@ -1,0 +1,11 @@
+<h1 class="page-title">Matching, Coloring &amp; Functional Graphs</h1>
+<p class="page-intro">Three small patterns that don't fit elsewhere. Kuhn's is the matching algorithm you can actually write in 20 minutes. A functional graph is any structure where each node has exactly one outgoing edge, such as a next-pointer array.</p>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Idea</th><th>Complexity</th></tr>
+<tr><td>Kuhn's matching</td><td>augmenting DFS from each left node; Hopcroft-Karp (section 08) only for large inputs</td><td class="complexity">O(V&middot;E)</td></tr>
+<tr><td>k-coloring</td><td>backtrack node by node, reject a color a neighbor already has (k = 2 is the bipartite check)</td><td class="complexity">exponential</td></tr>
+<tr><td>Floyd's cycle detection</td><td>tortoise and hare on next[]; a second pass from the start finds the cycle entry</td><td class="complexity">O(N), O(1) space</td></tr>
+<tr><td>Longest cycle, functional graph</td><td>timestamp each walk; reaching a stamp from the same walk closes a cycle of length (time - stamp)</td><td class="complexity">O(N)</td></tr>
+</table>
+
+{{code:MatchingColoringFunctional.java}}

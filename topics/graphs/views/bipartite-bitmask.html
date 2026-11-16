@@ -1,0 +1,9 @@
+<h1 class="page-title">Bipartite Check &amp; Bitmask DP</h1>
+<p class="page-intro">Recognize bitmask DP by the bound: N &le; ~15&ndash;20 plus "visit all/some subset" phrasing is the tell, not a pure graph traversal.</p>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Idea</th><th>Complexity</th></tr>
+<tr><td>Bipartite check</td><td>2-coloring via BFS/DFS, conflict = not bipartite</td><td class="complexity">O(V+E)</td></tr>
+<tr><td>Held-Karp (TSP)</td><td>dp[mask][i] = shortest path visiting set mask, ending at i</td><td class="complexity">O(2<sup>N</sup> &middot; N&sup2;)</td></tr>
+</table>
+
+{{code:BipartiteAndBitmaskDP.java}}

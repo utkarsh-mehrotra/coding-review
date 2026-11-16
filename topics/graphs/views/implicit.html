@@ -1,0 +1,12 @@
+<h1 class="page-title">Implicit Graphs: Grids &amp; State Spaces</h1>
+<p class="page-intro">Most FAANG graph questions never hand you a graph. The nodes are grid cells, board positions or strings, and the edges are the legal moves. The skill is naming the node and generating neighbors lazily; the traversal itself is plain BFS or DFS.</p>
+<table class="ref-table">
+<tr><th>Problem shape</th><th>Node is</th><th>Technique</th></tr>
+<tr><td>Count or size regions (islands)</td><td>cell</td><td>iterative DFS/BFS flood fill</td></tr>
+<tr><td>Fewest steps, every step costs 1</td><td>cell, or cell plus extra state</td><td>BFS by level</td></tr>
+<tr><td>Spread from many starts (rotting oranges)</td><td>cell</td><td>multi-source BFS</td></tr>
+<tr><td>Which cells can reach a sink</td><td>cell</td><td>reverse BFS from the sinks (Pacific Atlantic)</td></tr>
+<tr><td>Transform one string or board into another</td><td>string / board</td><td>BFS over states; bidirectional when both ends are known</td></tr>
+</table>
+
+{{code:ImplicitGraphs.java}}

@@ -1,0 +1,13 @@
+<h1 class="page-title">Cycles, Ordering &amp; Cloning</h1>
+<p class="page-intro">Dependency problems reduce to one question: is there a valid order, and if so what is it? A cycle means there is none. Course Schedule and Alien Dictionary differ only in how the edges get built.</p>
+<table class="ref-table">
+<tr><th>Question</th><th>Tool</th></tr>
+<tr><td>Is there a cycle in a directed graph?</td><td>3-color DFS. An edge into a gray node (on the current path) closes a cycle.</td></tr>
+<tr><td>Which nodes can never reach a cycle?</td><td>Same colors. Nodes that finish black are safe (LC 802).</td></tr>
+<tr><td>Give me a valid order</td><td>Kahn's. Fewer than N nodes out means a cycle.</td></tr>
+<tr><td>How many rounds if independent items run in parallel?</td><td>Kahn's, one queue level per round.</td></tr>
+<tr><td>Order inferred from sorted data (Alien Dictionary)</td><td>One edge from the first differing character of each adjacent pair, then Kahn's. Watch the prefix case.</td></tr>
+<tr><td>Deep-copy a graph</td><td>Map old node to new node. The map doubles as the visited set.</td></tr>
+</table>
+
+{{code:CycleAndCourseGraphs.java}}

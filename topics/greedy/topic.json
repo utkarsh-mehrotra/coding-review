@@ -1,0 +1,121 @@
+{
+ "id": "greedy",
+ "title": "Greedy",
+ "order": 11,
+ "views": [
+  {
+   "id": "greedy",
+   "title": "Greedy",
+   "intro": "Greedy is right when an exchange argument or a \"stays ahead\" invariant holds. State the argument in one sentence before coding; if you cannot, think DP. Typical shapes: furthest reach, sort by a key, two passes, ratio ordering, heap of options.",
+   "table": [
+    [
+     "Reach / jumps",
+     "Track the furthest frontier",
+     "O(n)"
+    ],
+    [
+     "Two-pass",
+     "Candy, gas station style prefix logic",
+     "O(n)"
+    ],
+    [
+     "Sort then sweep",
+     "Assign cookies, boats, largest number",
+     "O(n log n)"
+    ],
+    [
+     "Greedy + heap",
+     "Refueling stops, scheduling with choices",
+     "O(n log n)"
+    ]
+   ],
+   "files": [
+    {
+     "file": "Greedy.java",
+     "desc": "Jump game I/II, gas station, candy, partition labels, queue reconstruction, cookies, largest number, units, valid parenthesis string, boats, refueling, straights, lemonade",
+     "badge": "O(n log n)"
+    }
+   ],
+   "pitfalls": [
+    "Without a proof sketch, test the greedy against brute force on small inputs.",
+    "Largest Number: compare a+b with b+a, and special-case an all-zero result.",
+    "Valid Parenthesis String: carry a range [lo, hi] of possible open counts, not a single count."
+   ],
+   "group": "Greedy"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>Can you reach the end / minimum jumps?</strong>",
+   "a": "Furthest-reach frontier",
+   "template": "Greedy#jump"
+  },
+  {
+   "q": "<strong>Circular route, find the start?</strong>",
+   "a": "Restart after any negative prefix",
+   "template": "Greedy#canCompleteCircuit"
+  },
+  {
+   "q": "<strong>Neighbor-dependent minimum assignment?</strong>",
+   "a": "Left pass and right pass",
+   "template": "Greedy#candy"
+  },
+  {
+   "q": "<strong>Split into the most self-contained segments?</strong>",
+   "a": "Extend to the last occurrence",
+   "template": "Greedy#partitionLabels"
+  },
+  {
+   "q": "<strong>Custom ordering decides the answer?</strong>",
+   "a": "Comparator from an exchange argument",
+   "template": "Greedy#largestNumber"
+  },
+  {
+   "q": "<strong>Pair heaviest with lightest?</strong>",
+   "a": "Sort + two pointers",
+   "template": "Greedy#numRescueBoats"
+  },
+  {
+   "q": "<strong>Need the best past option when stuck?</strong>",
+   "a": "Heap of passed options",
+   "template": "Greedy#minRefuelStops"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> jump game I/II, gas station, assign cookies, best time to buy and sell II, merge intervals.",
+  "<strong>SDE3 bar:</strong> candy, queue reconstruction, partition labels, largest number, task scheduler, valid parenthesis string, with a stated exchange argument.",
+  "<strong>Staff bar (for context):</strong> proving optimality or finding a counterexample fast, matroid-style greedy, and recognizing when greedy gives a good approximation but not an exact answer."
+ ],
+ "practice": [
+  [
+   "Reach / scan",
+   [
+    "55 Jump Game",
+    "45 Jump Game II",
+    "134 Gas Station",
+    "135 Candy",
+    "763 Partition Labels",
+    "678 Valid Parenthesis String"
+   ]
+  ],
+  [
+   "Sort based",
+   [
+    "455 Assign Cookies",
+    "179 Largest Number",
+    "406 Queue Reconstruction by Height",
+    "881 Boats to Save People",
+    "846 Hand of Straights",
+    "1710 Maximum Units on a Truck"
+   ]
+  ],
+  [
+   "Greedy + heap",
+   [
+    "871 Minimum Number of Refueling Stops",
+    "621 Task Scheduler",
+    "767 Reorganize String"
+   ]
+  ]
+ ]
+}

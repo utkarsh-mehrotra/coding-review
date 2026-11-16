@@ -1,0 +1,10 @@
+<h1 class="page-title">Topological Sort &amp; DAG Patterns</h1>
+<p class="page-intro">Works only on Directed Acyclic Graphs. Once topologically sorted, many problems reduce to simple DP over the order &mdash; longest/shortest path, counting paths, critical path scheduling.</p>
+<table class="ref-table">
+<tr><th>Technique</th><th>Idea</th></tr>
+<tr><td>Kahn's (BFS)</td><td>Queue of zero-in-degree nodes; fewer than V processed at the end &rarr; cycle exists</td></tr>
+<tr><td>DFS-based topo sort</td><td>Post-order push onto a stack; reverse at the end</td></tr>
+<tr><td>DAG DP</td><td>Relax edges in topo order &mdash; no need for Dijkstra since a DAG has no cycles</td></tr>
+</table>
+
+{{code:TopoSortDAG.java}}

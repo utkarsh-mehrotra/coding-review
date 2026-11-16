@@ -1,0 +1,9 @@
+<h1 class="page-title">Minimum Spanning Tree</h1>
+<p class="page-intro">For connected, weighted, undirected graphs. "Minimum cost to connect all points" style problems are MST on an implicit complete graph &mdash; recognizing the implicit graph is the actual skill being tested.</p>
+<table class="ref-table">
+<tr><th>Algorithm</th><th>Best for</th><th>Complexity</th></tr>
+<tr><td>Kruskal's</td><td>Sparse graphs / edge-list input (sort edges, add via DSU)</td><td class="complexity">O(E log E)</td></tr>
+<tr><td>Prim's</td><td>Dense graphs / adjacency-matrix input (grow tree via priority queue)</td><td class="complexity">O(E log V)</td></tr>
+</table>
+
+{{code:MST.java}}

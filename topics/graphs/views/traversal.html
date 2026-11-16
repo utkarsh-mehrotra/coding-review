@@ -1,0 +1,12 @@
+<h1 class="page-title">Traversal Primitives</h1>
+<p class="page-intro">The base every other pattern builds on. If weights are capped or small, the interview signal is recognizing you don't need Dijkstra by default.</p>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>DFS (recursive/iterative)</td><td>Connectivity, cycle detection, path existence, backtracking</td><td class="complexity">O(V+E)</td></tr>
+<tr><td>BFS</td><td>Shortest path (unweighted), level-order, multi-source spread</td><td class="complexity">O(V+E)</td></tr>
+<tr><td>Multi-source BFS</td><td>"Nearest X from any source" &mdash; rotting oranges, walls-and-gates, 01 matrix</td><td class="complexity">O(V+E)</td></tr>
+<tr><td>0-1 BFS (deque)</td><td>Shortest path when edge weights are only 0 or 1</td><td class="complexity">O(V+E)</td></tr>
+<tr><td>Dial's Algorithm</td><td>Shortest path with small bounded integer weights (bucket queue)</td><td class="complexity">O(V+E+maxW)</td></tr>
+</table>
+
+{{code:Traversal.java}}

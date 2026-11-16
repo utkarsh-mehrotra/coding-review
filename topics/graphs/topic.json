@@ -1,0 +1,475 @@
+{
+ "id": "graphs",
+ "title": "Graphs",
+ "order": 1,
+ "views": [
+  {
+   "id": "traversal",
+   "title": "Traversal (BFS / DFS)",
+   "fragment": "views/traversal.html",
+   "files": [
+    {
+     "file": "Traversal.java",
+     "desc": "DFS, BFS, multi-source BFS, 0-1 BFS, Dial's bucket queue",
+     "badge": "O(V+E)"
+    }
+   ]
+  },
+  {
+   "id": "shortest-path",
+   "title": "Shortest Path",
+   "fragment": "views/shortest-path.html",
+   "files": [
+    {
+     "file": "ShortestPath.java",
+     "desc": "Dijkstra, Bellman-Ford, Floyd-Warshall, Johnson's, A*",
+     "badge": "varies"
+    }
+   ]
+  },
+  {
+   "id": "topo-dag",
+   "title": "Topo Sort & DAG DP",
+   "fragment": "views/topo-dag.html",
+   "files": [
+    {
+     "file": "TopoSortDAG.java",
+     "desc": "Kahn's, DFS-based topo sort, DAG longest-path &amp; path-counting DP",
+     "badge": "O(V+E)"
+    }
+   ]
+  },
+  {
+   "id": "dsu",
+   "title": "Union–Find (DSU)",
+   "fragment": "views/dsu.html",
+   "files": [
+    {
+     "file": "DSU.java",
+     "desc": "Union-Find with path compression + union by rank, plus cycle/component helpers",
+     "badge": "O(&alpha;(N))"
+    }
+   ]
+  },
+  {
+   "id": "mst",
+   "title": "MST (Kruskal / Prim)",
+   "fragment": "views/mst.html",
+   "files": [
+    {
+     "file": "MST.java",
+     "desc": "Kruskal's (DSU-based) and Prim's (priority-queue based)",
+     "badge": "O(E log E)"
+    }
+   ]
+  },
+  {
+   "id": "scc",
+   "title": "SCC, Bridges, 2-SAT",
+   "fragment": "views/scc.html",
+   "files": [
+    {
+     "file": "SCC_Bridges_2SAT.java",
+     "desc": "Tarjan's, Kosaraju's, SCC condensation, bridges/articulation points, 2-SAT",
+     "badge": "O(V+E)"
+    }
+   ]
+  },
+  {
+   "id": "eulerian",
+   "title": "Eulerian Path",
+   "fragment": "views/eulerian.html",
+   "files": [
+    {
+     "file": "EulerianPath.java",
+     "desc": "Hierholzer's algorithm, plus the Reconstruct Itinerary (LC 332) shape",
+     "badge": "O(E)"
+    }
+   ]
+  },
+  {
+   "id": "flow",
+   "title": "Network Flow",
+   "fragment": "views/flow.html",
+   "files": [
+    {
+     "file": "NetworkFlow.java",
+     "desc": "Edmonds-Karp, Dinic's, Hopcroft-Karp bipartite matching",
+     "badge": "O(VE&sup2;)"
+    }
+   ]
+  },
+  {
+   "id": "bipartite-bitmask",
+   "title": "Bipartite & Bitmask DP",
+   "fragment": "views/bipartite-bitmask.html",
+   "files": [
+    {
+     "file": "BipartiteAndBitmaskDP.java",
+     "desc": "Bipartite check, Held-Karp TSP, LC 847 shortest-path-visit-all shape",
+     "badge": "O(2&#8319; &middot; N&sup2;)"
+    }
+   ]
+  },
+  {
+   "id": "implicit",
+   "title": "Grids & State Spaces",
+   "fragment": "views/implicit.html",
+   "files": [
+    {
+     "file": "ImplicitGraphs.java",
+     "desc": "Flood fill, grid BFS, multi-source BFS, reverse BFS, word ladder (plain and bidirectional), open the lock, sliding puzzle",
+     "badge": "O(cells)"
+    }
+   ]
+  },
+  {
+   "id": "dijkstra-variants",
+   "title": "Dijkstra Variants",
+   "fragment": "views/dijkstra-variants.html",
+   "files": [
+    {
+     "file": "DijkstraVariants.java",
+     "desc": "Cheapest flights (state Dijkstra and K-bounded Bellman-Ford), minimax path, path reconstruction, path counting, obstacle elimination",
+     "badge": "O(E log V)"
+    }
+   ]
+  },
+  {
+   "id": "cycles-courses",
+   "title": "Cycles, Courses, Clone",
+   "fragment": "views/cycles-courses.html",
+   "files": [
+    {
+     "file": "CycleAndCourseGraphs.java",
+     "desc": "3-color cycle detection, safe nodes, course order, parallel courses, alien dictionary, clone graph",
+     "badge": "O(V+E)"
+    }
+   ]
+  },
+  {
+   "id": "dsu-extended",
+   "title": "DSU Extended",
+   "fragment": "views/dsu-extended.html",
+   "files": [
+    {
+     "file": "DSUExtended.java",
+     "desc": "Size-tracking DSU, online grid islands, accounts merge, redundant connection, weighted DSU",
+     "badge": "O(&alpha;(N))"
+    }
+   ]
+  },
+  {
+   "id": "trees",
+   "title": "Tree Algorithms",
+   "fragment": "views/trees.html",
+   "files": [
+    {
+     "file": "TreeGraphs.java",
+     "desc": "Diameter, LCA with binary lifting, k-th ancestor, rerooting, minimum height trees",
+     "badge": "O(N log N)"
+    }
+   ]
+  },
+  {
+   "id": "matching-coloring",
+   "title": "Matching, Coloring, Cycles",
+   "fragment": "views/matching-coloring.html",
+   "files": [
+    {
+     "file": "MatchingColoringFunctional.java",
+     "desc": "Kuhn's matching, k-coloring, Floyd's cycle detection, longest cycle in a functional graph",
+     "badge": "varies"
+    }
+   ]
+  }
+ ],
+ "decisions": [
+  {
+   "q": "Unweighted, shortest path?",
+   "a": "BFS (multi-source if multiple starts; 0-1 BFS if weights are 0/1)",
+   "template": "Traversal#bfs"
+  },
+  {
+   "q": "Weighted, non-negative, single source?",
+   "a": "Dijkstra",
+   "template": "ShortestPath#dijkstra"
+  },
+  {
+   "q": "Weighted, negative edges possible, single source?",
+   "a": "Bellman-Ford (also detects negative cycles)",
+   "template": "ShortestPath#bellmanFord"
+  },
+  {
+   "q": "All-pairs shortest path, dense graph?",
+   "a": "Floyd-Warshall",
+   "template": "ShortestPath#floydWarshall"
+  },
+  {
+   "q": "All-pairs shortest path, sparse graph?",
+   "a": "Johnson's",
+   "template": "ShortestPath#johnsons"
+  },
+  {
+   "q": "DAG + need ordering/dependency resolution?",
+   "a": "Topological sort (Kahn's or DFS)",
+   "template": "TopoSortDAG#kahnsTopoSort"
+  },
+  {
+   "q": "DAG + need longest/shortest/count paths?",
+   "a": "DP over topo order",
+   "template": "TopoSortDAG#longestPathDAG"
+  },
+  {
+   "q": "Undirected + dynamic connectivity/merge queries?",
+   "a": "DSU",
+   "template": "DSU#countComponents"
+  },
+  {
+   "q": "Connect all nodes, minimize total edge weight?",
+   "a": "Kruskal's (sparse/edge-list) or Prim's (dense/adjacency-matrix)",
+   "template": "MST#kruskalsMST"
+  },
+  {
+   "q": "Directed graph, need tightly-coupled clusters?",
+   "a": "Tarjan's/Kosaraju's (SCC), condense to DAG if there's a follow-up",
+   "template": "SCC_Bridges_2SAT#tarjanSCC"
+  },
+  {
+   "q": "Need critical/fragile points in a network?",
+   "a": "Bridges &amp; articulation points",
+   "template": "SCC_Bridges_2SAT#findBridgesAndArticulation"
+  },
+  {
+   "q": "Need to traverse every edge exactly once?",
+   "a": "Hierholzer's (Eulerian path/circuit)",
+   "template": "EulerianPath#hierholzer"
+  },
+  {
+   "q": "Boolean 2-variable clause satisfaction?",
+   "a": "2-SAT via implication graph + SCC",
+   "template": "SCC_Bridges_2SAT#solve2SAT"
+  },
+  {
+   "q": "Assignment/matching with capacity constraints?",
+   "a": "Max flow (Edmonds-Karp/Dinic's) or bipartite matching (Hopcroft-Karp)",
+   "template": "NetworkFlow#edmondsKarp"
+  },
+  {
+   "q": "Small N (&le;20), must visit all nodes/subsets?",
+   "a": "Bitmask DP (Held-Karp style)",
+   "template": "BipartiteAndBitmaskDP#heldKarpTSP"
+  },
+  {
+   "q": "Grid, board or string-transformation problem?",
+   "a": "Implicit graph: name the node, generate neighbors, BFS (bidirectional if both ends are known)",
+   "template": "ImplicitGraphs#wordLadder"
+  },
+  {
+   "q": "Shortest path with an extra constraint (K stops, fuel, keys, obstacle budget)?",
+   "a": "Put the resource in the state: Dijkstra/BFS over (node, used), or Bellman-Ford capped at K+1 rounds",
+   "template": "DijkstraVariants#cheapestFlightsDijkstraState"
+  },
+  {
+   "q": "Path cost is the worst edge, not the sum?",
+   "a": "Dijkstra with max() as the combiner (or sort edges + DSU)",
+   "template": "DijkstraVariants#minimumEffortPath"
+  },
+  {
+   "q": "Count the shortest paths, or print one?",
+   "a": "Dijkstra with ways[] or prev[]",
+   "template": "DijkstraVariants#countShortestPaths"
+  },
+  {
+   "q": "Directed cycle, safe nodes, or an order inferred from data (Alien Dictionary)?",
+   "a": "3-color DFS or Kahn's, after building the edges from the data",
+   "template": "CycleAndCourseGraphs#alienOrder"
+  },
+  {
+   "q": "Ratios or equivalences between named things (evaluate division)?",
+   "a": "Weighted DSU, or DFS multiplying along the path",
+   "template": "DSUExtended#calcEquation"
+  },
+  {
+   "q": "Tree question: LCA, distance, diameter, an answer for every root?",
+   "a": "Binary lifting, double BFS, or rerooting",
+   "template": "TreeGraphs#treeDiameter"
+  },
+  {
+   "q": "Small bipartite matching to code live?",
+   "a": "Kuhn's; Hopcroft-Karp only for large inputs",
+   "template": "MatchingColoringFunctional#kuhnMatching"
+  },
+  {
+   "q": "Every node has exactly one outgoing edge?",
+   "a": "Functional graph: Floyd's or a timestamp walk",
+   "template": "MatchingColoringFunctional#cycleStart"
+  },
+  {
+   "q": "Small k-coloring, or \"can this be split into k groups\"?",
+   "a": "Backtracking coloring (k = 2 is the bipartite check)",
+   "template": "MatchingColoringFunctional#kColorable"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> BFS/DFS variants, Dijkstra, Union-Find, Kruskal's/Prim's, topological sort, bipartite check &mdash; implement cleanly, discuss complexity, handle edge cases (disconnected components, self-loops, multi-edges).",
+  "<strong>SDE3 bar:</strong> everything above cold, plus recognizing which algorithm applies to a disguised/real-world framed problem, discussing tradeoffs (Johnson's vs Floyd-Warshall, Dinic's vs Edmonds-Karp), SCC condensation as a two-step technique, and reasoning about complexity on dense vs. sparse graphs without being told which.",
+  "<strong>Staff bar (for context):</strong> full flow/matching implementations, 2-SAT reductions, amortized analysis of DSU from first principles, choosing/justifying approximations for NP-hard graph coloring instances."
+ ],
+ "practice": [
+  [
+   "Multi-source BFS",
+   [
+    "994 Rotting Oranges",
+    "286 Walls and Gates",
+    "1162 As Far from Land as Possible"
+   ]
+  ],
+  [
+   "Dijkstra",
+   [
+    "743 Network Delay Time",
+    "1631 Path With Minimum Effort",
+    "787 Cheapest Flights Within K Stops"
+   ]
+  ],
+  [
+   "Bellman-Ford",
+   [
+    "787 Cheapest Flights (K-constrained)"
+   ]
+  ],
+  [
+   "Topological Sort",
+   [
+    "207/210 Course Schedule I/II",
+    "269 Alien Dictionary",
+    "1136 Parallel Courses"
+   ]
+  ],
+  [
+   "DSU",
+   [
+    "547 Number of Provinces",
+    "684 Redundant Connection",
+    "721 Accounts Merge",
+    "1319 Min Ops to Connect Network"
+   ]
+  ],
+  [
+   "MST",
+   [
+    "1584 Min Cost to Connect All Points",
+    "1135 Connecting Cities With Min Cost"
+   ]
+  ],
+  [
+   "SCC",
+   [
+    "1192 Critical Connections (bridges)",
+    "1568 Min Days to Disconnect Island"
+   ]
+  ],
+  [
+   "Eulerian Path",
+   [
+    "332 Reconstruct Itinerary"
+   ]
+  ],
+  [
+   "Bipartite",
+   [
+    "785 Is Graph Bipartite?",
+    "886 Possible Bipartition"
+   ]
+  ],
+  [
+   "Bitmask DP",
+   [
+    "847 Shortest Path Visiting All Nodes",
+    "943 Find the Shortest Superstring"
+   ]
+  ],
+  [
+   "Flow/Matching",
+   [
+    "1349 Max Students Taking Exam",
+    "1947 Max Compatibility Score Sum"
+   ]
+  ],
+  [
+   "Grids / state-space BFS",
+   [
+    "200 Number of Islands",
+    "695 Max Area of Island",
+    "1091 Shortest Path in Binary Matrix",
+    "417 Pacific Atlantic",
+    "127 Word Ladder",
+    "752 Open the Lock",
+    "773 Sliding Puzzle"
+   ]
+  ],
+  [
+   "Dijkstra with constraints",
+   [
+    "787 Cheapest Flights (both versions)",
+    "1631 Path With Minimum Effort",
+    "1976 Ways to Arrive at Destination",
+    "1293 Obstacle Elimination"
+   ]
+  ],
+  [
+   "Cycles / ordering / cloning",
+   [
+    "802 Eventual Safe States",
+    "133 Clone Graph",
+    "269 Alien Dictionary",
+    "1136 Parallel Courses"
+   ]
+  ],
+  [
+   "DSU variants",
+   [
+    "305 Number of Islands II",
+    "684 Redundant Connection",
+    "399 Evaluate Division"
+   ]
+  ],
+  [
+   "Trees",
+   [
+    "1245 Tree Diameter",
+    "236 Lowest Common Ancestor",
+    "1483 Kth Ancestor",
+    "834 Sum of Distances in Tree",
+    "310 Minimum Height Trees"
+   ]
+  ],
+  [
+   "Functional graphs",
+   [
+    "287 Find the Duplicate Number",
+    "142 Linked List Cycle II",
+    "2360 Longest Cycle in a Graph"
+   ]
+  ]
+ ],
+ "intro": "DFS/BFS are table stakes. This reference maps every specialized pattern to the graph property that calls for it, with a decision tree to go from problem statement to algorithm fast, plus a Java template for each one in the sidebar.",
+ "groups": {
+  "traversal": "Graph Templates",
+  "shortest-path": "Graph Templates",
+  "topo-dag": "Graph Templates",
+  "dsu": "Graph Templates",
+  "mst": "Graph Templates",
+  "scc": "Graph Templates",
+  "eulerian": "Graph Templates",
+  "flow": "Graph Templates",
+  "bipartite-bitmask": "Graph Templates",
+  "implicit": "Graph Modeling & Variants",
+  "dijkstra-variants": "Graph Modeling & Variants",
+  "cycles-courses": "Graph Modeling & Variants",
+  "dsu-extended": "Graph Modeling & Variants",
+  "trees": "Graph Modeling & Variants",
+  "matching-coloring": "Graph Modeling & Variants"
+ }
+}

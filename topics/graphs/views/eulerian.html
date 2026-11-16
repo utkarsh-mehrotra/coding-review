@@ -1,0 +1,9 @@
+<h1 class="page-title">Eulerian Path / Circuit</h1>
+<p class="page-intro">Traverses every <em>edge</em> exactly once &mdash; versus Hamiltonian, which is every <em>node</em> and is NP-hard. Don't confuse them in an interview.</p>
+<table class="ref-table">
+<tr><th>Technique</th><th>Idea</th></tr>
+<tr><td>Hierholzer's</td><td>Post-order DFS with edge removal; reconstruct path by reversing the recursion stack</td></tr>
+</table>
+<p class="page-intro" style="margin-bottom:0;">Classic problem: Reconstruct Itinerary (LeetCode 332) &mdash; included below as a worked shape.</p>
+
+{{code:EulerianPath.java}}

@@ -1,0 +1,122 @@
+{
+ "id": "backtracking",
+ "title": "Backtracking",
+ "order": 10,
+ "views": [
+  {
+   "id": "backtracking",
+   "title": "Backtracking",
+   "intro": "Choose, explore, undo. Subsets and combinations move a START index forward; permutations use a used[] array. For duplicate inputs sort first and skip equal siblings at the same depth. Prune early with a cheap feasibility bound.",
+   "table": [
+    [
+     "Subsets / combinations",
+     "Start index moves forward",
+     "O(2^n)"
+    ],
+    [
+     "Permutations",
+     "used[] array, with duplicate skip rule",
+     "O(n!)"
+    ],
+    [
+     "Constraint search",
+     "N-Queens, sudoku with occupancy sets or bitmasks",
+     "exp"
+    ],
+    [
+     "Strings",
+     "Parentheses, partitions, IP addresses, operators",
+     "exp"
+    ]
+   ],
+   "files": [
+    {
+     "file": "Backtracking.java",
+     "desc": "Subsets (+dup), permutations (+unique), combinations, combination sum I/II, parentheses, phone, palindrome partition, word search, N-Queens, sudoku, IP addresses, add operators, gray code",
+     "badge": "O(2^n) / O(n!)"
+    }
+   ],
+   "pitfalls": [
+    "Add a COPY of the current path to the result, not the live list.",
+    "Duplicates: `i > start && a[i] == a[i-1]` for combinations; `used[i-1]` check for permutations.",
+    "Prune before recursing (remaining sum < 0, not enough elements left) instead of after."
+   ],
+   "group": "Backtracking"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>All subsets / combinations?</strong>",
+   "a": "Start-index recursion",
+   "template": "Backtracking#subsets"
+  },
+  {
+   "q": "<strong>All orderings?</strong>",
+   "a": "used[] array",
+   "template": "Backtracking#permute"
+  },
+  {
+   "q": "<strong>Inputs contain duplicates?</strong>",
+   "a": "Sort + skip equal siblings",
+   "template": "Backtracking#subsetsWithDup"
+  },
+  {
+   "q": "<strong>Reusable candidates summing to a target?</strong>",
+   "a": "Recurse with the same index",
+   "template": "Backtracking#combinationSum"
+  },
+  {
+   "q": "<strong>Generate valid strings?</strong>",
+   "a": "Track counts, only add legal characters",
+   "template": "Backtracking#generateParenthesis"
+  },
+  {
+   "q": "<strong>Place items under conflict constraints?</strong>",
+   "a": "Occupancy sets / bitmasks for O(1) validity",
+   "template": "Backtracking#solveNQueens"
+  },
+  {
+   "q": "<strong>Find a path of letters in a grid?</strong>",
+   "a": "Mark visited in place, restore on exit",
+   "template": "Backtracking#exist"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> subsets, permutations, combination sum, generate parentheses, letter combinations, word search.",
+  "<strong>SDE3 bar:</strong> duplicate handling, palindrome partitioning, N-Queens, sudoku solver, restore IP addresses, expression add operators.",
+  "<strong>Staff bar (for context):</strong> pruning heuristics, bitmask-based constraint propagation, and recognizing when DP or meet-in-the-middle replaces brute force."
+ ],
+ "practice": [
+  [
+   "Subsets / permutations",
+   [
+    "78 Subsets",
+    "90 Subsets II",
+    "46 Permutations",
+    "47 Permutations II",
+    "77 Combinations"
+   ]
+  ],
+  [
+   "Sums / strings",
+   [
+    "39 Combination Sum",
+    "40 Combination Sum II",
+    "22 Generate Parentheses",
+    "17 Letter Combinations",
+    "131 Palindrome Partitioning",
+    "93 Restore IP Addresses",
+    "282 Expression Add Operators"
+   ]
+  ],
+  [
+   "Constraint",
+   [
+    "51 N-Queens",
+    "52 N-Queens II",
+    "37 Sudoku Solver",
+    "79 Word Search"
+   ]
+  ]
+ ]
+}

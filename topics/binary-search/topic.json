@@ -1,0 +1,133 @@
+{
+ "id": "binary-search",
+ "title": "Binary Search",
+ "order": 9,
+ "views": [
+  {
+   "id": "binary-search",
+   "title": "Binary Search",
+   "intro": "One template covers everything: find the FIRST index in [lo, hi] where a monotone predicate ok(i) becomes true, with `while (lo < hi)` and `hi = mid` on true. Searching on the answer is the same loop with ok(x) = \"is x feasible?\".",
+   "table": [
+    [
+     "Bounds",
+     "lowerBound / upperBound, first and last position",
+     "O(log n)"
+    ],
+    [
+     "Rotated arrays",
+     "One half is always sorted",
+     "O(log n)"
+    ],
+    [
+     "Search on answer",
+     "Min speed / capacity / days such that feasible",
+     "O(n log range)"
+    ],
+    [
+     "Partition search",
+     "Median of two sorted arrays",
+     "O(log min(m, n))"
+    ]
+   ],
+   "files": [
+    {
+     "file": "BinarySearch.java",
+     "desc": "Lower/upper bound, range, rotated search and min, peak, matrices, Koko, shipping, split array, bouquets, multiplication table, two-array median, sqrt, time map, K closest",
+     "badge": "O(log n)"
+    }
+   ],
+   "pitfalls": [
+    "Compute mid as lo + (hi - lo) / 2 to avoid overflow.",
+    "Search-on-answer needs a monotone predicate: if feasible(x) does not imply feasible(x + 1) you cannot binary search.",
+    "With duplicates in a rotated array, equal ends force a linear shrink (worst case O(n))."
+   ],
+   "group": "Binary Search"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>First index meeting a monotone condition?</strong>",
+   "a": "Lower-bound template: while (lo < hi), hi = mid on true",
+   "template": "BinarySearch#lowerBound"
+  },
+  {
+   "q": "<strong>First and last position of a value?</strong>",
+   "a": "lowerBound and upperBound",
+   "template": "BinarySearch#searchRange"
+  },
+  {
+   "q": "<strong>Rotated sorted array?</strong>",
+   "a": "Decide which half is sorted",
+   "template": "BinarySearch#searchRotated"
+  },
+  {
+   "q": "<strong>Minimize the maximum (or maximize the minimum) with a feasibility check?</strong>",
+   "a": "Binary search on the answer",
+   "template": "BinarySearch#shipWithinDays"
+  },
+  {
+   "q": "<strong>Smallest rate finishing in time?</strong>",
+   "a": "Binary search on the answer",
+   "template": "BinarySearch#minEatingSpeed"
+  },
+  {
+   "q": "<strong>Median or kth of two sorted arrays?</strong>",
+   "a": "Partition the smaller array",
+   "template": "BinarySearch#findMedianSortedArrays"
+  },
+  {
+   "q": "<strong>Latest value at or before a timestamp?</strong>",
+   "a": "Binary search the history list",
+   "template": "BinarySearch#TimeMap"
+  },
+  {
+   "q": "<strong>Real-valued answer?</strong>",
+   "a": "Fixed iteration count, not an epsilon test",
+   "template": "BinarySearch#sqrt"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> classic search, first/last position, rotated array search, search insert, peak element.",
+  "<strong>SDE3 bar:</strong> search on the answer (Koko, shipping, split array), 2D matrix search, K closest elements, time-based map.",
+  "<strong>Staff bar (for context):</strong> median of two sorted arrays, binary search combined with other structures (rolling hash for longest duplicate substring), and arguing monotonicity precisely."
+ ],
+ "practice": [
+  [
+   "Bounds",
+   [
+    "34 First and Last Position",
+    "35 Search Insert Position",
+    "704 Binary Search",
+    "658 Find K Closest Elements"
+   ]
+  ],
+  [
+   "Rotated / peak",
+   [
+    "33 Search in Rotated Sorted Array",
+    "153 Find Minimum in Rotated Sorted Array",
+    "154 With Duplicates",
+    "162 Find Peak Element"
+   ]
+  ],
+  [
+   "On the answer",
+   [
+    "875 Koko Eating Bananas",
+    "1011 Capacity To Ship Packages",
+    "410 Split Array Largest Sum",
+    "1482 Minimum Days to Make m Bouquets",
+    "668 Kth Smallest in Multiplication Table"
+   ]
+  ],
+  [
+   "Hard",
+   [
+    "4 Median of Two Sorted Arrays",
+    "981 Time Based Key-Value Store",
+    "74 Search a 2D Matrix",
+    "240 Search a 2D Matrix II"
+   ]
+  ]
+ ]
+}

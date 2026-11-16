@@ -1,0 +1,297 @@
+{
+ "id": "trees",
+ "title": "Trees & Range Structures",
+ "order": 3,
+ "views": [
+  {
+   "id": "binary-tree",
+   "title": "Binary Tree Patterns",
+   "intro": "Most tree problems are one post-order that returns a value and optionally updates a global. Traversals, level order, LCA, build from traversals, serialization and tree dp share that skeleton.",
+   "table": [
+    [
+     "Traversals",
+     "Inorder / preorder / postorder iterative, Morris for O(1) space",
+     "O(n)"
+    ],
+    [
+     "Level order",
+     "Queue with a level-size snapshot",
+     "O(n)"
+    ],
+    [
+     "Post-order value + global",
+     "Height, diameter, max path sum, balanced",
+     "O(n)"
+    ],
+    [
+     "Tree dp",
+     "Rob III, cameras: return a small state tuple per node",
+     "O(n)"
+    ]
+   ],
+   "files": [
+    {
+     "file": "BinaryTree.java",
+     "desc": "Traversals, level order, diameter, max path sum, LCA, build, serialize, flatten, distance K, vertical order, rob III, cameras",
+     "badge": "O(n)"
+    }
+   ],
+   "pitfalls": [
+    "Max path sum: return the best DOWNWARD gain (a path cannot fork upward), but update the answer with the bent path through the node.",
+    "Path Sum III: backtrack the prefix-sum map after both children return.",
+    "Recursion depth can hit 10^5 on a skewed tree; mention the iterative form."
+   ],
+   "group": "Trees"
+  },
+  {
+   "id": "bst",
+   "title": "Binary Search Trees",
+   "intro": "Inorder of a BST is sorted; every BST question is either \"use that\" or \"carry open bounds down\". Deletion with two children replaces the node with its inorder successor.",
+   "table": [
+    [
+     "Validate",
+     "Carry (lo, hi) bounds, never compare only to the parent",
+     "O(n)"
+    ],
+    [
+     "Kth / iterator",
+     "Iterative inorder, stop early; stack of the left spine",
+     "O(h)"
+    ],
+    [
+     "Search / LCA",
+     "Walk down; no recursion needed",
+     "O(h)"
+    ],
+    [
+     "Recover",
+     "Two inversions in the inorder sequence",
+     "O(n)"
+    ]
+   ],
+   "files": [
+    {
+     "file": "BST.java",
+     "desc": "Validate, search, insert, delete, kth smallest, LCA, sorted array to BST, recover, iterator, largest BST subtree, floor, Catalan count",
+     "badge": "O(h)"
+    }
+   ],
+   "pitfalls": [
+    "Comparing a node only against its parent accepts invalid trees; carry bounds.",
+    "Recover BST: the first inversion marks `first = prev`, the last marks `second = cur`.",
+    "TreeMap gives floor/ceiling/first/last in O(log n) when a whole ordered structure is needed."
+   ],
+   "group": "Trees"
+  },
+  {
+   "id": "trie",
+   "title": "Tries",
+   "intro": "Use a trie when many queries share prefixes: autocomplete, dictionary with wildcards, word search over a grid, and bitwise tries for maximum XOR.",
+   "table": [
+    [
+     "Insert / search / prefix",
+     "26-way children with end marker and pass count",
+     "O(L)"
+    ],
+    [
+     "Wildcard",
+     "DFS over children on a dot",
+     "O(26^L) worst"
+    ],
+    [
+     "Grid + trie",
+     "Prune words as they are found",
+     "O(cells * 4^L)"
+    ],
+    [
+     "Binary trie",
+     "Maximum XOR pair, greedy bit by bit",
+     "O(32n)"
+    ]
+   ],
+   "files": [
+    {
+     "file": "Trie.java",
+     "desc": "Trie, wildcard search, word search II, maximum XOR, replace words, suggested products",
+     "badge": "O(L)"
+    }
+   ],
+   "pitfalls": [
+    "Word Search II: null out the stored word after finding it so duplicates are not reported.",
+    "Binary trie over 31 bits (not 32) for non-negative ints keeps the sign bit out of the way."
+   ],
+   "group": "Trees"
+  },
+  {
+   "id": "range-structures",
+   "title": "Range Queries",
+   "intro": "Pick the lightest tool: prefix sums for static sums, a difference array for range add, Fenwick for point update plus prefix sum, a segment tree for any monoid, lazy propagation for range updates, a sparse table for static range min.",
+   "table": [
+    [
+     "Prefix / difference",
+     "Static range sum, offline range add",
+     "O(n)"
+    ],
+    [
+     "Fenwick",
+     "Point update, prefix sum, inversion counting",
+     "O(log n)"
+    ],
+    [
+     "Segment tree",
+     "Point update, range query (any associative op)",
+     "O(log n)"
+    ],
+    [
+     "Lazy segment tree",
+     "Range add + range sum",
+     "O(log n)"
+    ],
+    [
+     "Sparse table",
+     "Static range min in O(1)",
+     "O(n log n) build"
+    ]
+   ],
+   "files": [
+    {
+     "file": "RangeStructures.java",
+     "desc": "Prefix, difference, 2D prefix, Fenwick, count smaller, inversions, segment tree, lazy tree, sparse table, skyline",
+     "badge": "O(log n)"
+    }
+   ],
+   "pitfalls": [
+    "Fenwick is 1-indexed internally; the template exposes a 0-indexed API.",
+    "Count-smaller problems: compress values to ranks first, then scan right to left.",
+    "Skyline: process starts before ends at equal x and keep a TreeMap multiset of heights."
+   ],
+   "group": "Trees"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>Visit every node with a value flowing up?</strong>",
+   "a": "One post-order returning a value (and a global for the answer)",
+   "template": "BinaryTree#diameter"
+  },
+  {
+   "q": "<strong>Answer per level?</strong>",
+   "a": "BFS with a level-size snapshot",
+   "template": "BinaryTree#levelOrder"
+  },
+  {
+   "q": "<strong>Best path that may bend at a node?</strong>",
+   "a": "Return best downward gain, update global with the bent path",
+   "template": "BinaryTree#maxPathSum"
+  },
+  {
+   "q": "<strong>Count paths with a given sum?</strong>",
+   "a": "Prefix-sum map along the root path, backtrack",
+   "template": "BinaryTree#pathSumIII"
+  },
+  {
+   "q": "<strong>Lowest common ancestor?</strong>",
+   "a": "Post-order: both sides non-null means this node",
+   "template": "BinaryTree#lowestCommonAncestor"
+  },
+  {
+   "q": "<strong>Rebuild or store a tree?</strong>",
+   "a": "Preorder + inorder map, or preorder with null markers",
+   "template": "BinaryTree#serialize"
+  },
+  {
+   "q": "<strong>Choose nodes with no two adjacent (tree dp)?</strong>",
+   "a": "Return {take, skip} per node",
+   "template": "BinaryTree#robTree"
+  },
+  {
+   "q": "<strong>Validate or order-query a BST?</strong>",
+   "a": "Carry bounds; use inorder = sorted",
+   "template": "BST#isValidBST"
+  },
+  {
+   "q": "<strong>Kth smallest in a BST, or lazy iteration?</strong>",
+   "a": "Iterative inorder / stack of left spine",
+   "template": "BST#kthSmallest"
+  },
+  {
+   "q": "<strong>Prefix queries over many words?</strong>",
+   "a": "Trie",
+   "template": "Trie#insert"
+  },
+  {
+   "q": "<strong>Find words on a board?</strong>",
+   "a": "Trie + grid DFS with pruning",
+   "template": "Trie#findWords"
+  },
+  {
+   "q": "<strong>Maximum XOR of two numbers?</strong>",
+   "a": "Binary trie, greedy opposite bit",
+   "template": "Trie#findMaximumXOR"
+  },
+  {
+   "q": "<strong>Many range sums, no updates?</strong>",
+   "a": "Prefix sums",
+   "template": "RangeStructures#prefix"
+  },
+  {
+   "q": "<strong>Point updates plus prefix sums, or counting inversions?</strong>",
+   "a": "Fenwick tree",
+   "template": "RangeStructures#countInversions"
+  },
+  {
+   "q": "<strong>Range updates and range queries?</strong>",
+   "a": "Lazy segment tree",
+   "template": "RangeStructures#LazySeg"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> all traversals recursive and iterative, level order, LCA, validate BST, kth smallest, build from traversals, serialize, trie insert/search.",
+  "<strong>SDE3 bar:</strong> max path sum, tree dp, BST delete, word search II, Fenwick tree for counting problems, segment tree for dynamic range queries, skyline.",
+  "<strong>Staff bar (for context):</strong> lazy propagation, persistent or offline-query tricks, choosing between Fenwick, segment tree and sparse table by update/query mix, Morris traversal for O(1) space."
+ ],
+ "practice": [
+  [
+   "Binary tree",
+   [
+    "102 Level Order",
+    "124 Binary Tree Maximum Path Sum",
+    "236 Lowest Common Ancestor",
+    "297 Serialize and Deserialize",
+    "337 House Robber III",
+    "968 Binary Tree Cameras",
+    "863 All Nodes Distance K"
+   ]
+  ],
+  [
+   "BST",
+   [
+    "98 Validate BST",
+    "230 Kth Smallest in BST",
+    "450 Delete Node in a BST",
+    "99 Recover BST",
+    "173 BST Iterator",
+    "333 Largest BST Subtree"
+   ]
+  ],
+  [
+   "Trie",
+   [
+    "208 Implement Trie",
+    "211 Add and Search Word",
+    "212 Word Search II",
+    "421 Maximum XOR of Two Numbers"
+   ]
+  ],
+  [
+   "Range queries",
+   [
+    "304 Range Sum Query 2D",
+    "315 Count of Smaller Numbers After Self",
+    "307 Range Sum Query Mutable",
+    "218 The Skyline Problem",
+    "1109 Corporate Flight Bookings"
+   ]
+  ]
+ ]
+}

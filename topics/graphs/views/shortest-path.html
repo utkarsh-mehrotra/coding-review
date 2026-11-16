@@ -1,0 +1,12 @@
+<h1 class="page-title">Shortest Path Algorithms</h1>
+<p class="page-intro">The follow-up interviewers ask: "your graph has 10^5 nodes but is sparse &mdash; why not Floyd-Warshall?" Johnson's is the answer that shows depth.</p>
+<table class="ref-table">
+<tr><th>Algorithm</th><th>Constraint</th><th>Complexity</th></tr>
+<tr><td>Dijkstra</td><td>Non-negative weights only</td><td class="complexity">O((V+E) log V)</td></tr>
+<tr><td>Bellman-Ford</td><td>Handles negative weights; detects negative cycles</td><td class="complexity">O(V&middot;E)</td></tr>
+<tr><td>Floyd-Warshall</td><td>All-Pairs Shortest Path, dense graphs</td><td class="complexity">O(V&sup3;)</td></tr>
+<tr><td>Johnson's</td><td>APSP on sparse graphs, beats Floyd-Warshall when E &lt;&lt; V&sup2;</td><td class="complexity">O(V&sup2; log V + VE)</td></tr>
+<tr><td>A* Search</td><td>Needs admissible heuristic; pathfinding/spatial/games</td><td class="complexity">~Dijkstra, faster in practice</td></tr>
+</table>
+
+{{code:ShortestPath.java}}

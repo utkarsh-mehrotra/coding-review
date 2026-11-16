@@ -1,0 +1,123 @@
+{
+ "id": "linked-lists",
+ "title": "Linked Lists",
+ "order": 12,
+ "views": [
+  {
+   "id": "linked-lists",
+   "title": "Linked Lists",
+   "intro": "Use a dummy head whenever the head can change. Slow/fast pointers find the middle and the cycle; reversing the second half turns many problems (palindrome, reorder) into a merge of two lists. Draw the pointers before coding.",
+   "table": [
+    [
+     "Reverse",
+     "Whole list, a range, k-groups",
+     "O(n)"
+    ],
+    [
+     "Slow / fast",
+     "Middle, cycle entry, nth from end",
+     "O(n)"
+    ],
+    [
+     "Merge",
+     "Two lists, K lists by divide and conquer, sort list",
+     "O(n log n)"
+    ],
+    [
+     "Pointer surgery",
+     "Reorder, partition, rotate, copy with random pointer",
+     "O(n)"
+    ]
+   ],
+   "files": [
+    {
+     "file": "LinkedLists.java",
+     "desc": "Reverse (range, k-group), swap pairs, middle, cycle, remove nth, merge, merge K, sort, reorder, palindrome, add numbers, intersection, dedupe II, partition, rotate, odd-even, copy random",
+     "badge": "O(n)"
+    }
+   ],
+   "pitfalls": [
+    "Dummy head removes every \"is it the head?\" special case.",
+    "Save `next` BEFORE overwriting it when reversing.",
+    "Cycle entry: after slow meets fast, restart one pointer at the head and move both one step."
+   ],
+   "group": "Linked Lists"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>Reverse all, a segment, or in groups?</strong>",
+   "a": "Iterative pointer flip; pull-to-front for ranges",
+   "template": "LinkedLists#reverse"
+  },
+  {
+   "q": "<strong>Middle, or nth from the end?</strong>",
+   "a": "Slow / fast, or a gap of n",
+   "template": "LinkedLists#removeNthFromEnd"
+  },
+  {
+   "q": "<strong>Cycle present, and where does it start?</strong>",
+   "a": "Floyd",
+   "template": "LinkedLists#detectCycle"
+  },
+  {
+   "q": "<strong>Merge sorted lists?</strong>",
+   "a": "Dummy head merge; divide and conquer for K",
+   "template": "LinkedLists#mergeKLists"
+  },
+  {
+   "q": "<strong>Sort a list in O(n log n), O(1) extra?</strong>",
+   "a": "Merge sort with slow/fast split",
+   "template": "LinkedLists#sortList"
+  },
+  {
+   "q": "<strong>Palindrome or reorder using the second half?</strong>",
+   "a": "Find middle, reverse second half",
+   "template": "LinkedLists#reorderList"
+  },
+  {
+   "q": "<strong>Clone with arbitrary pointers in O(1) space?</strong>",
+   "a": "Interleave copies, set randoms, split",
+   "template": "LinkedLists#copyRandomList"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> reverse list, merge two lists, detect cycle, remove nth from end, middle of list, add two numbers.",
+  "<strong>SDE3 bar:</strong> reverse k-group, merge K lists, sort list, reorder list, copy list with random pointer, LRU cache from scratch.",
+  "<strong>Staff bar (for context):</strong> in-place operations with proof of pointer invariants, lock-free list intuition, and skip-list / unrolled list tradeoffs."
+ ],
+ "practice": [
+  [
+   "Reverse",
+   [
+    "206 Reverse Linked List",
+    "92 Reverse Linked List II",
+    "25 Reverse Nodes in k-Group",
+    "24 Swap Nodes in Pairs"
+   ]
+  ],
+  [
+   "Fast / slow",
+   [
+    "876 Middle of the Linked List",
+    "141 Linked List Cycle",
+    "142 Linked List Cycle II",
+    "19 Remove Nth Node From End",
+    "160 Intersection of Two Linked Lists"
+   ]
+  ],
+  [
+   "Merge / rearrange",
+   [
+    "21 Merge Two Sorted Lists",
+    "23 Merge k Sorted Lists",
+    "148 Sort List",
+    "143 Reorder List",
+    "234 Palindrome Linked List",
+    "138 Copy List with Random Pointer",
+    "2 Add Two Numbers",
+    "61 Rotate List"
+   ]
+  ]
+ ]
+}

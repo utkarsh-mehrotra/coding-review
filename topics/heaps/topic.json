@@ -1,0 +1,121 @@
+{
+ "id": "heaps",
+ "title": "Heaps & Top-K",
+ "order": 7,
+ "views": [
+  {
+   "id": "heaps-topk",
+   "title": "Heaps & Top-K",
+   "intro": "For K largest keep a MIN-heap of size K; for K smallest keep a MAX-heap. Two heaps track a median. K-way merge pushes the next element of whichever list just emitted. Greedy scheduling problems often pair a sort with a heap.",
+   "table": [
+    [
+     "Top K",
+     "K largest / closest / most frequent",
+     "O(n log k)"
+    ],
+    [
+     "Quickselect",
+     "Kth element, average linear",
+     "O(n) avg"
+    ],
+    [
+     "Two heaps",
+     "Running median",
+     "O(log n) per add"
+    ],
+    [
+     "K-way merge",
+     "Merge sorted lists, kth in sorted matrix, smallest range",
+     "O(N log k)"
+    ]
+   ],
+   "files": [
+    {
+     "file": "HeapsTopK.java",
+     "desc": "Kth largest (heap + quickselect), K closest, top words, median finder, K-way merge, task scheduler, reorganize string, meeting rooms, IPO, furthest building, ugly numbers",
+     "badge": "O(n log k)"
+    }
+   ],
+   "pitfalls": [
+    "Heap of size K for K largest is a MIN-heap; people reach for a max-heap by reflex.",
+    "PriorityQueue has no decrease-key: push duplicates and skip stale entries on pop.",
+    "Comparator subtraction can overflow; use Integer.compare for large values."
+   ],
+   "group": "Heaps"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>K largest / smallest / closest / most frequent?</strong>",
+   "a": "Heap of size K",
+   "template": "HeapsTopK#findKthLargest"
+  },
+  {
+   "q": "<strong>Single Kth element, average O(n)?</strong>",
+   "a": "Quickselect with random pivot",
+   "template": "HeapsTopK#quickselectKthLargest"
+  },
+  {
+   "q": "<strong>Median of a stream?</strong>",
+   "a": "Two heaps (max-heap lower half, min-heap upper half)",
+   "template": "HeapsTopK#MedianFinder"
+  },
+  {
+   "q": "<strong>Merge K sorted sequences?</strong>",
+   "a": "Heap of (value, list, index)",
+   "template": "HeapsTopK#mergeKSorted"
+  },
+  {
+   "q": "<strong>Fewest rooms / concurrent intervals?</strong>",
+   "a": "Sort by start + min-heap of end times",
+   "template": "HeapsTopK#minMeetingRooms"
+  },
+  {
+   "q": "<strong>Rearrange so equal items are not adjacent?</strong>",
+   "a": "Max-heap by count, hold back the previous item",
+   "template": "HeapsTopK#reorganizeString"
+  },
+  {
+   "q": "<strong>Repeatedly pick the best available option as capacity grows?</strong>",
+   "a": "Sort by unlock key + max-heap of rewards",
+   "template": "HeapsTopK#findMaximizedCapital"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> kth largest, top K frequent, K closest points, merge K sorted lists, meeting rooms II.",
+  "<strong>SDE3 bar:</strong> find median from data stream, task scheduler, reorganize string, IPO-style greedy with heaps, smallest range covering K lists.",
+  "<strong>Staff bar (for context):</strong> sliding window median with lazy deletion, external-memory top K, and quickselect vs heap tradeoffs under streaming constraints."
+ ],
+ "practice": [
+  [
+   "Top K",
+   [
+    "215 Kth Largest Element",
+    "347 Top K Frequent Elements",
+    "973 K Closest Points to Origin",
+    "692 Top K Frequent Words"
+   ]
+  ],
+  [
+   "Two heaps / merge",
+   [
+    "295 Find Median from Data Stream",
+    "480 Sliding Window Median",
+    "23 Merge k Sorted Lists",
+    "378 Kth Smallest in Sorted Matrix",
+    "632 Smallest Range Covering K Lists"
+   ]
+  ],
+  [
+   "Greedy + heap",
+   [
+    "621 Task Scheduler",
+    "767 Reorganize String",
+    "253 Meeting Rooms II",
+    "502 IPO",
+    "1642 Furthest Building You Can Reach",
+    "871 Minimum Number of Refueling Stops"
+   ]
+  ]
+ ]
+}

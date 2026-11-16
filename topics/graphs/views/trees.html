@@ -1,0 +1,11 @@
+<h1 class="page-title">Tree Algorithms</h1>
+<p class="page-intro">A tree is a connected graph with N-1 edges, so everything above applies. These are the tree-specific tools that come up on their own: the farthest pair, ancestors, an answer for every possible root, and centers. All of them build iteratively, so deep trees don't overflow the stack.</p>
+<table class="ref-table">
+<tr><th>Need</th><th>Tool</th><th>Complexity</th></tr>
+<tr><td>Diameter</td><td>BFS from any node, then BFS from the farthest one</td><td class="complexity">O(N)</td></tr>
+<tr><td>LCA, k-th ancestor, distance between nodes</td><td>binary lifting</td><td class="complexity">O(N log N) build, O(log N) query</td></tr>
+<tr><td>An answer for every node as root</td><td>rerooting: bottom-up counts, then a top-down adjustment</td><td class="complexity">O(N)</td></tr>
+<tr><td>Root that minimizes height</td><td>peel leaves until 1 or 2 nodes remain</td><td class="complexity">O(N)</td></tr>
+</table>
+
+{{code:TreeGraphs.java}}

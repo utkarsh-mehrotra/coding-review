@@ -1,0 +1,12 @@
+<h1 class="page-title">Union-Find Beyond the Basics</h1>
+<p class="page-intro">The DSU in section 04 answers "are these connected?". These variants carry extra information through the same two operations.</p>
+<table class="ref-table">
+<tr><th>Variant</th><th>Extra data</th><th>Problem</th></tr>
+<tr><td>Size tracking</td><td>size[] kept on roots</td><td>largest component, live component count</td></tr>
+<tr><td>Grid cells</td><td>id = r * n + c</td><td>Number of Islands II (LC 305)</td></tr>
+<tr><td>String keys</td><td>map each key to an int first</td><td>Accounts Merge (LC 721)</td></tr>
+<tr><td>Cycle edge</td><td>union returns false</td><td>Redundant Connection (LC 684)</td></tr>
+<tr><td>Weighted</td><td>w[x] = ratio to parent, multiplied along the path</td><td>Evaluate Division (LC 399)</td></tr>
+</table>
+
+{{code:DSUExtended.java}}

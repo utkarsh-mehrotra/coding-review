@@ -1,0 +1,13 @@
+<h1 class="page-title">Strongly Connected Components, Bridges &amp; 2-SAT</h1>
+<p class="page-intro">After Tarjan's/Kosaraju's, the usual follow-up is: collapse each SCC into a single node and build the condensation DAG &mdash; that's often the actual second half of the question.</p>
+<p class="page-intro" style="margin-bottom:14px;">Stack depth: the DFS in these templates is recursive, which is the form interviewers expect. On a chain around 10<sup>5</sup> deep it overflows Java's default stack, so the file includes a <code>runWithBigStack</code> helper that runs the call on a thread with a bigger one.</p>
+<table class="ref-table">
+<tr><th>Algorithm / Pattern</th><th>Solves</th><th>Key concept</th></tr>
+<tr><td>Tarjan's</td><td>SCCs, single-pass</td><td>DFS discovery time + low-link values</td></tr>
+<tr><td>Kosaraju's</td><td>SCCs, two-pass</td><td>DFS + transpose graph + DFS in finish-time order</td></tr>
+<tr><td>SCC condensation</td><td>Collapse each SCC into one node</td><td>Produces a DAG for further topo-sort/DP</td></tr>
+<tr><td>Bridges &amp; articulation points</td><td>Network vulnerability / critical edges</td><td>Same DFS discovery/low-link backbone</td></tr>
+<tr><td>2-SAT</td><td>Boolean constraint satisfaction (a OR b clauses)</td><td>Implication graph + SCC; UNSAT iff a var and its negation share an SCC</td></tr>
+</table>
+
+{{code:SCC_Bridges_2SAT.java}}

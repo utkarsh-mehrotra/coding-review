@@ -1,0 +1,116 @@
+{
+ "id": "design",
+ "title": "Data-Structure Design",
+ "order": 15,
+ "views": [
+  {
+   "id": "design-structures",
+   "title": "Data-Structure Design",
+   "intro": "The pattern is almost always a hash map for lookup plus an ordering structure (linked list, TreeMap, heap, array with swap-delete) that makes the second operation cheap. State the complexity of every operation before coding.",
+   "table": [
+    [
+     "LRU / LFU",
+     "Map + doubly linked list; frequency buckets with minFreq",
+     "O(1)"
+    ],
+    [
+     "Randomized set",
+     "Array + index map, swap with last on delete",
+     "O(1)"
+    ],
+    [
+     "Feeds",
+     "Per-user lists merged with a heap",
+     "O(k log u)"
+    ],
+    [
+     "Limiters / counters",
+     "Deque of timestamps, token bucket, circular buckets",
+     "O(1) amortized"
+    ]
+   ],
+   "files": [
+    {
+     "file": "DesignStructures.java",
+     "desc": "LRU (hand-rolled and LinkedHashMap), LFU, randomized set, max stack, Twitter feed, rate limiter, token bucket, snapshot array, hit counter, peeking iterator, consistent hashing",
+     "badge": "O(1)"
+    }
+   ],
+   "pitfalls": [
+    "LRU: use sentinel head and tail nodes so no operation needs null checks.",
+    "LFU: when the min-frequency bucket empties during a touch, increment minFreq; on insert, reset it to 1.",
+    "Say aloud which operations are O(1) and which are O(log n) and why."
+   ],
+   "group": "Design"
+  }
+ ],
+ "decisions": [
+  {
+   "q": "<strong>Evict least recently used?</strong>",
+   "a": "Hash map + doubly linked list",
+   "template": "DesignStructures#LRUCache"
+  },
+  {
+   "q": "<strong>Evict least frequently used, ties by recency?</strong>",
+   "a": "freq to LinkedHashSet buckets, track minFreq",
+   "template": "DesignStructures#LFUCache"
+  },
+  {
+   "q": "<strong>O(1) insert, delete and random element?</strong>",
+   "a": "Array + index map with swap-delete",
+   "template": "DesignStructures#RandomizedSet"
+  },
+  {
+   "q": "<strong>Merge per-user streams into a feed?</strong>",
+   "a": "Heap over each user's newest tweet",
+   "template": "DesignStructures#Twitter"
+  },
+  {
+   "q": "<strong>Throttle requests per window?</strong>",
+   "a": "Deque of timestamps or token bucket",
+   "template": "DesignStructures#RateLimiter"
+  },
+  {
+   "q": "<strong>Versioned reads by snapshot id?</strong>",
+   "a": "Per-index history + binary search",
+   "template": "DesignStructures#SnapshotArray"
+  },
+  {
+   "q": "<strong>Route keys to nodes with minimal remapping?</strong>",
+   "a": "Consistent hashing ring (TreeMap)",
+   "template": "DesignStructures#ConsistentHash"
+  }
+ ],
+ "calibration": [
+  "<strong>SDE2 bar:</strong> LRU cache, min stack, insert/delete/getRandom O(1), implement a queue with stacks.",
+  "<strong>SDE3 bar:</strong> LFU cache, Twitter feed, max stack, time-based key-value store, rate limiter, snapshot array, iterator designs.",
+  "<strong>Staff bar (for context):</strong> thread-safety discussion for these structures, sharding and consistent hashing, and trade-offs between exact and approximate counters."
+ ],
+ "practice": [
+  [
+   "Caches",
+   [
+    "146 LRU Cache",
+    "460 LFU Cache"
+   ]
+  ],
+  [
+   "Set / stack designs",
+   [
+    "380 Insert Delete GetRandom O(1)",
+    "155 Min Stack",
+    "716 Max Stack",
+    "1146 Snapshot Array"
+   ]
+  ],
+  [
+   "Feeds / counters",
+   [
+    "355 Design Twitter",
+    "362 Design Hit Counter",
+    "359 Logger Rate Limiter",
+    "284 Peeking Iterator"
+   ]
+  ]
+ ]
+}
