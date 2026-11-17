@@ -184,6 +184,10 @@ class BuildTest(unittest.TestCase):
         ids = set(re.findall(r'\bid="([^"]+)"', self.page))
         for a in anchors:
             self.assertIn(a, ids)
+        gotos = re.findall(r'data-goto="([^"]+)"', cs)
+        self.assertTrue(gotos)
+        for g in gotos:
+            self.assertIn('id="view-%s"' % g, self.page)
 
     def test_nav_has_cheatsheet_after_overview(self):
         ov = self.page.index('data-view="overview"><span class="fname">00</span>')
@@ -193,10 +197,49 @@ class BuildTest(unittest.TestCase):
         self.assertLess(cs, lc)
 
     def test_cheatsheet_print_button_and_css(self):
-        self.assertIn('id="printCheatsheet"', self.page)
-        self.assertIn("@media print", self.page)
+        self.assertIn('id="printCheatsheet"', self._cheatsheet())
+        css = (SITE / "assets" / "style.css").read_text()
+        i = css.index("@media print")
+        depth, j = 0, css.index("{", i)
+        start = j
+        while True:
+            if css[j] == "{":
+                depth += 1
+            elif css[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            j += 1
+        block = css[start:j]
+        self.assertRegex(block, r"\.topbar[^{]*\{[^}]*display:\s*none")
+        self.assertRegex(block, r"\.sidebar[^{]*\{[^}]*display:\s*none")
+        self.assertIn(block.strip("{} \n"), self.page)
         self.assertIn("window.print()", self.page)
 
+    def _fixture(self, views):
+        return {"title": "Fix <T>", "_dir": None, "decisions": [
+            {"q": "<b>q1</b>", "a": "a1", "template": "F#m"}], "views": views}
+
+    def test_cheatsheet_merges_tables_and_pitfalls(self):
+        f = {"file": "F.java"}
+        v1 = {"id": "v1", "files": [f], "table": [["P1", "U1", "O(1)"], ["P2", "U<2", "O(n)"]],
+              "pitfalls": ["use `a` < b"]}
+        v2 = {"id": "v2", "files": [f], "table": [["P2", "U<2", "O(n)"], ["P3", "U3", "O(2)"]],
+              "pitfalls": ["second"]}
+        out = build.build_cheatsheet_view([self._fixture([v1, v2])])
+        pats = re.findall(r'<td>(P\d)</td>', out)
+        self.assertEqual(pats, ["P1", "P2", "P3"])
+        self.assertIn("<td>U&lt;2</td>", out)
+        self.assertEqual(re.findall(r"<li>(.*?)</li>", out), ["use a &lt; b", "second"])
+        self.assertNotIn("`", out)
+        self.assertEqual(out.count("<th>Pattern</th>"), 1)
+        self.assertIn("Fix <T>".replace("<", "&lt;").replace(">", "&gt;"), out)
+
+    def test_cheatsheet_omits_empty_tables_and_pitfalls(self):
+        out = build.build_cheatsheet_view([self._fixture([{"id": "v1", "files": [{"file": "F.java"}]}])])
+        self.assertNotIn("<th>Pattern</th>", out)
+        self.assertNotIn("cs-pitfalls", out)
+        self.assertEqual(out.count('class="sig-row"'), 1)
 
 if __name__ == "__main__":
     unittest.main()
