@@ -298,6 +298,19 @@ class BuildTest(unittest.TestCase):
         self.assertIn('id="jumpStatus"', self.page)
         self.assertNotIn('.jump-btn { display: none', (SITE / "assets" / "style.css").read_text())
 
+    def test_topbar_fits_phone(self):
+        css = (SITE / "assets" / "style.css").read_text()
+        i = css.index("@media (max-width: 520px) {\n  .topbar")
+        block = css[i:css.index("\n}\n", i)]
+        for rule in (".topbar { gap: 8px; }", ".topbar .brand { display: none; }", "min-width: 0",
+                     ".ess-long { display: none; }", "#themeLabel { position: absolute", ".jump-hint { display: none; }"):
+            self.assertIn(rule, block)
+        self.assertIn('class="ess-short"', self.page)
+
+    def test_jump_keys_handled_on_document(self):
+        js = (SITE / "assets" / "app.js").read_text()
+        self.assertNotIn("jumpBackdrop.addEventListener(\"keydown\"", js)
+
 
 if __name__ == "__main__":
     unittest.main()

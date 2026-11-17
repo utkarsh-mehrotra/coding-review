@@ -683,7 +683,7 @@ document.addEventListener("click", function(e){
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="searchInput" type="text" placeholder="Filter: topic, algorithm, method&hellip;" autocomplete="off">
     </div>
-    <button class="theme-toggle ess-toggle" id="essentialsToggle" aria-pressed="false">Show essentials</button>
+    <button class="theme-toggle ess-toggle" id="essentialsToggle" aria-pressed="false"><span class="ess-long">Show essentials</span><span class="ess-short">Essentials</span></button>
     <button class="theme-toggle jump-btn" id="jumpButton" type="button" aria-haspopup="dialog" aria-label="Jump to a view, template or problem"><span>Jump</span><span class="jump-hint">&#8984;K</span></button>
     <button class="theme-toggle" id="themeToggle"><span id="themeIcon">&#9680;</span><span id="themeLabel">Auto</span></button>
   </div>

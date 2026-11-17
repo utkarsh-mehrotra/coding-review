@@ -124,7 +124,8 @@
   function applyEssentials(on){
     root.classList.toggle("essentials", on);
     essBtn.setAttribute("aria-pressed", on ? "true" : "false");
-    essBtn.textContent = on ? "Show full code" : "Show essentials";
+    essBtn.querySelector(".ess-long").textContent = on ? "Show full code" : "Show essentials";
+    essBtn.querySelector(".ess-short").textContent = on ? "Full code" : "Essentials";
   }
   var essOn = false;
   try { essOn = localStorage.getItem("coding-review-essentials") === "1"; } catch(e) {}
@@ -212,7 +213,8 @@
   jumpBackdrop.addEventListener("mousedown", function(e){
     if (e.target === jumpBackdrop) { e.preventDefault(); jumpClose(); }
   });
-  jumpBackdrop.addEventListener("keydown", function(e){
+  document.addEventListener("keydown", function(e){
+    if (!jumpIsOpen()) return;
     if (e.key === "Escape") { e.preventDefault(); jumpClose(); }
     else if (e.key === "ArrowDown") { e.preventDefault(); jumpSetActive(jumpActive + 1, true); }
     else if (e.key === "ArrowUp") { e.preventDefault(); jumpSetActive(jumpActive - 1, true); }
