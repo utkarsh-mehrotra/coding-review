@@ -344,5 +344,59 @@ class BuildTest(unittest.TestCase):
         self.assertTrue(any("remove noLeetCode" in e and key in e for e in errs), errs)
 
 
+class ListBadgesTest(unittest.TestCase):
+    DATA = build.PROBLEMS.parent
+
+    def _lists(self):
+        import json
+        return json.loads((self.DATA / "lists.json").read_text())
+
+    def test_lists_file_shape(self):
+        import json
+        lists = self._lists()
+        all_ids = {int(q["questionFrontendId"]) for q in json.loads((self.DATA / "lc_all.json").read_text())}
+        for key, n in (("top-interview-150", 150), ("leetcode-75", 75)):
+            ids = lists[key]["ids"]
+            self.assertEqual(len(ids), n)
+            self.assertEqual(len(set(ids)), n)
+            self.assertEqual(ids, sorted(ids))
+            self.assertTrue(lists[key]["name"])
+            self.assertLessEqual(set(ids), all_ids)
+
+    def test_problems_have_lists_field(self):
+        import json
+        lists = self._lists()
+        rows = json.loads(build.PROBLEMS.read_text())["problems"]
+        for r in rows:
+            self.assertIsInstance(r["lists"], list)
+        by_id = {r["id"]: r for r in rows}
+        for key in ("top-interview-150", "leetcode-75"):
+            for i in lists[key]["ids"]:
+                if i in by_id:
+                    self.assertIn(key, by_id[i]["lists"])
+
+    def test_pill_badge(self):
+        import json
+        lists = self._lists()
+        rows = json.loads(build.PROBLEMS.read_text())["problems"]
+        for r in rows:
+            pill = build.problem_pill(r)
+            self.assertEqual('<span class="lc-badge" title="Top Interview 150">TI</span>' in pill,
+                             r["id"] in lists["top-interview-150"]["ids"])
+            self.assertEqual('<span class="lc-badge" title="LeetCode 75">75</span>' in pill,
+                             r["id"] in lists["leetcode-75"]["ids"])
+        two_sum = next(r for r in rows if r["id"] == 1)
+        self.assertEqual(("TI" in build.problem_pill(two_sum)), 1 in lists["top-interview-150"]["ids"])
+
+    def test_coverage_row_bitmask(self):
+        import json
+        lists = self._lists()
+        data = build.coverage_data(build.load_topics(), build.load_problems())
+        for row in data["rows"]:
+            mask = (1 if row[0] in lists["top-interview-150"]["ids"] else 0) | (2 if row[0] in lists["leetcode-75"]["ids"] else 0)
+            self.assertEqual(row[11], mask)
+        self.assertIn('id="cov-list"', build.render_page())
+
+
 if __name__ == "__main__":
     unittest.main()

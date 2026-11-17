@@ -13,7 +13,7 @@
   ];
   var DIFF = ["Easy", "Medium", "Hard"], DCLS = ["e", "m", "h"];
   var T = DATA.templates, TOP = DATA.topics, VIEW = DATA.templateView;
-  // row: [id, title, slug, diff, paid, ac, tier, topic, tmpl, also[], practiceOnly]
+  // row: [id, title, slug, diff, paid, ac, tier, topic, tmpl, also[], practiceOnly, listMask]
   var R = DATA.rows;
   function $(id) { return document.getElementById(id); }
   function fmt(n) { return n.toLocaleString("en-US"); }
@@ -22,7 +22,7 @@
   function tierCounts(rows) { var c = [0, 0, 0, 0]; rows.forEach(function (r) { c[r[6]]++; }); return c; }
   function toList() { var h = $("cov-list-title"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); }
 
-  var state = { q: "", tiers: { A: 1, B: 1, C: 1, U: 1 }, diffs: { 0: 1, 1: 1, 2: 1 }, topic: -2, free: false, sort: "id", dir: 1, limit: 200 };
+  var state = { q: "", tiers: { A: 1, B: 1, C: 1, U: 1 }, diffs: { 0: 1, 1: 1, 2: 1 }, topic: -2, list: 0, free: false, sort: "id", dir: 1, limit: 200 };
   try { var saved = JSON.parse(localStorage.getItem("coding-review-coverage") || "null"); if (saved) state.free = !!saved.free; } catch (e) {}
 
   // ---- summary
@@ -40,6 +40,11 @@
     b.onclick = function () { state.tiers = {}; state.tiers[t.k] = 1; syncChips(); render(true); toList(); };
     $("cov-legend").appendChild(b);
   });
+  var LISTS = [[1, "Top Interview 150", 150], [2, "LeetCode 75", 75]];
+  $("cov-lists").innerHTML = LISTS.map(function (l) {
+    var rows = R.filter(function (r) { return r[11] & l[0]; }), c = tierCounts(rows);
+    return esc(l[1]) + ": " + (c[0] + c[1]) + " of " + l[2] + " covered (" + c[0] + "+" + c[1] + ")";
+  }).join("<br>");
   var exN = 0, exParts = [];
   Object.keys(DATA.excluded).forEach(function (k) { exN += DATA.excluded[k]; exParts.push(DATA.excluded[k] + " " + k); });
   $("cov-excl").textContent = fmt(n) + " algorithm problems in total. Left out: " + fmt(exN) + " non-algorithm problems (" + exParts.join(", ") + ").";
@@ -76,6 +81,8 @@
   function opt(v, label) { var o = document.createElement("option"); o.value = v; o.textContent = label; topicSel.appendChild(o); }
   opt("-2", "All topics"); TOP.forEach(function (t, i) { opt(String(i), t[1]); }); opt("-1", "No topic (not covered)");
   topicSel.onchange = function () { state.topic = +topicSel.value; render(true); };
+  var listSel = $("cov-list");
+  listSel.onchange = function () { state.list = +listSel.value; render(true); };
   var free = $("cov-free"); free.checked = state.free;
   free.onchange = function () { state.free = free.checked; try { localStorage.setItem("coding-review-coverage", JSON.stringify({ free: state.free })); } catch (e) {} render(true); };
   var qTimer; $("cov-q").oninput = function (e) { clearTimeout(qTimer); qTimer = setTimeout(function () { state.q = e.target.value.trim().toLowerCase(); render(true); }, 120); };
@@ -113,12 +120,16 @@
     var out = R.filter(function (r) {
       if (!state.tiers["ABCU"[r[6]]] || !state.diffs[r[3]] || (state.free && r[4])) return false;
       if (state.topic !== -2 && r[7] !== state.topic) return false;
+      if (state.list && !(r[11] & state.list)) return false;
       if (!q) return true;
       if (numeric) return String(r[0]).indexOf(q) === 0;
       return r[1].toLowerCase().indexOf(q) !== -1 || (r[8] >= 0 && T[r[8]].toLowerCase().indexOf(q) !== -1);
     });
     var f = KEY[state.sort], d = state.dir;
     return out.sort(function (a, b) { var x = f(a), y = f(b); return x < y ? -d : x > y ? d : a[0] - b[0]; });
+  }
+  function badges(r) {
+    return (r[11] & 1 ? '<span class="lc-badge" title="Top Interview 150">TI</span>' : "") + (r[11] & 2 ? '<span class="lc-badge" title="LeetCode 75">75</span>' : "");
   }
   function tmplCell(r) {
     if (r[8] < 0) return r[10] ? '<span class="cov-also">topic: ' + esc(TOP[r[7]][1]) + "</span>" : '<span class="cov-also">none</span>';
@@ -144,7 +155,7 @@
     body.innerHTML = rows.slice(0, state.limit).map(function (r) {
       var t = "ABCU"[r[6]];
       return '<tr><td class="r cov-muted">' + r[0] + '</td><td><a class="cov-title" href="https://leetcode.com/problems/' + esc(r[2]) + '/" target="_blank" rel="noopener">' +
-        esc(r[1]) + "</a>" + (r[4] ? '<span class="lc-lock" title="Premium">P</span>' : "") + '</td><td class="cov-d-' + DCLS[r[3]] + '">' + DIFF[r[3]] +
+        esc(r[1]) + "</a>" + badges(r) + (r[4] ? '<span class="lc-lock" title="Premium">P</span>' : "") + '</td><td class="cov-d-' + DCLS[r[3]] + '">' + DIFF[r[3]] +
         '</td><td><span class="cov-pill cov-p' + t + '">' + t + " &middot; " + TIERS[r[6]].name + "</span></td><td>" + tmplCell(r) +
         '</td><td class="r cov-muted cov-hide-sm">' + r[5].toFixed(0) + "%</td></tr>";
     }).join("");

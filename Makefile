@@ -2,7 +2,7 @@
 SRC := common/Check.java $(wildcard topics/*/*.java) $(wildcard topics/*/tests/*.java)
 TESTS := GraphCoreTest GraphVariantsTest GraphExtrasTest GraphRandomTest DPTest TreesTest PatternsTest StructuresTest Deepen1Test Deepen2Test Deepen3Test
 
-.PHONY: test check site test-site all clean problems fetch-lc
+.PHONY: test check site test-site all clean problems fetch-lc fetch-lists
 all: test problems check site test-site
 
 test:
@@ -26,12 +26,18 @@ LC := tools/lc-coverage
 problems:
 	mkdir -p build
 	python3 $(LC)/inventory.py . build/lc-inventory.json
-	python3 $(LC)/match.py build/lc-inventory.json $(LC)/data/lc_all.json $(LC)/data/problems.json
+	python3 $(LC)/match.py build/lc-inventory.json $(LC)/data/lc_all.json $(LC)/data/problems.json $(LC)/data/lists.json
 
 # refetch LeetCode's public problem list (about 42 requests, 1 per second), then remap
 fetch-lc:
 	rm -f $(LC)/data/lc_all.json
 	python3 $(LC)/fetch_lc.py $(LC)/data/lc_all.json
+	$(MAKE) problems
+
+# refetch the Top Interview 150 and LeetCode 75 lists (2 requests), then remap
+fetch-lists:
+	rm -f $(LC)/data/lists.json
+	python3 $(LC)/fetch_lists.py $(LC)/data/lists.json
 	$(MAKE) problems
 
 clean:

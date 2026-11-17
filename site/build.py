@@ -113,7 +113,8 @@ def coverage_data(topics, problems):
     diff = ["Easy", "Medium", "Hard"]
     rows = [[r["id"], r["title"], r["slug"], diff.index(r["difficulty"]), int(r["paid"]), r["ac"], "ABCU".index(r["tier"]),
              tp.get(r["topic"], -1), ti[r["templates"][0]] if r["templates"] else -1, [ti[k] for k in r["also"]],
-             1 if r["how"] == "listed in practice map" else 0] for r in rows_in]
+             1 if r["how"] == "listed in practice map" else 0,
+             sum(1 << i for i, (key, _, _) in enumerate(LIST_BADGES) if key in r.get("lists", []))] for r in rows_in]
     view_of = {}
     for t in topics:
         view_of.update(view_of_file(t))
@@ -136,6 +137,7 @@ def build_coverage_view(data):
   <div class="cov-bigbar" id="cov-bigbar" role="img"></div>
   <div class="cov-legend" id="cov-legend"></div>
   <p class="cov-note" id="cov-excl"></p>
+  <p class="cov-note" id="cov-lists"></p>
 </div>
 
 <h2 class="section-title">Coverage by topic</h2>
@@ -159,6 +161,7 @@ def build_coverage_view(data):
   <div class="cov-filters">
     <input type="search" id="cov-q" placeholder="Search number, title or template (e.g. 743, islands, DSU)" aria-label="Search problems" autocomplete="off">
     <select id="cov-topic" aria-label="Topic"></select>
+    <select id="cov-list" aria-label="List"><option value="0">All problems</option><option value="1">Top Interview 150</option><option value="2">LeetCode 75</option></select>
     <label class="cov-check"><input type="checkbox" id="cov-free"> Hide premium</label>
   </div>
   <div class="cov-filters">
@@ -259,12 +262,20 @@ def check(topics, problems=None):
 DIFF_CLASS = {"Easy": "e", "Medium": "m", "Hard": "h"}
 
 
+LIST_BADGES = (("top-interview-150", "Top Interview 150", "TI"), ("leetcode-75", "LeetCode 75", "75"))
+
+
+def list_badges(r):
+    return "".join('<span class="lc-badge" title="%s">%s</span>' % (name, short)
+                   for key, name, short in LIST_BADGES if key in r.get("lists", []))
+
+
 def problem_pill(r):
     return '<a class="lc-pill lc-%s lc-%s" href="https://leetcode.com/problems/%s/" target="_blank" rel="noopener" title="%s · %s%s">' \
-           '<span class="lc-id">%s</span>%s%s</a>' % (
+           '<span class="lc-id">%s</span>%s%s%s</a>' % (
                DIFF_CLASS[r["difficulty"]], r["tier"].lower(), html.escape(r["slug"]),
                r["difficulty"], "verified: named in the template" if r["tier"] == "A" else "matched by LeetCode tag",
-               " · premium" if r["paid"] else "", r["id"], html.escape(r["title"]),
+               " · premium" if r["paid"] else "", r["id"], html.escape(r["title"]), list_badges(r),
                '<span class="lc-lock">P</span>' if r["paid"] else "")
 
 

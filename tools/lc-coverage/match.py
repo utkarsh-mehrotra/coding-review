@@ -1,5 +1,5 @@
 """Step 3: map every LeetCode algorithm problem to templates with a confidence tier.
-Usage: python3 tools/lc-coverage/match.py build/lc-inventory.json tools/lc-coverage/data/lc_all.json tools/lc-coverage/data/problems.json
+Usage: python3 tools/lc-coverage/match.py build/lc-inventory.json tools/lc-coverage/data/lc_all.json tools/lc-coverage/data/problems.json [tools/lc-coverage/data/lists.json]
 Tiers: A verified (cited in code / practice map), B specific tag, C broad tag + keyword, U uncovered.
 """
 import json, re, sys, collections
@@ -7,6 +7,9 @@ import json, re, sys, collections
 inv = json.load(open(sys.argv[1]))
 lc = json.load(open(sys.argv[2]))
 out = sys.argv[3]
+LIST_KEYS = ['top-interview-150', 'leetcode-75']
+lists = json.load(open(sys.argv[4])) if len(sys.argv) > 4 else {}
+list_ids = {k: set(lists[k]['ids']) for k in LIST_KEYS if k in lists}
 T = inv['templates']
 TOPIC_OF = {k: v['topic'] for k, v in T.items()}
 
@@ -185,7 +188,8 @@ for q in lc:
         topic = TOPIC_OF[templates[0]]
     rows.append({'id': pid, 'title': q['title'], 'slug': q['titleSlug'], 'difficulty': q['difficulty'],
                  'paid': q['isPaidOnly'], 'ac': round(q['acRate'], 1), 'tags': sorted(tags),
-                 'tier': tier, 'how': how, 'topic': topic, 'templates': templates, 'also': others})
+                 'tier': tier, 'how': how, 'topic': topic, 'templates': templates, 'also': others,
+                 'lists': [k for k in LIST_KEYS if pid in list_ids.get(k, ())]})
 
 # one problem per line so diffs stay readable
 with open(out, 'w') as fh:
