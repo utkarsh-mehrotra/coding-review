@@ -54,7 +54,7 @@ public class DPSequences {
     }
 
     // Russian Doll Envelopes (LC 354): sort width asc, height DESC, then LIS on heights
-    // Faster: patience sorting on heights, O(n log n) — not DP-memo; mention as a follow-up.
+    // Faster (REQUIRED at LC 354 limits, n = 1e5): the O(n^2) memo times out; use patience sorting on heights, O(n log n).
     static int maxEnvelopes(int[][] env) {
         Arrays.sort(env, (a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(b[1], a[1]));
         int[] h = new int[env.length];

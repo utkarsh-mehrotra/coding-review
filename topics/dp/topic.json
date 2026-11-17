@@ -20,7 +20,7 @@
         ],
         [
           "Best ending here",
-          "Max subarray / product: memo the best ending at i",
+          "Max subarray / product: memo the best subarray starting at i",
           "O(n)"
         ],
         [
@@ -32,7 +32,7 @@
       "files": [
         {
           "file": "DPLinear.java",
-          "desc": "Climbing stairs x3, rob, decode ways, Kadane, max product, stock I-IV + cooldown + fee",
+          "desc": "Climbing stairs, rob, decode ways, max subarray, max product, stock I-IV + cooldown + fee",
           "badge": "O(n)"
         }
       ],
@@ -87,11 +87,11 @@
     {
       "id": "dp-sequences",
       "title": "Sequences & Strings",
-      "intro": "Two sequences give a memo over (i, j) suffixes. One sequence with a pairwise condition gives LIS-style take/skip memo. Palindromes use an interval memo f(i, j) or center expansion.",
+      "intro": "Two sequences give a memo over (i, j) suffixes. One sequence with a pairwise condition gives LIS-style take/skip memo. Palindromes use an interval memo f(i, j).",
       "table": [
         [
           "LIS",
-          "f(i, prev): take a[i] if larger, or skip",
+          "f(i) = 1 + best f(j) over j > i with a[j] > a[i]",
           "O(n^2)"
         ],
         [
@@ -101,7 +101,7 @@
         ],
         [
           "Palindromes",
-          "Interval memo f(i, j) or expand around a center",
+          "Interval memo f(i, j)",
           "O(n^2)"
         ],
         [
@@ -113,7 +113,7 @@
       "files": [
         {
           "file": "DPSequences.java",
-          "desc": "LIS (both forms), count of LIS, envelopes, LCS, edit distance, palindromes, distinct subsequences, word break, wildcard, regex, interleave",
+          "desc": "LIS, count of LIS, envelopes, LCS, edit distance, palindromes, distinct subsequences, word break, wildcard, regex, interleave",
           "badge": "O(nm)"
         }
       ],
@@ -284,7 +284,7 @@
       "pitfalls": [
         "State the dimension you added and what it stands for before writing the recurrence.",
         "Interval DP with an extra state: memoize with the extra dimension, not just (l, r).",
-        "Reconstruction: walk the memo forward from the start state, choosing the transition that produced each value; never recompute from scratch."
+        "Reconstruction: walk the memo from the answer state, at each step taking the transition that produced the stored value; never recompute from scratch."
       ],
       "group": "Dynamic Programming"
     }
@@ -302,7 +302,7 @@
     },
     {
       "q": "<strong>Best contiguous subarray?</strong>",
-      "a": "Memo best subarray ending at i (track max AND min for products)",
+      "a": "Memo best subarray starting at i (track max AND min for products)",
       "template": "DPLinear#maxSubArray"
     },
     {
@@ -317,7 +317,7 @@
     },
     {
       "q": "<strong>Items reusable, fewest items?</strong>",
-      "a": "Memo f(i, amount): take coin i again (stay at i) or move on",
+      "a": "Memo f(amount) = 1 + min over coins of f(amount - coin)",
       "template": "DPKnapsack#coinChangeMin"
     },
     {
@@ -332,7 +332,7 @@
     },
     {
       "q": "<strong>Longest increasing chain?</strong>",
-      "a": "Memo f(i, prev) take/skip; or LIS ending at i",
+      "a": "Memo f(i) = LIS starting at i; answer = max over i",
       "template": "DPSequences#lengthOfLIS"
     },
     {
@@ -371,7 +371,7 @@
       "template": "DPBitmaskDigit#countDigitOne"
     },
     {
-      "q": "<strong>dp transition looks at a sliding window of earlier values?</strong>",
+      "q": "<strong>Best choice among the next k indices?</strong>",
       "a": "Memo f(i) over the next k indices",
       "template": "DPCombined#maxResult"
     },

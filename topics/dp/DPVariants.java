@@ -3,7 +3,7 @@ import java.util.*;
 public class DPVariants {
     // Framework reminder: state -> choice -> transition -> base -> order -> can the state shrink?
 
-    // ---------- Frog Jump (LC 403): state = (stone, last jump); set of reachable jump sizes per stone ----------
+    // ---------- Frog Jump (LC 403): memo over (stone index, last jump size) ----------
     static boolean canCross(int[] stones) {
         int n = stones.length;
         Map<Integer, Integer> at = new HashMap<>();
@@ -245,7 +245,7 @@ public class DPVariants {
         return memo[i] = res;
     }
 
-    // ---------- Remove Boxes (LC 546): dp[l][r][k] with k equal boxes attached to the left of l ----------
+    // ---------- Remove Boxes (LC 546): memo over (l, r, k) with k equal boxes attached to the left of l ----------
     static int removeBoxes(int[] boxes) {
         int n = boxes.length;
         return rb(boxes, 0, n - 1, 0, new Integer[n][n][n]);
@@ -255,11 +255,12 @@ public class DPVariants {
     private static int rb(int[] b, int l, int r, int k, Integer[][][] memo) {
         if (l > r) return 0;
         if (memo[l][r][k] != null) return memo[l][r][k];
+        int l0 = l, k0 = k;                             // cache under the key we were called with
         while (l < r && b[l + 1] == b[l]) { l++; k++; } // absorb equal neighbours into k
         int best = (k + 1) * (k + 1) + rb(b, l + 1, r, 0, memo); // remove b[l] with its k friends now
         for (int m = l + 1; m <= r; m++)
             if (b[m] == b[l]) best = Math.max(best, rb(b, l + 1, m - 1, 0, memo) + rb(b, m, r, k + 1, memo)); // clear the middle first, then merge
-        return memo[l][r][k] = best;
+        return memo[l0][r][k0] = best;
     }
 
     // ---------- Minimum Cost to Merge Stones (LC 1000): cost(i, j, m) = min cost to turn stones i..j into m piles ----------

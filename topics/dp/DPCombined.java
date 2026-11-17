@@ -77,20 +77,22 @@ public class DPCombined {
         return memo[left][r][c] = sum;
     }
 
-    // New 21 Game (LC 837): memo over current points, each draw 1..maxPts equally likely. O(k * maxPts)
-    // Faster: sliding-window sum over the next maxPts values, O(n + maxPts) — not DP-memo; mention as a follow-up.
+    // New 21 Game (LC 837): memo over current points, each draw 1..maxPts equally likely. O(k)
+    // f(pts) = average of f(pts+1..pts+W); neighbouring states share all but one term, so
+    // f(pts) = f(pts+1) + (f(pts+1) - f(pts+1+W)) / W  — still top-down, no inner loop.
     static double new21Game(int n, int k, int maxPts) {
         if (k == 0 || n >= k + maxPts) return 1.0;
         return ending(0, n, k, maxPts, new Double[k]);
     }
 
-    // state: pts = current score | choice: draw x in 1..maxPts | base: pts >= k stops -> 1 if pts <= n else 0
+    // state: pts = current score | choice: draw x in 1..maxPts | base: pts >= k stops -> 1 if pts <= n else 0;
+    //   pts == k - 1 -> share of draws that land in [k, n]
     private static double ending(int pts, int n, int k, int maxPts, Double[] memo) {
         if (pts >= k) return pts <= n ? 1.0 : 0.0;
         if (memo[pts] != null) return memo[pts];
-        double sum = 0;
-        for (int x = 1; x <= maxPts; x++) sum += ending(pts + x, n, k, maxPts, memo);
-        return memo[pts] = sum / maxPts;
+        if (pts == k - 1) return memo[pts] = Math.max(0, Math.min(maxPts, n - k + 1)) / (double) maxPts;
+        double next = ending(pts + 1, n, k, maxPts, memo);
+        return memo[pts] = next + (next - ending(pts + 1 + maxPts, n, k, maxPts, memo)) / maxPts;
     }
 
     // ---------- Hash-map-state DP ----------

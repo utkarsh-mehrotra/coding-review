@@ -2,7 +2,7 @@ import java.util.*;
 
 public class DPBitmaskDigit {
 
-    // ---------- Bitmask DP: dp[mask] over a subset of <= ~20 items ----------
+    // ---------- Bitmask DP: memo f(mask) over a subset of <= ~20 items ----------
     // RECOGNIZE: n <= 20, "assign / partition / visit every item once".
 
     // Minimum Cost Assignment: cost[i][j] = worker i on task j, one each. O(2^n * n) time, O(2^n) memo
