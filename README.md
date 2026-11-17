@@ -15,6 +15,7 @@ make check       # template-first rule: every decision links to a real template 
 make site        # regenerate site/index.html from topics/*/topic.json + the Java files
 make problems    # remap LeetCode problems to templates (offline)
 make all         # all of the above
+make serve       # open http://localhost:8000 (the LeetCode Coverage view needs this, not file://)
 ```
 
 ## Layout

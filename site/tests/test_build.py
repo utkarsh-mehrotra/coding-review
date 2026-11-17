@@ -397,6 +397,33 @@ class ListBadgesTest(unittest.TestCase):
             self.assertEqual(row[11], mask)
         self.assertIn('id="cov-list"', build.render_page())
 
+    def test_page_has_no_inline_coverage_data(self):
+        page = build.render_page()
+        self.assertNotIn('id="coverage-data"', page)
+        self.assertIn('id="view-coverage"', page)
+
+    def test_coverage_json_text(self):
+        import json
+        text = build.coverage_json(build.load_topics(), build.load_problems())
+        self.assertNotIn(": ", text[:200])
+        data = json.loads(text)
+        self.assertEqual(len(data["rows"]), 3696)
+        self.assertEqual([(l["key"], l["bit"], l["size"]) for l in data["lists"]],
+                         [("top-interview-150", 1, 150), ("leetcode-75", 2, 75)])
+
+    def test_coverage_json_written(self):
+        import json
+        path = build.OUT.parent / "coverage.json"
+        self.assertTrue(path.exists())
+        self.assertEqual(path.read_text(), build.coverage_json(build.load_topics(), build.load_problems()))
+        self.assertEqual(len(json.loads(path.read_text())["rows"]), 3696)
+
+    def test_coverage_view_has_offline_message(self):
+        page = build.render_page()
+        self.assertIn("The problem list loads from coverage.json, which browsers block when the page is opened as a file. "
+                      "Run <code>make serve</code> and open <code>http://localhost:8000</code>.", page)
+        self.assertIn("Loading the problem list", page)
+
 
 if __name__ == "__main__":
     unittest.main()

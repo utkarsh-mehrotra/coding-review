@@ -1,10 +1,20 @@
 // LeetCode coverage view: summary, per-topic breakdown, searchable problem list, gaps.
-// Data comes from <script type="application/json" id="coverage-data">, written by site/build.py
-// from tools/lc-coverage/data/problems.json.
-(function () {
-  var dataEl = document.getElementById("coverage-data");
-  if (!dataEl) return;
-  var DATA = JSON.parse(dataEl.textContent);
+// Data comes from coverage.json (written by site/build.py from tools/lc-coverage/data/problems.json).
+// The file loads once, the first time the view opens, so the main page stays small.
+var coverageLoad = null;
+
+// Fetches coverage.json at most once and calls onData (or onError) once. Later calls return the
+// same promise and do nothing else, so the view never renders twice.
+function loadCoverage(fetchFn, onData, onError) {
+  if (coverageLoad) return coverageLoad;
+  coverageLoad = Promise.resolve().then(function () { return fetchFn("coverage.json"); }).then(function (res) {
+    if (!res.ok) throw new Error("coverage.json: HTTP " + res.status);
+    return res.json();
+  }).then(onData, onError);
+  return coverageLoad;
+}
+
+function initCoverage(DATA) {
   var TIERS = [
     { k: "A", name: "Verified", desc: "named in a template or practice map", c: "var(--tA)" },
     { k: "B", name: "Tag match", desc: "a specific tag points to one template", c: "var(--tB)" },
@@ -40,10 +50,10 @@
     b.onclick = function () { state.tiers = {}; state.tiers[t.k] = 1; syncChips(); render(true); toList(); };
     $("cov-legend").appendChild(b);
   });
-  var LISTS = [[1, "Top Interview 150", 150], [2, "LeetCode 75", 75]];
+  var LISTS = DATA.lists;   // [{key, name, bit, size}]
   $("cov-lists").innerHTML = LISTS.map(function (l) {
-    var rows = R.filter(function (r) { return r[11] & l[0]; }), c = tierCounts(rows);
-    return esc(l[1]) + ": " + (c[0] + c[1]) + " of " + l[2] + " covered (" + c[0] + "+" + c[1] + ")";
+    var rows = R.filter(function (r) { return r[11] & l.bit; }), c = tierCounts(rows);
+    return esc(l.name) + ": " + (c[0] + c[1]) + " of " + l.size + " covered (" + c[0] + "+" + c[1] + ")";
   }).join("<br>");
   var exN = 0, exParts = [];
   Object.keys(DATA.excluded).forEach(function (k) { exN += DATA.excluded[k]; exParts.push(DATA.excluded[k] + " " + k); });
@@ -82,6 +92,7 @@
   opt("-2", "All topics"); TOP.forEach(function (t, i) { opt(String(i), t[1]); }); opt("-1", "No topic (not covered)");
   topicSel.onchange = function () { state.topic = +topicSel.value; render(true); };
   var listSel = $("cov-list");
+  LISTS.forEach(function (l) { var o = document.createElement("option"); o.value = String(l.bit); o.textContent = l.name; listSel.appendChild(o); });
   listSel.onchange = function () { state.list = +listSel.value; render(true); };
   var free = $("cov-free"); free.checked = state.free;
   free.onchange = function () { state.free = free.checked; try { localStorage.setItem("coding-review-coverage", JSON.stringify({ free: state.free })); } catch (e) {} render(true); };
@@ -128,8 +139,9 @@
     var f = KEY[state.sort], d = state.dir;
     return out.sort(function (a, b) { var x = f(a), y = f(b); return x < y ? -d : x > y ? d : a[0] - b[0]; });
   }
+  var BADGE = { "top-interview-150": "TI", "leetcode-75": "75" };
   function badges(r) {
-    return (r[11] & 1 ? '<span class="lc-badge" title="Top Interview 150">TI</span>' : "") + (r[11] & 2 ? '<span class="lc-badge" title="LeetCode 75">75</span>' : "");
+    return LISTS.map(function (l) { return r[11] & l.bit ? '<span class="lc-badge" title="' + esc(l.name) + '">' + esc(BADGE[l.key] || l.name) + "</span>" : ""; }).join("");
   }
   function tmplCell(r) {
     if (r[8] < 0) return r[10] ? '<span class="cov-also">topic: ' + esc(TOP[r[7]][1]) + "</span>" : '<span class="cov-also">none</span>';
@@ -180,4 +192,28 @@
     : "No templates are marked as lacking a LeetCode equivalent.";
   $("cov-nolc").innerHTML = tplLinks(DATA.noLc);
   $("cov-utags").innerHTML = DATA.utags.map(function (p) { return '<span class="cov-tag">' + esc(p[0]) + ' <span class="cov-muted">' + p[1] + "</span></span>"; }).join("");
-})();
+}
+
+function showCoverage(data) {
+  document.getElementById("cov-status").hidden = true;
+  initCoverage(data);
+  document.getElementById("cov-body").hidden = false;
+}
+
+function showCoverageError() {
+  document.getElementById("cov-status").hidden = true;
+  document.getElementById("cov-offline").hidden = false;
+}
+
+// Starts loading when the coverage view opens, or at once when the page opens on #coverage
+// (app.js fires its first cr:view before this file runs).
+function wire(doc, loc, fetchFn, onData, onError) {
+  function start() { loadCoverage(fetchFn, onData || showCoverage, onError || showCoverageError); }
+  doc.addEventListener("cr:view", function (e) { if (e.detail && e.detail.name === "coverage") start(); });
+  if ((loc.hash || "") === "#coverage") start();
+}
+
+function _reset() { coverageLoad = null; }
+
+if (typeof module !== "undefined" && module.exports) module.exports = { initCoverage: initCoverage, loadCoverage: loadCoverage, wire: wire, _reset: _reset };
+else wire(document, location, function (u) { return window.fetch(u); });

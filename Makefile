@@ -2,7 +2,7 @@
 SRC := common/Check.java $(wildcard topics/*/*.java) $(wildcard topics/*/tests/*.java)
 TESTS := GraphCoreTest GraphVariantsTest GraphExtrasTest GraphRandomTest DPTest TreesTest PatternsTest StructuresTest Deepen1Test Deepen2Test Deepen3Test
 
-.PHONY: test check site test-site all clean problems fetch-lc fetch-lists
+.PHONY: test check site test-site serve all clean problems fetch-lc fetch-lists
 all: test problems check site test-site
 
 test:
@@ -16,6 +16,10 @@ check:
 
 site:
 	python3 site/build.py
+
+# the coverage view fetches coverage.json, which browsers block on file://, so serve the site locally
+serve:
+	python3 -m http.server 8000 -d site
 
 test-site:
 	python3 -m unittest discover -s site/tests

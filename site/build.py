@@ -24,6 +24,8 @@ ROOT = Path(__file__).resolve().parent.parent
 TOPICS = ROOT / "topics"
 ASSETS = ROOT / "site" / "assets"
 OUT = ROOT / "site" / "index.html"
+COVERAGE_OUT = ROOT / "site" / "coverage.json"
+LISTS_FILE = ROOT / "tools" / "lc-coverage" / "data" / "lists.json"
 PROBLEMS = ROOT / "tools" / "lc-coverage" / "data" / "problems.json"
 SHOWN_TIERS = ("A", "B")     # A: named in a template or practice map, B: specific tag match
 GROUP_PREVIEW = 12           # problems shown per template before "show more"
@@ -121,17 +123,28 @@ def coverage_data(topics, problems):
     decision_tpls = sorted({d["template"] for t in topics for d in t["decisions"]})
     flagged = {d["template"] for t in topics for d in t["decisions"] if d.get("noLeetCode")}
     utags = collections.Counter(tag for r in rows_in if r["tier"] == "U" for tag in r["tags"])
-    return {"topics": [[t, names[t]] for t in topic_ids], "templates": tmpl, "rows": rows, "excluded": raw["excluded"],
+    lists_raw = json.loads(LISTS_FILE.read_text())
+    lists = [{"key": key, "name": lists_raw[key]["name"], "bit": 1 << i, "size": len(lists_raw[key]["ids"])}
+             for i, (key, _, _) in enumerate(LIST_BADGES)]
+    return {"lists": lists, "topics": [[t, names[t]] for t in topic_ids], "templates": tmpl, "rows": rows, "excluded": raw["excluded"],
             "templateView": {f: v for f, v in view_of.items()}, "decisionCount": len(decision_tpls),
             "zero": [k for k in decision_tpls if not problems.get(k) and k not in flagged],
             "noLc": [k for k in decision_tpls if k in flagged], "utags": utags.most_common(10)}
 
 
+def coverage_json(topics, problems):
+    """Compact JSON text of the coverage payload, served as site/coverage.json; None when there is no problem data."""
+    data = coverage_data(topics, problems)
+    return json.dumps(data, separators=(",", ":"), ensure_ascii=False) if data else None
+
+
 def build_coverage_view(data):
-    payload = json.dumps(data, separators=(",", ":")).replace("</", "<\\/")
     return f"""<div class="view" id="view-coverage">
 <div class="page-kicker">LC &mdash; LEETCODE COVERAGE</div>
 <h1 class="page-title">LeetCode Template Coverage</h1>
+<p class="cov-note" id="cov-status">Loading the problem list&hellip;</p>
+<p class="cov-offline" id="cov-offline" hidden>The problem list loads from coverage.json, which browsers block when the page is opened as a file. Run <code>make serve</code> and open <code>http://localhost:8000</code>.</p>
+<div id="cov-body" hidden>
 <p class="page-intro" id="cov-lede"></p>
 <div class="cov-panel">
   <div class="cov-bigbar" id="cov-bigbar" role="img"></div>
@@ -161,7 +174,7 @@ def build_coverage_view(data):
   <div class="cov-filters">
     <input type="search" id="cov-q" placeholder="Search number, title or template (e.g. 743, islands, DSU)" aria-label="Search problems" autocomplete="off">
     <select id="cov-topic" aria-label="Topic"></select>
-    <select id="cov-list" aria-label="List"><option value="0">All problems</option><option value="1">Top Interview 150</option><option value="2">LeetCode 75</option></select>
+    <select id="cov-list" aria-label="List"><option value="0">All problems</option></select>
     <label class="cov-check"><input type="checkbox" id="cov-free"> Hide premium</label>
   </div>
   <div class="cov-filters">
@@ -207,7 +220,7 @@ def build_coverage_view(data):
   <dt>Not covered</dt><dd>No rule matched. Mostly simulation, string formatting and one-off math.</dd>
   <dt>Source</dt><dd>LeetCode's public problem list, cached in <code>tools/lc-coverage/data</code>. Database, shell, concurrency, pandas and JavaScript problems are excluded. Rebuild with <code>make problems</code>; refresh the list with <code>make fetch-lc</code>.</dd>
 </dl>
-<script type="application/json" id="coverage-data">{payload}</script>
+</div>
 </div>"""
 
 
@@ -766,6 +779,10 @@ def main():
         return
     page = render_page(topics, problems)
     OUT.write_text(page)
+    cov = coverage_json(topics, problems)
+    if cov:
+        COVERAGE_OUT.write_text(cov)
+        print("wrote %s (%d KB)" % (COVERAGE_OUT.relative_to(ROOT), len(cov.encode()) // 1024))
     print("wrote %s (%d KB): %d topics, %d templates, %d decisions" % (OUT.relative_to(ROOT), len(page) // 1024, len(topics), n_files, n_dec))
 
 
