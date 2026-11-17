@@ -229,6 +229,8 @@ def check(topics, problems=None):
                 errors.append("%s: template file %s.java not found (%s)" % (t["id"], fname, tpl))
             elif member not in members[fname + ".java"]:
                 errors.append("%s: member %s not found in %s.java" % (t["id"], member, fname))
+            elif member not in {m.name for m in outline(java[fname + ".java"].read_text())}:
+                errors.append("%s: member %s in %s.java has no outline anchor, so its cue cannot link" % (t["id"], member, fname))
         for name in java:
             if (t["id"], name) not in files_shown:
                 errors.append("%s: template %s is not shown in any view" % (t["id"], name))
@@ -341,6 +343,80 @@ def highlight_with_anchors(src, stem):
     return "".join(out)
 
 
+CUE_VISIBLE = 6              # cues shown above a card before "N more"
+RECOGNIZE = re.compile(r"//\s*RECOGNIZE:\s*(.*\S)")
+
+
+def _plain(text):
+    return html.unescape(re.sub(r"<[^>]*>", "", text)).strip()
+
+
+def cues_for_file(topic, file_stem, src):
+    """(cue_text, member) pairs for one template file, in member order.
+
+    A cue comes from each decision whose template is file_stem#member, plus the RECOGNIZE: comment
+    in a member's doc block when no decision names that member. Text is plain (tags stripped,
+    entities decoded); callers escape it once.
+    """
+    members = outline(src)
+    first = {}
+    for m in members:
+        first.setdefault(m.name, m)
+    by_member = {}
+    for dec in topic.get("decisions", []):
+        fname, _, member = dec.get("template", "").partition("#")
+        if fname == file_stem and member in first:
+            by_member.setdefault(member, []).append("%s \u2192 %s" % (_plain(dec["q"]), _plain(dec["a"])))
+    lines = src.split("\n")
+    cues = []
+    for name, m in sorted(first.items(), key=lambda kv: kv[1].start):
+        if name in by_member:
+            cues.extend((text, name) for text in by_member[name])
+            continue
+        for line in lines[m.doc_start - 1:m.start - 1]:
+            r = RECOGNIZE.search(line)
+            if r:
+                cues.append((r.group(1).strip(), name))
+    return cues
+
+
+def cues_html(topic, fname):
+    stem = fname[:-5]
+    src = (topic["_dir"] / fname).read_text().rstrip() + "\n"
+    cues = cues_for_file(topic, stem, src)
+    if not cues:
+        return ""
+    view = view_of_file(topic)[stem]
+    items = ['<li>%s <a class="tpl" data-goto="%s" data-anchor="%s">%s</a></li>' % (
+        html.escape(text), html.escape(view), html.escape(anchor_id(stem, member)), html.escape(member))
+        for text, member in cues]
+    head, rest = items[:CUE_VISIBLE], items[CUE_VISIBLE:]
+    more = ""
+    if rest:
+        more = '<details><summary>%d more</summary>%s</details>' % (len(rest), "".join(rest))
+    return '  <ul class="cues">%s%s</ul>\n' % ("".join(head), more)
+
+
+def cue_report(topics):
+    """(members_with_cue, total_non_private, [uncovered 'File#member', ...])."""
+    total, have, missing = 0, 0, []
+    for t in topics:
+        for jp in sorted(t["_dir"].glob("*.java")):
+            src = jp.read_text().rstrip() + "\n"
+            cued = {m for _, m in cues_for_file(t, jp.stem, src)}
+            seen = set()
+            for m in outline(src):
+                if m.private or m.name in seen:
+                    continue
+                seen.add(m.name)
+                total += 1
+                if m.name in cued:
+                    have += 1
+                else:
+                    missing.append("%s#%s" % (jp.stem, m.name))
+    return have, total, missing
+
+
 def code_card(topic, fname, desc, badge):
     src = (topic["_dir"] / fname).read_text().rstrip() + "\n"
     return (
@@ -348,8 +424,9 @@ def code_card(topic, fname, desc, badge):
         '      <div class="cc-title">%s</div>\n      <div class="cc-desc">%s</div>\n    </div>\n'
         '    <div class="cc-meta">\n      <span class="cc-badge">%s</span>\n'
         '      <button class="copy-btn">&#10697; Copy</button>\n    </div>\n  </div>\n'
-        '  <pre class="code-block"><code>%s</code></pre>\n</div>'
-    ) % (fname, html.escape(desc, quote=False) if "<" not in desc else desc, badge, highlight_with_anchors(src, fname[:-5]))
+        '%s  <pre class="code-block"><code>%s</code></pre>\n</div>'
+    ) % (fname, html.escape(desc, quote=False) if "<" not in desc else desc, badge,
+         cues_html(topic, fname), highlight_with_anchors(src, fname[:-5]))
 
 
 def build_view(topic, view, number, problems=None):
@@ -491,6 +568,8 @@ def render_page(topics=None, problems=None):
 document.addEventListener("click", function(e){
   var g = e.target.closest("[data-goto]");
   if (!g) return;
+  var a = g.getAttribute("data-anchor");
+  if (a && window.crGoto) { e.preventDefault(); window.crGoto(g.getAttribute("data-goto"), a); return; }
   location.hash = g.getAttribute("data-goto");
 });
 """
@@ -563,6 +642,10 @@ def main():
         print("check ok: %d topics, %d template files, %d decision entries all link to real members; "
               "%d LeetCode problems link to %d real template members" % (
                   len(topics), n_files, n_dec, sum(map(len, problems.values())), len(problems)))
+        have, total, missing = cue_report(topics)
+        print("cues: %d of %d non-private members have a cue" % (have, total))
+        if missing:
+            print("  without a cue (first 10 of %d): %s" % (len(missing), ", ".join(missing[:10])))
         return
     page = render_page(topics, problems)
     OUT.write_text(page)

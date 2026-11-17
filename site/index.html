@@ -638,6 +638,20 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
   .cov-hide-sm { display: none; }
 }
 
+/* ---- use-when cues above a code card ---- */
+.cues {
+  list-style: none;
+  margin: 0;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.cues li { padding: 2px 0; }
+.cues .tpl { margin-left: 4px; }
+.cues summary { cursor: pointer; color: var(--accent); padding: 2px 0; }
+
 </style>
 </head>
 <body>
@@ -1308,6 +1322,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Unweighted, shortest path? → BFS (multi-source if multiple starts; 0-1 BFS if weights are 0/1) <a class="tpl" data-goto="traversal" data-anchor="m-Traversal-bfs">bfs</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -1466,6 +1481,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Weighted, non-negative, single source? → Dijkstra <a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-dijkstra">dijkstra</a></li><li>Weighted, negative edges possible, single source? → Bellman-Ford (also detects negative cycles) <a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-bellmanFord">bellmanFord</a></li><li>All-pairs shortest path, dense graph? → Floyd-Warshall <a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-floydWarshall">floydWarshall</a></li><li>All-pairs shortest path, sparse graph? → Johnson&#x27;s <a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-johnsons">johnsons</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -1624,6 +1640,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>DAG + need ordering/dependency resolution? → Topological sort (Kahn&#x27;s or DFS) <a class="tpl" data-goto="topo-dag" data-anchor="m-TopoSortDAG-kahnsTopoSort">kahnsTopoSort</a></li><li>DAG + need longest/shortest/count paths? → DP over topo order <a class="tpl" data-goto="topo-dag" data-anchor="m-TopoSortDAG-longestPathDAG">longestPathDAG</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -1741,6 +1758,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Undirected + dynamic connectivity/merge queries? → DSU <a class="tpl" data-goto="dsu" data-anchor="m-DSU-countComponents">countComponents</a></li></ul>
   <pre class="code-block"><code><span class="tok-kw">public</span> <span class="tok-kw">class</span> DSU {
     <span class="tok-kw">int</span>[] parent, rank_;
     <span class="tok-kw">int</span> components;
@@ -1816,6 +1834,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Connect all nodes, minimize total edge weight? → Kruskal&#x27;s (sparse/edge-list) or Prim&#x27;s (dense/adjacency-matrix) <a class="tpl" data-goto="mst" data-anchor="m-MST-kruskalsMST">kruskalsMST</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -1918,6 +1937,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Directed graph, need tightly-coupled clusters? → Tarjan&#x27;s/Kosaraju&#x27;s (SCC), condense to DAG if there&#x27;s a follow-up <a class="tpl" data-goto="scc" data-anchor="m-SCC_Bridges_2SAT-tarjanSCC">tarjanSCC</a></li><li>Need critical/fragile points in a network? → Bridges &amp; articulation points <a class="tpl" data-goto="scc" data-anchor="m-SCC_Bridges_2SAT-findBridgesAndArticulation">findBridgesAndArticulation</a></li><li>Boolean 2-variable clause satisfaction? → 2-SAT via implication graph + SCC <a class="tpl" data-goto="scc" data-anchor="m-SCC_Bridges_2SAT-solve2SAT">solve2SAT</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -2126,6 +2146,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Need to traverse every edge exactly once? → Hierholzer&#x27;s (Eulerian path/circuit) <a class="tpl" data-goto="eulerian" data-anchor="m-EulerianPath-hierholzer">hierholzer</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -2208,6 +2229,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Assignment/matching with capacity constraints? → Max flow (Edmonds-Karp/Dinic&#x27;s) or bipartite matching (Hopcroft-Karp) <a class="tpl" data-goto="flow" data-anchor="m-NetworkFlow-edmondsKarp">edmondsKarp</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -2425,6 +2447,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Small N (≤20), must visit all nodes/subsets? → Bitmask DP (Held-Karp style) <a class="tpl" data-goto="bipartite-bitmask" data-anchor="m-BipartiteAndBitmaskDP-heldKarpTSP">heldKarpTSP</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -2543,6 +2566,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Grid, board or string-transformation problem? → Implicit graph: name the node, generate neighbors, BFS (bidirectional if both ends are known) <a class="tpl" data-goto="implicit" data-anchor="m-ImplicitGraphs-wordLadder">wordLadder</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -2851,6 +2875,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Shortest path with an extra constraint (K stops, fuel, keys, obstacle budget)? → Put the resource in the state: Dijkstra/BFS over (node, used), or Bellman-Ford capped at K+1 rounds <a class="tpl" data-goto="dijkstra-variants" data-anchor="m-DijkstraVariants-cheapestFlightsDijkstraState">cheapestFlightsDijkstraState</a></li><li>Path cost is the worst edge, not the sum? → Dijkstra with max() as the combiner (or sort edges + DSU) <a class="tpl" data-goto="dijkstra-variants" data-anchor="m-DijkstraVariants-minimumEffortPath">minimumEffortPath</a></li><li>Count the shortest paths, or print one? → Dijkstra with ways[] or prev[] <a class="tpl" data-goto="dijkstra-variants" data-anchor="m-DijkstraVariants-countShortestPaths">countShortestPaths</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -3052,6 +3077,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Directed cycle, safe nodes, or an order inferred from data (Alien Dictionary)? → 3-color DFS or Kahn&#x27;s, after building the edges from the data <a class="tpl" data-goto="cycles-courses" data-anchor="m-CycleAndCourseGraphs-alienOrder">alienOrder</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -3234,6 +3260,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Ratios or equivalences between named things (evaluate division)? → Weighted DSU, or DFS multiplying along the path <a class="tpl" data-goto="dsu-extended" data-anchor="m-DSUExtended-calcEquation">calcEquation</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -3473,6 +3500,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Tree question: LCA, distance, diameter, an answer for every root? → Binary lifting, double BFS, or rerooting <a class="tpl" data-goto="trees" data-anchor="m-TreeGraphs-treeDiameter">treeDiameter</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -3659,6 +3687,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Small bipartite matching to code live? → Kuhn&#x27;s; Hopcroft-Karp only for large inputs <a class="tpl" data-goto="matching-coloring" data-anchor="m-MatchingColoringFunctional-kuhnMatching">kuhnMatching</a></li><li>Small k-coloring, or &quot;can this be split into k groups&quot;? → Backtracking coloring (k = 2 is the bipartite check) <a class="tpl" data-goto="matching-coloring" data-anchor="m-MatchingColoringFunctional-kColorable">kColorable</a></li><li>Every node has exactly one outgoing edge? → Functional graph: Floyd&#x27;s or a timestamp walk <a class="tpl" data-goto="matching-coloring" data-anchor="m-MatchingColoringFunctional-cycleStart">cycleStart</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -3794,6 +3823,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>count ways / min cost where step i depends on a few earlier steps. <a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-climbStairsMemo">climbStairsMemo</a></li><li>Count ways / min cost where step i reads a few earlier steps? → 1D dp, then shrink to O(1) space <a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-climbStairsO1">climbStairsO1</a></li><li>Pick or skip adjacent items? → Take / skip state machine <a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-rob">rob</a></li><li>Best contiguous subarray? → Kadane (track max AND min if products) <a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-maxSubArray">maxSubArray</a></li><li>Buy / sell with limits, cooldown or fee? → Stock state machine (hold / sold / rest) <a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-maxProfitK">maxProfitK</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -4007,6 +4037,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Choose a subset under a capacity, each item once? → 0/1 knapsack, capacity loop DOWNWARD <a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-knapsack01">knapsack01</a></li><li>Can the array be split into equal halves / signs assigned to hit a target? → Subset-sum reduction <a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-findTargetSumWays">findTargetSumWays</a></li><li>Items reusable, fewest items? → Unbounded dp, capacity loop upward <a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-coinChangeMin">coinChangeMin</a></li><li>Count combinations vs ordered sequences? → Coins OUTER = combinations, amount OUTER = sequences <a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-coinChangeWays">coinChangeWays</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -4185,6 +4216,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Longest increasing chain? → Tails array with binary search, O(n log n) <a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-lengthOfLIS">lengthOfLIS</a></li><li>two sequences, keep order, match characters. dp[i][j] over prefixes. <a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-longestCommonSubsequence">longestCommonSubsequence</a></li><li>Two strings, edits or common parts? → Prefix table dp[i][j] <a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-minDistance">minDistance</a></li><li>Can the string be segmented into dictionary words? → dp over prefix length <a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-wordBreak">wordBreak</a></li><li>Does a pattern with wildcards match? → Prefix table; star means skip or consume <a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-isMatchRegex">isMatchRegex</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -4447,6 +4479,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>grid, move right/down only, count paths or min/max path sum. <a class="tpl" data-goto="dp-grid-interval" data-anchor="m-DPGridInterval-uniquePaths">uniquePaths</a></li><li>Grid with right/down moves? → Row-rolling dp <a class="tpl" data-goto="dp-grid-interval" data-anchor="m-DPGridInterval-minPathSum">minPathSum</a></li><li>Answer for range [i, j] from splitting at k? → Interval dp, loop by length <a class="tpl" data-goto="dp-grid-interval" data-anchor="m-DPGridInterval-maxCoins">maxCoins</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -4688,6 +4721,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>n ≤ 20, each item used once? → Bitmask dp over subsets <a class="tpl" data-goto="dp-bitmask-digit" data-anchor="m-DPBitmaskDigit-minCostAssignment">minCostAssignment</a></li><li>Count numbers up to N with a digit property? → Digit dp with tight flag <a class="tpl" data-goto="dp-bitmask-digit" data-anchor="m-DPBitmaskDigit-countDigitOne">countDigitOne</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -4864,6 +4898,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Intervals with weights, pick a compatible set? → Sort by end, binary-search the last compatible job <a class="tpl" data-goto="dp-combined" data-anchor="m-DPCombined-jobScheduling">jobScheduling</a></li><li>dp transition looks at a sliding window of earlier values? → Monotonic deque on dp <a class="tpl" data-goto="dp-combined" data-anchor="m-DPCombined-maxResult">maxResult</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -5040,6 +5075,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Eggs and floors? → Flip: floors covered with m moves <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-superEggDrop">superEggDrop</a></li><li>Two walkers on one grid? → Step index + both rows <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-cherryPickup">cherryPickup</a></li><li>Count distinct palindromic subsequences? → Interval DP, subtract the double count <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-countPalindromicSubsequences">countPalindromicSubsequences</a></li><li>Two groups must end up equal? → dp over the difference <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-tallestBillboard">tallestBillboard</a></li><li>Interval DP where equal items attach to a group? → dp[l][r][k] with k attached on the left <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-removeBoxes">removeBoxes</a></li><li>Merge k adjacent piles into one? → dp[i][j][piles] <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-mergeStones">mergeStones</a></li><details><summary>1 more</summary><li>Return the actual supersequence, not just its length? → LCS table, walk back merging <a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-shortestCommonSupersequence">shortestCommonSupersequence</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -5507,6 +5543,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>any &quot;visit every node&quot; ask. Recursive is fine; know the iterative forms for follow-ups. <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-inorder">inorder</a></li><li>Answer per level? → BFS with a level-size snapshot <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-levelOrder">levelOrder</a></li><li>Visit every node with a value flowing up? → One post-order returning a value (and a global for the answer) <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-diameter">diameter</a></li><li>Best path that may bend at a node? → Return best downward gain, update global with the bent path <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-maxPathSum">maxPathSum</a></li><li>Count paths with a given sum? → Prefix-sum map along the root path, backtrack <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-pathSumIII">pathSumIII</a></li><li>Lowest common ancestor? → Post-order: both sides non-null means this node <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-lowestCommonAncestor">lowestCommonAncestor</a></li><details><summary>2 more</summary><li>Rebuild or store a tree? → Preorder + inorder map, or preorder with null markers <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-serialize">serialize</a></li><li>Choose nodes with no two adjacent (tree dp)? → Return {take, skip} per node <a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-robTree">robTree</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -5921,6 +5958,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Validate or order-query a BST? → Carry bounds; use inorder = sorted <a class="tpl" data-goto="bst" data-anchor="m-BST-isValidBST">isValidBST</a></li><li>Kth smallest in a BST, or lazy iteration? → Iterative inorder / stack of left spine <a class="tpl" data-goto="bst" data-anchor="m-BST-kthSmallest">kthSmallest</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -6106,6 +6144,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Prefix queries over many words? → Trie <a class="tpl" data-goto="trie" data-anchor="m-Trie-insert">insert</a></li><li>Find words on a board? → Trie + grid DFS with pruning <a class="tpl" data-goto="trie" data-anchor="m-Trie-findWords">findWords</a></li><li>Maximum XOR of two numbers? → Binary trie, greedy opposite bit <a class="tpl" data-goto="trie" data-anchor="m-Trie-findMaximumXOR">findMaximumXOR</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -6296,6 +6335,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Many range sums, no updates? → Prefix sums <a class="tpl" data-goto="range-structures" data-anchor="m-RangeStructures-prefix">prefix</a></li><li>Point updates plus prefix sums, or counting inversions? → Fenwick tree <a class="tpl" data-goto="range-structures" data-anchor="m-RangeStructures-countInversions">countInversions</a></li><li>Range updates and range queries? → Lazy segment tree <a class="tpl" data-goto="range-structures" data-anchor="m-RangeStructures-LazySeg">LazySeg</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -6515,6 +6555,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Count moves or flow along each edge? → Return subtree excess, add |excess| <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-distributeCoins">distributeCoins</a></li><li>Width of a level? → Heap indices, subtract the level&#x27;s first <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-widthOfBinaryTree">widthOfBinaryTree</a></li><li>Find repeated subtrees? → Canonical id per subtree <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-findDuplicateSubtrees">findDuplicateSubtrees</a></li><li>Enumerate all trees of a kind? → Choose root, combine left x right <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-generateTrees">generateTrees</a></li><li>Rebuild from inorder + postorder? → Consume postorder from the end, right first <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-buildTreeInPost">buildTreeInPost</a></li><li>Spread outward from a start node? → One DFS returning depth or negative distance <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-amountOfTime">amountOfTime</a></li><details><summary>1 more</summary><li>Count nodes of a complete tree quickly? → Compare leftmost and rightmost depth <a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-countNodes">countNodes</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -6954,6 +6995,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Pair that hits a target? → Value to index map <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-twoSum">twoSum</a></li><li>Count contiguous subarrays with a sum condition (negatives allowed)? → Prefix sum + frequency map <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-subarraySum">subarraySum</a></li><li>Longest subarray with equal 0s and 1s? → Map 0 to -1, first-seen index of each balance <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-findMaxLength">findMaxLength</a></li><li>Product / aggregate of everything except self? → Left pass then right pass <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-productExceptSelf">productExceptSelf</a></li><li>Top K by frequency in O(n)? → Bucket by frequency <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-topKFrequent">topKFrequent</a></li><li>Values in 1..n, find missing or duplicate? → Cyclic sort or Floyd on i to a[i] <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-firstMissingPositive">firstMissingPositive</a></li><details><summary>2 more</summary><li>Majority element? → Boyer-Moore vote <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-majorityElement">majorityElement</a></li><li>Sort three kinds in place? → Dutch national flag <a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-sortColors">sortColors</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -7230,6 +7272,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Maximum subarray on a circular array? → max(linear best, total - linear worst) <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-maxSubarraySumCircular">maxSubarraySumCircular</a></li><li>Elements appearing more than n/k times? → Boyer-Moore with k - 1 candidates, then verify <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-majorityElementII">majorityElementII</a></li><li>Values in 1..n, find duplicates in O(1) space? → Negate a[|x| - 1] as a visited mark <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-findDuplicates">findDuplicates</a></li><li>Count pairs i → Merge sort counting (or Fenwick on ranks) <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-countRangeSum">countRangeSum</a></li><li>Most independent chunks to sort? → Cut where prefix max &lt;= suffix min <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-maxChunksToSortedII">maxChunksToSortedII</a></li><li>Furthest pair with a[i] → Decreasing stack of left candidates, sweep right <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-maxWidthRamp">maxWidthRamp</a></li><details><summary>1 more</summary><li>Sort integers in linear time? → Radix or counting sort <a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-radixSort">radixSort</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -7503,6 +7546,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Longest substring / subarray satisfying a condition? → Variable window; update after shrinking <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-lengthOfLongestSubstring">lengthOfLongestSubstring</a></li><li>Shortest window covering requirements? → Variable window; update inside the shrink loop <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-minWindow">minWindow</a></li><li>Count subarrays with exactly K distinct? → atMost(K) minus atMost(K - 1) <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-subarraysWithKDistinct">subarraysWithKDistinct</a></li><li>Window of fixed size, anagram check? → Fixed window with a difference counter <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-findAnagrams">findAnagrams</a></li><li>Sorted array, pair or triple sums? → Sort + two pointers <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-threeSum">threeSum</a></li><li>Maximize area between two walls? → Move the shorter wall <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-maxArea">maxArea</a></li><details><summary>1 more</summary><li>Product / sum below a bound with positives? → Variable window with running product or sum <a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-numSubarrayProductLessThanK">numSubarrayProductLessThanK</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -7801,6 +7845,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Window must contain t as a subsequence? → Forward match then backward tighten <a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-minWindowSubsequence">minWindowSubsequence</a></li><li>Every character in the window appears at least k times? → Fix distinct count 1..26, slide <a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-longestSubstringAtLeastK">longestSubstringAtLeastK</a></li><li>Take items from both ends? → Complement: slide a window in the middle <a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-maxScoreCards">maxScoreCards</a></li><li>Exactly k odd numbers or distinct values? → atMost(k) - atMost(k - 1) <a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-numberOfSubarrays">numberOfSubarrays</a></li><li>Values within t and indices within k? → TreeSet floor / ceiling over the window <a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-containsNearbyAlmostDuplicate">containsNearbyAlmostDuplicate</a></li><li>4-sum or k-sum? → Recursive kSum down to two pointers <a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-fourSum">fourSum</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -8049,6 +8094,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Nearest greater or smaller element for each index? → Monotonic stack of indices <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-nextGreater">nextGreater</a></li><li>Largest rectangle / contribution of each element as min or max? → Monotonic stack with left and right bounds <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-largestRectangleArea">largestRectangleArea</a></li><li>Smallest number after removing K digits? → Greedy monotonic stack <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-removeKdigits">removeKdigits</a></li><li>Evaluate an expression? → Stack with operator precedence <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-calculate2">calculate2</a></li><li>Nested brackets or encodings? → Stack of partial results <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-decodeString">decodeString</a></li><li>Max or min of every window of size k? → Monotonic deque <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-maxSlidingWindow">maxSlidingWindow</a></li><details><summary>1 more</summary><li>Shortest subarray with sum at least K and negatives present? → Deque over prefix sums <a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-shortestSubarray">shortestSubarray</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -8370,6 +8416,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Collisions processed in order? → Stack of survivors <a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-asteroidCollision">asteroidCollision</a></li><li>Expression with parentheses and precedence? → Recursive descent with a stack of terms <a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-calculate3">calculate3</a></li><li>Pattern a → Scan right to left with a stack <a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-find132pattern">find132pattern</a></li><li>Sum over all subarrays of min or max? → Per-element contribution with left and right boundaries <a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-subArrayRanges">subArrayRanges</a></li><li>Pop the most frequent, ties by recency? → Frequency buckets of stacks <a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-FreqStack">FreqStack</a></li><li>Queue built from stacks? → Two stacks, transfer only when empty <a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-MyQueue">MyQueue</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -8663,6 +8710,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>K largest / smallest / closest / most frequent? → Heap of size K <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-findKthLargest">findKthLargest</a></li><li>Single Kth element, average O(n)? → Quickselect with random pivot <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-quickselectKthLargest">quickselectKthLargest</a></li><li>Median of a stream? → Two heaps (max-heap lower half, min-heap upper half) <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-MedianFinder">MedianFinder</a></li><li>Merge K sorted sequences? → Heap of (value, list, index) <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-mergeKSorted">mergeKSorted</a></li><li>Rearrange so equal items are not adjacent? → Max-heap by count, hold back the previous item <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-reorganizeString">reorganizeString</a></li><li>Fewest rooms / concurrent intervals? → Sort by start + min-heap of end times <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-minMeetingRooms">minMeetingRooms</a></li><details><summary>1 more</summary><li>Repeatedly pick the best available option as capacity grows? → Sort by unlock key + max-heap of rewards <a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-findMaximizedCapital">findMaximizedCapital</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -8920,6 +8968,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Median of every sliding window? → Two ordered sets of indices (removal is required) <a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-medianSlidingWindowTwoSets">medianSlidingWindowTwoSets</a></li><li>Choose k workers, minimize cost when pay depends on a ratio? → Sort by wage/quality, keep a max-heap of qualities <a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-mincostToHireWorkers">mincostToHireWorkers</a></li><li>Smallest k pairs from two sorted arrays? → Seed (i, 0), push (i, j + 1) after each pop <a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-kSmallestPairs">kSmallestPairs</a></li><li>Maximum number of tasks with deadlines? → Sort by deadline, max-heap of durations, evict the longest <a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-scheduleCourse">scheduleCourse</a></li><li>3D water level or flooding from the edges? → Min-heap on the boundary, expand from the lowest wall <a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-trapRainWater">trapRainWater</a></li><li>Need decrease-key (Dijkstra, Prim) in a heap? → Indexed min priority queue <a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-IndexedMinPQ">IndexedMinPQ</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -9187,6 +9236,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Merge overlapping ranges? → Sort by start, extend the last output <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-merge">merge</a></li><li>Insert into a sorted disjoint list? → Three phases: before, overlapping, after <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-insert">insert</a></li><li>Remove fewest to make the rest disjoint, or fewest arrows? → Sort by END, greedy keep <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-eraseOverlapIntervals">eraseOverlapIntervals</a></li><li>Intersection of two interval lists? → Two pointers, advance the one that ends first <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-intervalIntersection">intervalIntersection</a></li><li>Maximum overlap at any instant? → Sweep line with +1 / -1 events <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-maxOverlap">maxOverlap</a></li><li>Capacity over a route or time? → Difference array <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-carPooling">carPooling</a></li><details><summary>1 more</summary><li>Online bookings that must not collide? → TreeMap floor / ceiling <a class="tpl" data-goto="intervals" data-anchor="m-Intervals-MyCalendar">MyCalendar</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -9392,6 +9442,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Smallest interval containing each query point? → Sort both, sweep queries, heap keyed by size <a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-minInterval">minInterval</a></li><li>Attend the most events, one per day? → Sweep days, min-heap of end days, drop expired <a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-maxEvents">maxEvents</a></li><li>Room assignment with counts per room? → Two heaps: free rooms by index, busy rooms by end time <a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-mostBooked">mostBooked</a></li><li>Cover [0, T] with the fewest clips? → Greedy furthest reach <a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-videoStitching">videoStitching</a></li><li>Dynamic set of covered ranges? → TreeMap of disjoint intervals <a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-RangeModule">RangeModule</a></li><li>Union area of rectangles? → Sweep line with coordinate compression <a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-rectangleArea">rectangleArea</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -9636,6 +9687,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>First index meeting a monotone condition? → Lower-bound template: while (lo &lt; hi), hi = mid on true <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-lowerBound">lowerBound</a></li><li>First and last position of a value? → lowerBound and upperBound <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-searchRange">searchRange</a></li><li>Rotated sorted array? → Decide which half is sorted <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-searchRotated">searchRotated</a></li><li>Smallest rate finishing in time? → Binary search on the answer <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-minEatingSpeed">minEatingSpeed</a></li><li>Minimize the maximum (or maximize the minimum) with a feasibility check? → Binary search on the answer <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-shipWithinDays">shipWithinDays</a></li><li>Median or kth of two sorted arrays? → Partition the smaller array <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-findMedianSortedArrays">findMedianSortedArrays</a></li><details><summary>2 more</summary><li>Real-valued answer? → Fixed iteration count, not an epsilon test <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-sqrt">sqrt</a></li><li>Latest value at or before a timestamp? → Binary search the history list <a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-TimeMap">TimeMap</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -9906,6 +9958,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>k-th smallest of an implicit set such as pair distances? → Search the value, count &lt;= mid with two pointers <a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-smallestDistancePair">smallestDistancePair</a></li><li>Maximize the minimum (or minimize the maximum)? → Binary search the answer with a greedy feasibility check <a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-maxDistance">maxDistance</a></li><li>Answer is a real number? → Fixed iteration count <a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-minmaxGasDist">minmaxGasDist</a></li><li>Where does the missing count cross k? → Search on a[i] - (i + 1) <a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-findKthPositive">findKthPositive</a></li><li>Best rectangle with sum at most k? → Fix column pair, prefix sums with TreeSet.ceiling <a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-maxSumSubmatrix">maxSumSubmatrix</a></li><li>Peak then two monotone sides? → Find the peak, search both sides <a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-searchMountain">searchMountain</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -10137,6 +10190,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>All subsets / combinations? → Start-index recursion <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-subsets">subsets</a></li><li>Inputs contain duplicates? → Sort + skip equal siblings <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-subsetsWithDup">subsetsWithDup</a></li><li>All orderings? → used[] array <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-permute">permute</a></li><li>Reusable candidates summing to a target? → Recurse with the same index <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-combinationSum">combinationSum</a></li><li>Generate valid strings? → Track counts, only add legal characters <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-generateParenthesis">generateParenthesis</a></li><li>Find a path of letters in a grid? → Mark visited in place, restore on exit <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-exist">exist</a></li><details><summary>1 more</summary><li>Place items under conflict constraints? → Occupancy sets / bitmasks for O(1) validity <a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-solveNQueens">solveNQueens</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -10525,6 +10579,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Fill buckets equally (square, k subsets)? → Sort descending, skip equal-load buckets <a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-makesquare">makesquare</a></li><li>k-th permutation, not all of them? → Factorial number system, no search <a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-getPermutation">getPermutation</a></li><li>Every way to parenthesize an expression? → Split at each operator, memoize <a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-diffWaysToCompute">diffWaysToCompute</a></li><li>Minimum removals to make a string valid? → BFS by number of removals <a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-removeInvalidParentheses">removeInvalidParentheses</a></li><li>Symmetry cuts the search? → Search one representative per orbit, multiply <a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-numberOfPatterns">numberOfPatterns</a></li><li>Settle debts with the fewest transfers? → Net balances, backtrack on the first non-zero <a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-minTransfers">minTransfers</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -10872,6 +10927,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Can you reach the end / minimum jumps? → Furthest-reach frontier <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-jump">jump</a></li><li>Circular route, find the start? → Restart after any negative prefix <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-canCompleteCircuit">canCompleteCircuit</a></li><li>Neighbor-dependent minimum assignment? → Left pass and right pass <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-candy">candy</a></li><li>Split into the most self-contained segments? → Extend to the last occurrence <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-partitionLabels">partitionLabels</a></li><li>Custom ordering decides the answer? → Comparator from an exchange argument <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-largestNumber">largestNumber</a></li><li>Pair heaviest with lightest? → Sort + two pointers <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-numRescueBoats">numRescueBoats</a></li><details><summary>1 more</summary><li>Need the best past option when stuck? → Heap of passed options <a class="tpl" data-goto="greedy" data-anchor="m-Greedy-minRefuelStops">minRefuelStops</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -11090,6 +11146,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Smallest lexicographic subsequence using each letter once? → Monotone stack with last occurrence <a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-removeDuplicateLetters">removeDuplicateLetters</a></li><li>Assign people to two groups minimizing total cost? → Sort by cost difference <a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-twoCitySchedCost">twoCitySchedCost</a></li><li>Forward moves branch a lot, reverse moves are forced? → Work backwards from the target <a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-brokenCalc">brokenCalc</a></li><li>Largest number from one swap? → Last-occurrence table, swap with the best later digit <a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-maximumSwap">maximumSwap</a></li><li>Order to beat opponent elements? → Sort and match greedily <a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-advantageCount">advantageCount</a></li><li>Merge two digit sequences into the maximum number? → Best subsequence per length, merge by suffix comparison <a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-maxNumber">maxNumber</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -11378,6 +11435,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Reverse all, a segment, or in groups? → Iterative pointer flip; pull-to-front for ranges <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-reverse">reverse</a></li><li>Cycle present, and where does it start? → Floyd <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-detectCycle">detectCycle</a></li><li>Middle, or nth from the end? → Slow / fast, or a gap of n <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-removeNthFromEnd">removeNthFromEnd</a></li><li>Merge sorted lists? → Dummy head merge; divide and conquer for K <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-mergeKLists">mergeKLists</a></li><li>Sort a list in O(n log n), O(1) extra? → Merge sort with slow/fast split <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-sortList">sortList</a></li><li>Palindrome or reorder using the second half? → Find middle, reverse second half <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-reorderList">reorderList</a></li><details><summary>1 more</summary><li>Clone with arbitrary pointers in O(1) space? → Interleave copies, set randoms, split <a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-copyRandomList">copyRandomList</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -11693,6 +11751,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Remove runs that sum to zero? → Prefix sums, jump to the last node with the same sum <a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-removeZeroSumSublists">removeZeroSumSublists</a></li><li>Add one to a number stored as a list? → Rightmost non-9 trick <a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-plusOne">plusOne</a></li><li>Kth node from the end? → Two pointers with a gap of k <a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-swapNodes">swapNodes</a></li><li>Reverse groups conditionally? → Count the group first, then reverse in place <a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-reverseEvenLengthGroups">reverseEvenLengthGroups</a></li><li>Insert into a sorted circular list? → Walk to the insertion or wrap point <a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-insertCircular">insertCircular</a></li><li>Child pointers / multilevel list? → Stack of saved next pointers <a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-flatten">flatten</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -11965,6 +12024,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>find a pattern in text in O(n + m); periodic structure; shortest repeating unit. <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-prefixFunction">prefixFunction</a></li><li>Find a pattern in linear time? → KMP prefix function <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-kmpSearch">kmpSearch</a></li><li>Does the string repeat a smaller unit? → n % (n - pi[n-1]) == 0 <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-repeatedSubstringPattern">repeatedSubstringPattern</a></li><li>All occurrences / prefix-match lengths? → Z-function on pattern#text <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-findAllZ">findAllZ</a></li><li>Substring equality or duplicates at scale? → Rolling hash <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-rabinKarp">rabinKarp</a></li><li>Longest palindromic substring in O(n)? → Manacher <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-manacher">manacher</a></li><details><summary>2 more</summary><li>Arithmetic on huge numbers as strings? → Digit arrays with carry <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-multiply">multiply</a></li><li>Parse with signs, spaces, overflow? → Single pass with long accumulator and clamping <a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-myAtoi">myAtoi</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -12230,6 +12290,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>distinct substrings, longest repeated substring, substring queries over one fixed text. <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-suffixArray">suffixArray</a></li><li>Count distinct substrings / longest repeated substring? → Suffix array + LCP <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-countDistinctSubstrings">countDistinctSubstrings</a></li><li>Many patterns in one scan? → Aho-Corasick automaton <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-AhoCorasick">AhoCorasick</a></li><li>Pairs of words forming a palindrome? → Hash all words, split each word at every index <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-palindromePairs">palindromePairs</a></li><li>Longest prefix that is also a suffix? → KMP failure function <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-longestHappyPrefix">longestHappyPrefix</a></li><li>Canonical form under rotation? → Minimal rotation <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-leastRotation">leastRotation</a></li><details><summary>1 more</summary><li>Validate a number or format string? → Finite-state flags <a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-isNumber">isNumber</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -12575,6 +12636,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Everything appears twice except one (or two)? → XOR fold; split by lowest set bit for two uniques <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-singleNumberIII">singleNumberIII</a></li><li>Count set bits, powers of two? → n &amp; (n - 1) clears the lowest set bit <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-hammingWeight">hammingWeight</a></li><li>Small set, enumerate subsets? → Bitmask loop 0 .. 2^n - 1 <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-subsetsMask">subsetsMask</a></li><li>Large exponent modulo m? → Fast exponentiation <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-powMod">powMod</a></li><li>Count primes up to n? → Sieve of Eratosthenes <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-countPrimes">countPrimes</a></li><li>nCr modulo a prime, many queries? → Factorial and inverse-factorial tables <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-modInverse">modInverse</a></li><details><summary>1 more</summary><li>Repeating decimals? → Remainder to position map <a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-fractionToDecimal">fractionToDecimal</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -12835,6 +12897,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Sum of bit differences over all pairs? → Per bit: ones x zeros <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-totalHammingDistance">totalHammingDistance</a></li><li>Josephus-style elimination? → f(n) = (f(n - 1) + k) mod n <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-findTheWinner">findTheWinner</a></li><li>Factorize many numbers? → Smallest-prime-factor sieve <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-spfSieve">spfSieve</a></li><li>Modular inverse with a non-prime modulus? → Extended Euclid <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-modInverseAny">modInverseAny</a></li><li>Linear recurrence for a huge n? → Matrix exponentiation <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-matPow">matPow</a></li><li>Pick uniformly from a stream? → Reservoir sampling <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-Reservoir">Reservoir</a></li><details><summary>1 more</summary><li>Weighted random pick? → Prefix sums + binary search <a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-WeightedPicker">WeightedPicker</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -13139,6 +13202,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Evict least recently used? → Hash map + doubly linked list <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-LRUCache">LRUCache</a></li><li>Evict least frequently used, ties by recency? → freq to LinkedHashSet buckets, track minFreq <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-LFUCache">LFUCache</a></li><li>O(1) insert, delete and random element? → Array + index map with swap-delete <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-RandomizedSet">RandomizedSet</a></li><li>Merge per-user streams into a feed? → Heap over each user&#x27;s newest tweet <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-Twitter">Twitter</a></li><li>Throttle requests per window? → Deque of timestamps or token bucket <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-RateLimiter">RateLimiter</a></li><li>Versioned reads by snapshot id? → Per-index history + binary search <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-SnapshotArray">SnapshotArray</a></li><details><summary>1 more</summary><li>Route keys to nodes with minimal remapping? → Consistent hashing ring (TreeMap) <a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-ConsistentHash">ConsistentHash</a></li></details></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -13442,6 +13506,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
       <button class="copy-btn">&#10697; Copy</button>
     </div>
   </div>
+  <ul class="cues"><li>Implement a hash map from scratch? → Array of buckets, chaining, resize at load factor <a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-MyHashMap">MyHashMap</a></li><li>Ordered set without balancing? → Skip list <a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-Skiplist">Skiplist</a></li><li>Increment / decrement counters, read max and min in O(1)? → Doubly linked list of count buckets <a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-AllOne">AllOne</a></li><li>Type-ahead suggestions? → Trie with per-node ranked list <a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-AutocompleteSystem">AutocompleteSystem</a></li><li>Cache with per-key expiry? → Hash map plus expiry-ordered structure <a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-TTLCache">TTLCache</a></li><li>Membership in tiny memory, false positives acceptable? → Bloom filter <a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-BloomFilter">BloomFilter</a></li></ul>
   <pre class="code-block"><code><span class="fold-mark">// … imports hidden
 </span><span class="fold" data-fold="import"><span class="tok-kw">import</span> java.util.*;
 </span>
@@ -14111,6 +14176,8 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 document.addEventListener("click", function(e){
   var g = e.target.closest("[data-goto]");
   if (!g) return;
+  var a = g.getAttribute("data-anchor");
+  if (a && window.crGoto) { e.preventDefault(); window.crGoto(g.getAttribute("data-goto"), a); return; }
   location.hash = g.getAttribute("data-goto");
 });
 

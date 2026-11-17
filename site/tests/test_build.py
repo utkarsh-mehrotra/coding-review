@@ -121,6 +121,44 @@ class BuildTest(unittest.TestCase):
         self.assertIn("Show essentials", self.page)
         self.assertIn("function copyText", self.page)
 
+    def test_cues_from_decisions(self):
+        t = next(t for t in build.load_topics() if (t["_dir"] / "HeapsTopK.java").exists())
+        src = (t["_dir"] / "HeapsTopK.java").read_text()
+        cues = build.cues_for_file(t, "HeapsTopK", src)
+        hit = [c for c, m in cues if m == "findKthLargest"]
+        self.assertTrue(any("K largest / smallest / closest / most frequent?" in c for c in hit), cues)
+        self.assertTrue(all("<" not in c for c, _ in cues))
+        self.assertIn("\u2192", hit[0])
+
+    def test_cues_from_recognize_without_decision(self):
+        src = (
+            "public class Demo {\n"
+            "    // Kth largest\n"
+            "    // RECOGNIZE: k largest -> heap\n"
+            "    static int a() { return 1; }\n"
+            "    // RECOGNIZE: shadowed by a decision\n"
+            "    static int b() { return 2; }\n"
+            "}\n")
+        topic = {"decisions": [{"q": "<strong>Q &amp; B?</strong>", "a": "use b", "template": "Demo#b"}]}
+        cues = build.cues_for_file(topic, "Demo", src)
+        self.assertEqual(cues, [("k largest -> heap", "a"), ("Q & B? \u2192 use b", "b")])
+
+    def test_cue_links_resolve(self):
+        anchors = re.findall(r'data-anchor="([^"]+)"', self.page)
+        self.assertTrue(anchors)
+        ids = set(re.findall(r'\bid="([^"]+)"', self.page))
+        for a in anchors:
+            self.assertIn(a, ids)
+
+    def test_cues_markup_above_pre_and_outside_code(self):
+        card = self._heaps_card()
+        self.assertLess(card.index('<ul class="cues">'), card.index('<pre class="code-block">'))
+
+    def test_cues_collapse_after_six(self):
+        self.assertRegex(self.page, r"<summary>\d+ more</summary>")
+        for ul in re.findall(r'<ul class="cues">(.*?)</ul>', self.page, re.S):
+            self.assertLessEqual(len(re.findall(r"<li>", ul.split("<details>")[0])), 6)
+
 
 if __name__ == "__main__":
     unittest.main()
