@@ -13,6 +13,7 @@ Coding rounds only: no system design or behavioral prep.
 make test        # compile all templates, run all test suites
 make check       # template-first rule: every decision links to a real template member
 make site        # regenerate site/index.html from topics/*/topic.json + the Java files
+make problems    # remap LeetCode problems to templates (offline)
 make all         # all of the above
 ```
 
@@ -27,6 +28,7 @@ make all         # all of the above
 | `site/build.py`, `site/assets/` | page generator, shared CSS and JS |
 | `site/index.html` | generated single-page reference (do not edit by hand) |
 | `docs/PLAN.md` | scope, conventions, roadmap |
+| `tools/lc-coverage/` | maps every LeetCode problem to a template; see its README |
 | `vercel.json` | Vercel config: serves `site/` as static files, no build step |
 
 ## Deploy
@@ -39,6 +41,12 @@ npx vercel --prod   # deploy site/ to production
 Graphs, Dynamic Programming, Trees & Range Structures, Arrays & Hashing, Sliding Window & Two Pointers,
 Monotonic Stack & Deque, Heaps & Top-K, Intervals & Sweep, Binary Search, Backtracking, Greedy, Linked Lists,
 String Algorithms, Bits & Math, Data-Structure Design. 51 template files, 232 decision-tree entries, 52 page views.
+
+## LeetCode coverage
+2,196 of LeetCode's 3,696 algorithm problems map to a template: 522 named in template comments or practice maps,
+1,674 matched by a specific LeetCode tag. Each template view lists its problems under the code, and the filter box
+finds a template by problem number or title. `make check` fails if a listed problem points at a missing method.
+Details and tiers: [`tools/lc-coverage/README.md`](tools/lc-coverage/README.md).
 
 ## Tests
 `make test` runs 11 suites (about 132,000 checks): LeetCode examples for every template, plus seeded randomized
