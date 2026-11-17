@@ -437,13 +437,13 @@ def cues_html(topic, fname):
     if not cues:
         return ""
     view = view_of_file(topic)[stem]
-    items = ['<li>%s <a class="tpl" data-goto="%s" data-anchor="%s">%s</a></li>' % (
-        html.escape(text), html.escape(view), html.escape(anchor_id(stem, member)), html.escape(member))
+    items = ['<li>%s <a class="tpl" href="#%s" data-goto="%s" data-anchor="%s">%s</a></li>' % (
+        html.escape(text), html.escape(view), html.escape(view), html.escape(anchor_id(stem, member)), html.escape(member))
         for text, member in cues]
     head, rest = items[:CUE_VISIBLE], items[CUE_VISIBLE:]
     more = ""
     if rest:
-        more = '<details><summary>%d more</summary>%s</details>' % (len(rest), "".join(rest))
+        more = '<li><details><summary>%d more</summary><ul>%s</ul></details></li>' % (len(rest), "".join(rest))
     return '  <ul class="cues">%s%s</ul>\n' % ("".join(head), more)
 
 
@@ -557,7 +557,7 @@ def jump_json(index):
 
 JUMP_MODAL = """<div class="jump-backdrop" id="jumpBackdrop" hidden>
   <div class="jump-modal" role="dialog" aria-modal="true" aria-label="Jump to a topic, template or problem">
-    <input id="jumpInput" class="jump-input" type="text" role="combobox" aria-label="Jump to a view, template or problem" aria-expanded="false" aria-controls="jumpList" aria-autocomplete="list" aria-activedescendant="" placeholder="Jump to a topic, template or problem number&hellip;" autocomplete="off" spellcheck="false">
+    <input id="jumpInput" class="jump-input" type="text" role="combobox" aria-label="Jump to a view, template or problem" aria-expanded="false" aria-controls="jumpList" aria-autocomplete="list" placeholder="Jump to a topic, template or problem number&hellip;" autocomplete="off" spellcheck="false">
     <ul class="jump-list" id="jumpList" role="listbox" aria-label="Jump results"></ul>
     <div class="jump-empty" id="jumpStatus" role="status" aria-live="polite"></div>
     <div class="jump-foot">Up and down to choose, Enter to go, Esc to close</div>
@@ -580,13 +580,13 @@ def build_overview(topics, counts, problems=None):
         p.append('<div class="calib-block"><strong>LeetCode coverage:</strong> %s problems map to a template here: %s named in the template code or practice map, '
                  '%s matched by a specific LeetCode tag. Each template view lists its problems under the code. '
                  'Type a problem number or title in the filter box to find its template, or open the '
-                 '<a class="tpl" data-goto="coverage">LeetCode Coverage</a> view for the full list.</div>' % (
+                 '<a class="tpl" href="#coverage" data-goto="coverage">LeetCode Coverage</a> view for the full list.</div>' % (
                      format(len(rows), ","), format(n_a, ","), format(len(rows) - n_a, ",")))
     p.append('<h2 class="section-title">Topics</h2>\n<div class="topic-grid">')
     for t in topics:
         first = t["views"][0]["id"]
-        p.append('<a class="topic-card" data-goto="%s"><strong>%s</strong><div class="tc-meta">%d %s &middot; %d %s &middot; %d decisions</div></a>' % (
-            first, html.escape(t["title"]), len(t["views"]), "view" if len(t["views"]) == 1 else "views",
+        p.append('<a class="topic-card" href="#%s" data-goto="%s"><strong>%s</strong><div class="tc-meta">%d %s &middot; %d %s &middot; %d decisions</div></a>' % (
+            first, first, html.escape(t["title"]), len(t["views"]), "view" if len(t["views"]) == 1 else "views",
             counts[t["id"]], "template file" if counts[t["id"]] == 1 else "template files", len(t["decisions"])))
     p.append('</div>')
     p.append('<h2 class="section-title">Decision Tree &mdash; &ldquo;which pattern do I reach for?&rdquo;</h2>')
@@ -595,9 +595,9 @@ def build_overview(topics, counts, problems=None):
         p.append('<h3 class="group-title">%s</h3>\n<ol class="decision-list">' % html.escape(t["title"]))
         for dec in t["decisions"]:
             fname, member = dec["template"].split("#", 1)
-            p.append('<li><strong>%s</strong> <span class="arrow">&rarr;</span> %s<a class="tpl" data-goto="%s">%s</a></li>' % (
+            p.append('<li><strong>%s</strong> <span class="arrow">&rarr;</span> %s<a class="tpl" href="#%s" data-goto="%s">%s</a></li>' % (
                 re.sub(r"^<strong>|</strong>$", "", dec["q"]).replace("<strong>", "").replace("</strong>", ""),
-                dec["a"], vf[fname], html.escape(dec["template"])))
+                dec["a"], vf[fname], vf[fname], html.escape(dec["template"])))
         p.append('</ol>')
     p.append('<h2 class="section-title">Level Calibration</h2>')
     for t in topics:
@@ -626,8 +626,8 @@ def build_cheatsheet_view(topics, problems=None):
         rows = ['<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>']
         for d in t["decisions"]:
             file_stem, member = d["template"].split("#", 1)
-            link = '<a class="tpl" data-goto="%s" data-anchor="%s">%s</a>' % (
-                html.escape(vmap[file_stem]), html.escape(anchor_id(file_stem, member)), html.escape(d["template"]))
+            link = '<a class="tpl" href="#%s" data-goto="%s" data-anchor="%s">%s</a>' % (
+                html.escape(vmap[file_stem]), html.escape(vmap[file_stem]), html.escape(anchor_id(file_stem, member)), html.escape(d["template"]))
             rows.append('<tr class="sig-row"><td>%s</td><td>%s</td><td>%s</td></tr>' % (
                 esc(_plain(d["q"])), esc(_plain(d["a"])), link))
         p.append('<table class="ref-table">\n%s\n</table>' % "\n".join(rows))
@@ -706,8 +706,10 @@ def render_page(topics=None, problems=None):
 document.addEventListener("click", function(e){
   var g = e.target.closest("[data-goto]");
   if (!g) return;
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (e.button || 0) !== 0) return;   // let the browser open a new tab
+  e.preventDefault();
   var a = g.getAttribute("data-anchor");
-  if (a && window.crGoto) { e.preventDefault(); window.crGoto(g.getAttribute("data-goto"), a); return; }
+  if (a && window.crGoto) { window.crGoto(g.getAttribute("data-goto"), a); return; }
   location.hash = g.getAttribute("data-goto");
 });
 """

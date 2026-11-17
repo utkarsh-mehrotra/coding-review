@@ -157,7 +157,9 @@ class BuildTest(unittest.TestCase):
     def test_cues_collapse_after_six(self):
         self.assertRegex(self.page, r"<summary>\d+ more</summary>")
         for ul in re.findall(r'<ul class="cues">(.*?)</ul>', self.page, re.S):
-            self.assertLessEqual(len(re.findall(r"<li>", ul.split("<details>")[0])), 6)
+            self.assertLessEqual(len(re.findall(r"<li>", ul.split("<li><details>")[0])), 6)
+            self.assertNotRegex(ul, r"</li>\s*<details>")   # details sits inside an li, not directly in the ul
+        self.assertRegex(self.page, r"<li><details><summary>\d+ more</summary><ul>")
 
     def _cheatsheet(self):
         m = re.search(r'<div class="view" id="view-cheatsheet">(.*?)\n</div>\n', self.page, re.S)
@@ -297,6 +299,23 @@ class BuildTest(unittest.TestCase):
         self.assertNotIn("<", out)
         import json
         self.assertEqual(json.loads(out)[0][0], "1 </script><b>x")
+
+    def test_goto_links_have_href(self):
+        tags = re.findall(r"<a\b[^>]*data-goto=[^>]*>", self.page)
+        self.assertTrue(tags)
+        for tag in tags:
+            self.assertIn("href=", tag)
+        js = (SITE / "assets" / "coverage.js").read_text()
+        for tag in re.findall(r"<a class=\"tpl\"[^']*data-goto=", js):
+            self.assertIn("href=", tag)
+
+    def test_jump_hint_platform_and_focus(self):
+        js = (SITE / "assets" / "app.js").read_text()
+        self.assertIn("Ctrl K", js)
+        self.assertIn("&#8984;K", self.page)
+        self.assertIn("preventScroll", js)
+        self.assertNotIn('"aria-activedescendant", ""', js)
+        self.assertNotIn('aria-activedescendant=""', self.page)
 
     def test_jump_a11y_markup(self):
         self.assertIn('role="combobox"', self.page)

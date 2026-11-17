@@ -150,7 +150,7 @@
 
   function jumpSetActive(i, scroll) {
     var rows = jumpList.children;
-    if (!rows.length) { jumpActive = 0; jumpInput.setAttribute("aria-activedescendant", ""); return; }
+    if (!rows.length) { jumpActive = 0; jumpInput.removeAttribute("aria-activedescendant"); return; }
     jumpActive = (i + rows.length) % rows.length;
     for (var k = 0; k < rows.length; k++) {
       var on = k === jumpActive;
@@ -193,19 +193,37 @@
     jumpInput.focus();
   }
 
-  function jumpClose() {
+  function jumpClose(navigated) {
     if (!jumpIsOpen()) return;
     jumpBackdrop.hidden = true;
     jumpInput.setAttribute("aria-expanded", "false");
+    jumpInput.removeAttribute("aria-activedescendant");
     var o = jumpOpener; jumpOpener = null;
-    if (o && o.focus) o.focus();
+    if (!navigated && o && o.focus) o.focus();
+  }
+
+  // After a jump, move focus to where the page landed so keyboard and screen reader users start there.
+  function focusTarget(anchorId) {
+    var el = anchorId ? document.getElementById(anchorId) : null;
+    if (!el) el = document.querySelector(".view.active h1, .view.active h2, .view.active h3");
+    if (!el) return;
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
   }
 
   function jumpGo(i) {
     var r = jumpResults[i];
     if (!r) return;
-    jumpClose();
+    jumpClose(true);
     window.crGoto(r[2], r[3]);
+    focusTarget(r[3]);
+  }
+
+  // The hint defaults to the Mac key; show Ctrl K elsewhere.
+  var plat = (navigator.platform || "") + " " + (navigator.userAgent || "");
+  if (!/Mac|iPhone|iPad|iPod/i.test(plat)) {
+    var hint = document.querySelector(".jump-hint");
+    if (hint) hint.textContent = "Ctrl K";
   }
 
   jumpButton.addEventListener("click", jumpOpen);

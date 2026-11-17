@@ -152,7 +152,7 @@ function initCoverage(DATA) {
     if (r[8] < 0) return r[10] ? '<span class="cov-also">topic: ' + esc(TOP[r[7]][1]) + "</span>" : '<span class="cov-also">none</span>';
     var key = T[r[8]], v = VIEW[key.split("#")[0]];
     var label = esc(key).replace("#", "#<wbr>");
-    var main = v ? '<a class="tpl" data-goto="' + v + '">' + label + "</a>" : '<span class="tpl">' + label + "</span>";
+    var main = v ? '<a class="tpl" href="#' + v + '" data-goto="' + v + '">' + label + "</a>" : '<span class="tpl">' + label + "</span>";
     var also = r[9].length ? '<span class="cov-also">also: ' + r[9].map(function (i) { return esc(T[i].split("#")[1]); }).join(", ") + "</span>" : "";
     return main + also;
   }
@@ -185,7 +185,7 @@ function initCoverage(DATA) {
   function tplLinks(list) {
     return list.map(function (t) {
       var v = VIEW[t.split("#")[0]];
-      return v ? '<a class="tpl" data-goto="' + v + '">' + esc(t) + "</a>" : '<span class="tpl">' + esc(t) + "</span>";
+      return v ? '<a class="tpl" href="#' + v + '" data-goto="' + v + '">' + esc(t) + "</a>" : '<span class="tpl">' + esc(t) + "</span>";
     }).join("");
   }
   $("cov-zero-note").textContent = DATA.zero.length

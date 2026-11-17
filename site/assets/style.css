@@ -648,6 +648,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
   color: var(--text-muted);
 }
 .cues li { padding: 2px 0; }
+.cues ul { list-style: none; margin: 0; padding: 0; }
 .cues .tpl { margin-left: 4px; }
 .cues summary { cursor: pointer; color: var(--accent); padding: 2px 0; }
 
