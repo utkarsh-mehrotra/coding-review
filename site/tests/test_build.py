@@ -341,10 +341,34 @@ class BuildTest(unittest.TestCase):
         css = (SITE / "assets" / "style.css").read_text()
         i = css.index("@media (max-width: 520px) {\n  .topbar")
         block = css[i:css.index("\n}\n", i)]
-        for rule in (".topbar { gap: 8px; }", ".topbar .brand { display: none; }", "min-width: 0",
+        for rule in (".topbar { gap: 8px; }", ".topbar .brand strong, .topbar .brand span.sub { display: none; }", "min-width: 0",
                      ".ess-long { display: none; }", "#themeLabel { position: absolute", ".jump-hint { display: none; }"):
             self.assertIn(rule, block)
         self.assertIn('class="ess-short"', self.page)
+
+    def test_logo_in_topbar_links_home(self):
+        m = re.search(r'<a class="brand" href="#overview" data-goto="overview"[^>]*>(.*?)</a>', self.page, re.S)
+        self.assertIsNotNone(m)
+        self.assertIn('class="logo"', m.group(1))
+        self.assertIn('class="logo-tile"', m.group(1))
+        self.assertIn('aria-hidden="true"', m.group(1))
+
+    def test_logo_css_uses_tokens(self):
+        css = (SITE / "assets" / "style.css").read_text()
+        self.assertIn(".logo-tile { fill: var(--accent); }", css)
+        self.assertIn(".logo-ink { stroke: var(--panel); }", css)
+
+    def test_favicon_links_and_files(self):
+        for href in ('href="favicon.svg" type="image/svg+xml"', 'href="favicon-32.png" sizes="32x32"',
+                     'rel="apple-touch-icon" href="apple-touch-icon.png"'):
+            self.assertIn(href, self.page)
+        fav = (SITE / "favicon.svg").read_text()
+        self.assertEqual(fav, build.logo_svg(themed=False))
+        self.assertIn('xmlns="http://www.w3.org/2000/svg"', fav)
+        self.assertNotIn("var(", fav)
+        for png in ("favicon-32.png", "apple-touch-icon.png"):
+            data = (SITE / png).read_bytes()
+            self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n", png)
 
     def test_jump_keys_handled_on_document(self):
         js = (SITE / "assets" / "app.js").read_text()

@@ -25,6 +25,7 @@ TOPICS = ROOT / "topics"
 ASSETS = ROOT / "site" / "assets"
 OUT = ROOT / "site" / "index.html"
 COVERAGE_OUT = ROOT / "site" / "coverage.json"
+FAVICON_OUT = ROOT / "site" / "favicon.svg"
 LISTS_FILE = ROOT / "tools" / "lc-coverage" / "data" / "lists.json"
 PROBLEMS = ROOT / "tools" / "lc-coverage" / "data" / "problems.json"
 SHOWN_TIERS = ("A", "B")     # A: named in a template or practice map, B: specific tag match
@@ -130,6 +131,28 @@ def coverage_data(topics, problems):
             "templateView": {f: v for f, v in view_of.items()}, "decisionCount": len(decision_tpls),
             "zero": [k for k in decision_tpls if not problems.get(k) and k not in flagged],
             "noLc": [k for k in decision_tpls if k in flagged], "utags": utags.most_common(10)}
+
+
+# Logo: a code-brace pair with a check mark on a rounded tile ("templates, reviewed").
+# One drawing, two renderings: themed (topbar, colors from CSS tokens) and fixed (favicon).
+LOGO_SHAPES = (
+    '<rect x="1" y="1" width="30" height="30" rx="8" {tile}/>'
+    '<path d="M12.6 8.5c-2.3 0-2.9 1.2-2.9 2.9v2.4c0 1.5-.9 2.2-2.4 2.2 1.5 0 2.4.7 2.4 2.2v2.4c0 1.7.6 2.9 2.9 2.9" {ink}/>'
+    '<path d="M19.4 8.5c2.3 0 2.9 1.2 2.9 2.9v2.4c0 1.5.9 2.2 2.4 2.2-1.5 0-2.4.7-2.4 2.2v2.4c0 1.7-.6 2.9-2.9 2.9" {ink}/>'
+    '<path d="M13.1 16.3l2.1 2.3 3.7-4.5" {ink}/>'
+)
+LOGO_STROKE = 'fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"'
+
+
+def logo_svg(themed=True, size=None):
+    """The site logo as SVG markup. themed=True uses CSS classes (styled with tokens in style.css);
+    themed=False uses fixed colors, for the favicon file."""
+    if themed:
+        body = LOGO_SHAPES.format(tile='class="logo-tile"', ink='class="logo-ink" ' + LOGO_STROKE)
+        dims = ' width="%d" height="%d"' % (size, size) if size else ""
+        return '<svg class="logo" viewBox="0 0 32 32"%s aria-hidden="true" focusable="false">%s</svg>' % (dims, body)
+    body = LOGO_SHAPES.format(tile='fill="#0E7C7B"', ink='stroke="#FFFFFF" ' + LOGO_STROKE)
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">%s</svg>\n' % body
 
 
 def coverage_json(topics, problems):
@@ -744,6 +767,9 @@ document.addEventListener("click", function(e){
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Coding Review &mdash; Java Templates</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 {css}
 </style>
@@ -755,7 +781,7 @@ document.addEventListener("click", function(e){
     <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="brand"><span class="dot">&#9679;</span><strong>coding-review</strong><span class="sub">&nbsp;&mdash; Java templates, SDE2 / SDE3 / Staff</span></div>
+    <a class="brand" href="#overview" data-goto="overview" aria-label="coding-review: go to the overview">{logo_svg(size=22)}<strong>coding-review</strong><span class="sub">&nbsp;&mdash; Java templates, SDE2 / SDE3 / Staff</span></a>
     <div class="search-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="searchInput" type="text" placeholder="Filter: topic, algorithm, method&hellip;" autocomplete="off">
@@ -818,6 +844,7 @@ def main():
         return
     page = render_page(topics, problems)
     OUT.write_text(page)
+    FAVICON_OUT.write_text(logo_svg(themed=False))
     cov = coverage_json(topics, problems)
     if cov:
         COVERAGE_OUT.write_text(cov)
