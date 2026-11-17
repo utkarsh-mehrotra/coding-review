@@ -50,3 +50,38 @@ test("fetch failure reports an error", async () => {
   await settle();
   assert.equal(err, 1);
 });
+
+test("onData throwing reaches onError", async () => {
+  _reset();
+  const errs = [];
+  loadCoverage(fakeFetch(), () => { throw new Error("render"); }, (e) => errs.push(e.message));
+  await settle();
+  assert.deepEqual(errs, ["render"]);
+});
+
+test("retries after a failed fetch", async () => {
+  _reset();
+  let n = 0, errs = 0, got = 0;
+  const f = (url) => { n++; return n === 1 ? Promise.reject(new Error("net")) : fakeFetch()(url); };
+  await loadCoverage(f, () => got++, () => errs++);
+  await loadCoverage(f, () => got++, () => errs++);
+  await loadCoverage(f, () => got++, () => errs++);
+  assert.deepEqual([n, errs, got], [2, 1, 1]);
+});
+
+test("non-OK response reaches onError", async () => {
+  _reset();
+  let err = null;
+  await loadCoverage(() => Promise.resolve({ ok: false, status: 404 }), () => {}, (e) => { err = e; });
+  assert.match(err.message, /404/);
+});
+
+test("fetch URL carries the version", async () => {
+  _reset();
+  const f = fakeFetch();
+  const doc = fakeDoc();
+  doc.getElementById = () => ({ getAttribute: () => "abc123def456" });
+  wire(doc, { hash: "#coverage" }, f, () => {}, () => {});
+  await settle();
+  assert.deepEqual(f.calls, ["coverage.json?v=abc123def456"]);
+});

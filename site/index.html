@@ -1953,11 +1953,12 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <li>A TTL cache must decide when expiry is evaluated: lazily on read, or by an eviction pass.</li>
 </ul>
 </div>
-<div class="view" id="view-coverage">
+<div class="view" id="view-coverage" data-coverage-version="67fbf687d627">
 <div class="page-kicker">LC &mdash; LEETCODE COVERAGE</div>
 <h1 class="page-title">LeetCode Template Coverage</h1>
 <p class="cov-note" id="cov-status">Loading the problem list&hellip;</p>
 <p class="cov-offline" id="cov-offline" hidden>The problem list loads from coverage.json, which browsers block when the page is opened as a file. Run <code>make serve</code> and open <code>http://localhost:8000</code>.</p>
+<p class="cov-offline" id="cov-failed" hidden>The problem list didn't load. Check your connection, then open this view again.</p>
 <div id="cov-body" hidden>
 <p class="page-intro" id="cov-lede"></p>
 <div class="cov-panel">
@@ -14990,14 +14991,19 @@ if (typeof module !== "undefined" && module.exports) module.exports = CRSearch; 
 // The file loads once, the first time the view opens, so the main page stays small.
 var coverageLoad = null;
 
-// Fetches coverage.json at most once and calls onData (or onError) once. Later calls return the
-// same promise and do nothing else, so the view never renders twice.
-function loadCoverage(fetchFn, onData, onError) {
+// Fetches coverage.json and calls onData once. A successful load is kept, so later calls return the
+// same promise and the view never renders twice. A failed fetch is forgotten, so the next call retries.
+// An error thrown by onData goes to onError and is not retried (the same data would fail again).
+function loadCoverage(fetchFn, onData, onError, version) {
   if (coverageLoad) return coverageLoad;
-  coverageLoad = Promise.resolve().then(function () { return fetchFn("coverage.json"); }).then(function (res) {
+  var url = "coverage.json" + (version ? "?v=" + version : "");
+  var p = Promise.resolve().then(function () { return fetchFn(url); }).then(function (res) {
     if (!res.ok) throw new Error("coverage.json: HTTP " + res.status);
     return res.json();
-  }).then(onData, onError);
+  });
+  coverageLoad = p.then(function (data) {
+    try { onData(data); } catch (e) { onError(e); }
+  }, function (e) { coverageLoad = null; onError(e); });
   return coverageLoad;
 }
 
@@ -15181,21 +15187,27 @@ function initCoverage(DATA) {
   $("cov-utags").innerHTML = DATA.utags.map(function (p) { return '<span class="cov-tag">' + esc(p[0]) + ' <span class="cov-muted">' + p[1] + "</span></span>"; }).join("");
 }
 
-function showCoverage(data) {
+function showCoverageError() {
+  var file = typeof location !== "undefined" && location.protocol === "file:";
   document.getElementById("cov-status").hidden = true;
-  initCoverage(data);
-  document.getElementById("cov-body").hidden = false;
+  document.getElementById("cov-body").hidden = true;
+  document.getElementById(file ? "cov-offline" : "cov-failed").hidden = false;
 }
 
-function showCoverageError() {
+function showCoverage(data) {
+  initCoverage(data);   // a throw here reaches showCoverageError through loadCoverage
   document.getElementById("cov-status").hidden = true;
-  document.getElementById("cov-offline").hidden = false;
+  document.getElementById("cov-body").hidden = false;
 }
 
 // Starts loading when the coverage view opens, or at once when the page opens on #coverage
 // (app.js fires its first cr:view before this file runs).
 function wire(doc, loc, fetchFn, onData, onError) {
-  function start() { loadCoverage(fetchFn, onData || showCoverage, onError || showCoverageError); }
+  function start() {
+    var el = doc.getElementById && doc.getElementById("view-coverage");
+    var version = el && el.getAttribute("data-coverage-version");
+    loadCoverage(fetchFn, onData || showCoverage, onError || showCoverageError, version);
+  }
   doc.addEventListener("cr:view", function (e) { if (e.detail && e.detail.name === "coverage") start(); });
   if ((loc.hash || "") === "#coverage") start();
 }

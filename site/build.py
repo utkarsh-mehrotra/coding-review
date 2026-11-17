@@ -134,16 +134,27 @@ def coverage_data(topics, problems):
 
 def coverage_json(topics, problems):
     """Compact JSON text of the coverage payload, served as site/coverage.json; None when there is no problem data."""
-    data = coverage_data(topics, problems)
+    return dump_coverage(coverage_data(topics, problems))
+
+
+def dump_coverage(data):
     return json.dumps(data, separators=(",", ":"), ensure_ascii=False) if data else None
 
 
+def coverage_version(text):
+    """Short content hash; index.html fetches coverage.json?v=<hash> so a new deploy never pairs with an old cached file."""
+    import hashlib
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
+
+
 def build_coverage_view(data):
-    return f"""<div class="view" id="view-coverage">
+    version = coverage_version(dump_coverage(data))
+    return f"""<div class="view" id="view-coverage" data-coverage-version="{version}">
 <div class="page-kicker">LC &mdash; LEETCODE COVERAGE</div>
 <h1 class="page-title">LeetCode Template Coverage</h1>
 <p class="cov-note" id="cov-status">Loading the problem list&hellip;</p>
 <p class="cov-offline" id="cov-offline" hidden>The problem list loads from coverage.json, which browsers block when the page is opened as a file. Run <code>make serve</code> and open <code>http://localhost:8000</code>.</p>
+<p class="cov-offline" id="cov-failed" hidden>The problem list didn't load. Check your connection, then open this view again.</p>
 <div id="cov-body" hidden>
 <p class="page-intro" id="cov-lede"></p>
 <div class="cov-panel">

@@ -418,6 +418,15 @@ class ListBadgesTest(unittest.TestCase):
         self.assertEqual(path.read_text(), build.coverage_json(build.load_topics(), build.load_problems()))
         self.assertEqual(len(json.loads(path.read_text())["rows"]), 3696)
 
+    def test_coverage_version_matches_json(self):
+        import hashlib
+        text = build.coverage_json(build.load_topics(), build.load_problems())
+        v = hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
+        self.assertIn('data-coverage-version="%s"' % v, build.render_page())
+
+    def test_coverage_view_has_failure_message(self):
+        self.assertIn("The problem list didn't load. Check your connection, then open this view again.", build.render_page())
+
     def test_coverage_view_has_offline_message(self):
         page = build.render_page()
         self.assertIn("The problem list loads from coverage.json, which browsers block when the page is opened as a file. "
