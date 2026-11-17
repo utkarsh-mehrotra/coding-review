@@ -141,40 +141,37 @@
   var jumpBackdrop = document.getElementById("jumpBackdrop");
   var jumpInput = document.getElementById("jumpInput");
   var jumpList = document.getElementById("jumpList");
+  var jumpStatus = document.getElementById("jumpStatus");
   var jumpButton = document.getElementById("jumpButton");
   var jumpResults = [], jumpActive = 0, jumpOpener = null;
 
   function jumpIsOpen() { return !jumpBackdrop.hidden; }
 
-  function jumpSetActive(i) {
+  function jumpSetActive(i, scroll) {
     var rows = jumpList.children;
-    if (!rows.length) { jumpActive = 0; return; }
+    if (!rows.length) { jumpActive = 0; jumpInput.setAttribute("aria-activedescendant", ""); return; }
     jumpActive = (i + rows.length) % rows.length;
     for (var k = 0; k < rows.length; k++) {
       var on = k === jumpActive;
       rows[k].classList.toggle("active", on);
       rows[k].setAttribute("aria-selected", on ? "true" : "false");
     }
-    if (rows[jumpActive].scrollIntoView) rows[jumpActive].scrollIntoView({ block: "nearest" });
+    jumpInput.setAttribute("aria-activedescendant", rows[jumpActive].id);
+    if (scroll && rows[jumpActive].scrollIntoView) rows[jumpActive].scrollIntoView({ block: "nearest" });
   }
 
   function jumpRender() {
     var q = jumpInput.value;
     jumpResults = CRSearch.rank(jumpIndex, q, 12);
     jumpList.textContent = "";
-    if (!jumpResults.length) {
-      if (q.trim()) {
-        var li = document.createElement("li");
-        li.className = "jump-empty";
-        li.textContent = "No matches.";
-        jumpList.appendChild(li);
-      }
-      return;
-    }
+    jumpInput.setAttribute("aria-expanded", jumpResults.length ? "true" : "false");
+    jumpStatus.textContent = (!jumpResults.length && q.trim()) ? "No matches." : "";
+    if (!jumpResults.length) { jumpSetActive(0); return; }
     jumpResults.forEach(function(r, i){
       var li = document.createElement("li");
       li.className = "jump-row";
       li.setAttribute("role", "option");
+      li.id = "jump-opt-" + i;
       var a = document.createElement("span"); a.className = "jump-label"; a.textContent = r[0];
       var b = document.createElement("span"); b.className = "jump-sub"; b.textContent = r[1];
       var c = document.createElement("span"); c.className = "jump-kind"; c.textContent = r[4];
@@ -198,6 +195,7 @@
   function jumpClose() {
     if (!jumpIsOpen()) return;
     jumpBackdrop.hidden = true;
+    jumpInput.setAttribute("aria-expanded", "false");
     var o = jumpOpener; jumpOpener = null;
     if (o && o.focus) o.focus();
   }
@@ -216,13 +214,11 @@
   });
   jumpBackdrop.addEventListener("keydown", function(e){
     if (e.key === "Escape") { e.preventDefault(); jumpClose(); }
-    else if (e.key === "ArrowDown") { e.preventDefault(); jumpSetActive(jumpActive + 1); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); jumpSetActive(jumpActive - 1); }
-    else if (e.key === "Enter") { e.preventDefault(); jumpGo(jumpActive); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); jumpSetActive(jumpActive + 1, true); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); jumpSetActive(jumpActive - 1, true); }
+    else if (e.key === "Enter") {
+      if (e.isComposing || e.keyCode === 229) return; e.preventDefault(); jumpGo(jumpActive); }
     else if (e.key === "Tab") { e.preventDefault(); jumpInput.focus(); }
-  });
-  jumpInput.addEventListener("blur", function(){
-    if (jumpIsOpen()) setTimeout(function(){ if (jumpIsOpen()) jumpInput.focus(); }, 0);
   });
   document.addEventListener("keydown", function(e){
     if ((e.metaKey || e.ctrlKey) && !e.altKey && (e.key === "k" || e.key === "K")) {

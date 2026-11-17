@@ -275,5 +275,29 @@ class BuildTest(unittest.TestCase):
         self.assertNotRegex(block, r"#[0-9A-Fa-f]{3,6}\b")
 
 
+    def test_jump_problem_uses_own_first_template(self):
+        t = {"id": "t", "title": "T", "_dir": None, "decisions": [],
+             "views": [{"id": "v1", "title": "V1", "files": [{"file": "A.java"}]},
+                       {"id": "v2", "title": "V2", "files": [{"file": "B.java"}]}]}
+        row = {"id": 7, "title": "Seven", "templates": ["B#b", "A#a"]}
+        # dict order lists the secondary template first
+        idx = build.build_jump_index([t], {"A#a": [row], "B#b": [row]}, [])
+        probs = [e for e in idx if e[4] == "problem"]
+        self.assertEqual(len(probs), 1)
+        self.assertEqual(probs[0][2:4], ["v2", build.group_id("B", "b")])
+
+    def test_jump_json_cannot_close_script(self):
+        out = build.jump_json([["1 </script><b>x", "", "v", "", "problem"]])
+        self.assertNotIn("<", out)
+        import json
+        self.assertEqual(json.loads(out)[0][0], "1 </script><b>x")
+
+    def test_jump_a11y_markup(self):
+        self.assertIn('role="combobox"', self.page)
+        self.assertIn('aria-activedescendant', self.page)
+        self.assertIn('id="jumpStatus"', self.page)
+        self.assertNotIn('.jump-btn { display: none', (SITE / "assets" / "style.css").read_text())
+
+
 if __name__ == "__main__":
     unittest.main()

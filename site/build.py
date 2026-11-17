@@ -487,22 +487,29 @@ def build_jump_index(topics, problems, view_ids_titles):
     for t in topics:
         vmap.update(view_of_file(t))
     done = set()
-    for key, rows in problems.items():
-        stem, member = key.split("#", 1)
-        if stem not in vmap:
-            continue
+    for rows in problems.values():
         for r in rows:
-            if r["id"] in done:
+            if r["id"] in done or not r["templates"]:
+                continue
+            key = r["templates"][0]
+            stem, member = key.split("#", 1)
+            if stem not in vmap:
                 continue
             done.add(r["id"])
             idx.append(["%s %s" % (r["id"], r["title"]), key, vmap[stem], group_id(stem, member), "problem"])
     return idx
 
 
+def jump_json(index):
+    """JSON safe to embed in a script element."""
+    return json.dumps(index, separators=(",", ":")).replace("<", "\\u003c")
+
+
 JUMP_MODAL = """<div class="jump-backdrop" id="jumpBackdrop" hidden>
   <div class="jump-modal" role="dialog" aria-modal="true" aria-label="Jump to a topic, template or problem">
-    <input id="jumpInput" class="jump-input" type="text" placeholder="Jump to a topic, template or problem number&hellip;" autocomplete="off" spellcheck="false" aria-controls="jumpList">
-    <ul class="jump-list" id="jumpList" role="listbox"></ul>
+    <input id="jumpInput" class="jump-input" type="text" role="combobox" aria-label="Jump to a view, template or problem" aria-expanded="false" aria-controls="jumpList" aria-autocomplete="list" aria-activedescendant="" placeholder="Jump to a topic, template or problem number&hellip;" autocomplete="off" spellcheck="false">
+    <ul class="jump-list" id="jumpList" role="listbox" aria-label="Jump results"></ul>
+    <div class="jump-empty" id="jumpStatus" role="status" aria-live="polite"></div>
     <div class="jump-foot">Up and down to choose, Enter to go, Esc to close</div>
   </div>
 </div>"""
@@ -639,8 +646,7 @@ def render_page(topics=None, problems=None):
     if cov:
         ref_views.append(("coverage", "LeetCode Coverage", "Reference"))
     topic_views = [(v["id"], v["title"], t["title"]) for t in topics for v in t["views"]]
-    jump_json = json.dumps(build_jump_index(topics, problems, ref_views + topic_views),
-                           separators=(",", ":")).replace("<", "\\u003c")
+    jump_data = jump_json(build_jump_index(topics, problems, ref_views + topic_views))
 
     css = (ASSETS / "style.css").read_text()
     js = (ASSETS / "search.js").read_text() + "\n" + (ASSETS / "app.js").read_text().replace("/*VIEWS*/[]", json.dumps(view_ids))
@@ -678,7 +684,7 @@ document.addEventListener("click", function(e){
       <input id="searchInput" type="text" placeholder="Filter: topic, algorithm, method&hellip;" autocomplete="off">
     </div>
     <button class="theme-toggle ess-toggle" id="essentialsToggle" aria-pressed="false">Show essentials</button>
-    <button class="theme-toggle jump-btn" id="jumpButton" type="button" aria-haspopup="dialog">Jump &#8984;K</button>
+    <button class="theme-toggle jump-btn" id="jumpButton" type="button" aria-haspopup="dialog" aria-label="Jump to a view, template or problem"><span>Jump</span><span class="jump-hint">&#8984;K</span></button>
     <button class="theme-toggle" id="themeToggle"><span id="themeIcon">&#9680;</span><span id="themeLabel">Auto</span></button>
   </div>
 
@@ -703,7 +709,7 @@ document.addEventListener("click", function(e){
   </div>
 </div>
 {JUMP_MODAL}
-<script type="application/json" id="jump-index">{jump_json}</script>
+<script type="application/json" id="jump-index">{jump_data}</script>
 <script>
 {js}
 </script>

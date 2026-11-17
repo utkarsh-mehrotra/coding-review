@@ -59,3 +59,13 @@ test("rank limit", () => {
 test("rank empty query returns nothing", () => {
   assert.equal(rank([["a", "", "v", "", "view"]], "  ").length, 0);
 });
+
+test("rank equal scores order by kind then label", () => {
+  const idx = [
+    ["Graph problem", "", "v", "", "problem"],
+    ["Graph B", "", "v", "", "template"],
+    ["Graph A", "", "v", "", "template"],
+    ["Graph view", "", "v", "", "view"],
+  ];
+  assert.deepEqual(rank(idx, "graph").map((e) => e[0]), ["Graph view", "Graph A", "Graph B", "Graph problem"]);
+});
