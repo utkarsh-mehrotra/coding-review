@@ -138,7 +138,8 @@
     {
       "q": "<strong>Modular inverse with a non-prime modulus?</strong>",
       "a": "Extended Euclid",
-      "template": "BitsMathVariants#modInverseAny"
+      "template": "BitsMathVariants#modInverseAny",
+      "noLeetCode": true
     },
     {
       "q": "<strong>Factorize many numbers?</strong>",

@@ -123,7 +123,8 @@
     {
       "q": "<strong>Route keys to nodes with minimal remapping?</strong>",
       "a": "Consistent hashing ring (TreeMap)",
-      "template": "DesignStructures#ConsistentHash"
+      "template": "DesignStructures#ConsistentHash",
+      "noLeetCode": true
     },
     {
       "q": "<strong>Implement a hash map from scratch?</strong>",
@@ -148,7 +149,8 @@
     {
       "q": "<strong>Membership in tiny memory, false positives acceptable?</strong>",
       "a": "Bloom filter",
-      "template": "DesignVariants#BloomFilter"
+      "template": "DesignVariants#BloomFilter",
+      "noLeetCode": true
     },
     {
       "q": "<strong>Type-ahead suggestions?</strong>",

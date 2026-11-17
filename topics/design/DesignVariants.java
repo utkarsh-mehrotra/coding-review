@@ -215,6 +215,7 @@ public class DesignVariants {
         }
     }
 
+    // LC 1797
     // ---------- Cache with per-entry TTL: lazy expiry on read + min-heap sweep on write; time is injected for testing ----------
     static class TTLCache<K, V> {
         private static class Entry<V> { V val; long expiry; Entry(V v, long e) { val = v; expiry = e; } }

@@ -5,6 +5,7 @@ public class RangeStructures {
     // Pick: prefix sums (static), Fenwick (point update + prefix/range sum), segment tree (any monoid, range ops),
     //       lazy segment tree (range update), sparse table (static range min/max in O(1)).
 
+    // LC 303
     // ---------- Prefix sum / difference array ----------
     static long[] prefix(int[] a) {
         long[] p = new long[a.length + 1];
@@ -56,6 +57,7 @@ public class RangeStructures {
         return Arrays.asList(res);
     }
 
+    // LC 493
     // Count inversions with Fenwick
     static long countInversions(int[] a) {
         int[] sorted = Arrays.stream(a).distinct().sorted().toArray();

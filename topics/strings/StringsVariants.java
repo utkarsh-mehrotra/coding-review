@@ -43,6 +43,7 @@ public class StringsVariants {
         return lcp;
     }
 
+    // LC 1698
     // Number of distinct substrings = n(n+1)/2 - sum(lcp)
     static long countDistinctSubstrings(String s) {
         int n = s.length();
@@ -90,6 +91,7 @@ public class StringsVariants {
         return null;
     }
 
+    // LC 1032
     // ---------- Aho-Corasick: many patterns, one pass over the text ----------
     // RECOGNIZE: dictionary of words to find inside a long text (censoring, DNA motifs, log scanning).
     static class AhoCorasick {
@@ -197,6 +199,7 @@ public class StringsVariants {
         return s.substring(0, StringAlgorithms.prefixFunction(s)[s.length() - 1]);
     }
 
+    // LC 899
     // ---------- Lexicographically smallest rotation in O(n) (Booth / two-candidate scan) ----------
     static String leastRotation(String s) {
         int n = s.length();

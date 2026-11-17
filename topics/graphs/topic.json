@@ -208,7 +208,8 @@
   {
    "q": "All-pairs shortest path, sparse graph?",
    "a": "Johnson's",
-   "template": "ShortestPath#johnsons"
+   "template": "ShortestPath#johnsons",
+   "noLeetCode": true
   },
   {
    "q": "DAG + need ordering/dependency resolution?",
@@ -248,12 +249,14 @@
   {
    "q": "Boolean 2-variable clause satisfaction?",
    "a": "2-SAT via implication graph + SCC",
-   "template": "SCC_Bridges_2SAT#solve2SAT"
+   "template": "SCC_Bridges_2SAT#solve2SAT",
+   "noLeetCode": true
   },
   {
    "q": "Assignment/matching with capacity constraints?",
    "a": "Max flow (Edmonds-Karp/Dinic's) or bipartite matching (Hopcroft-Karp)",
-   "template": "NetworkFlow#edmondsKarp"
+   "template": "NetworkFlow#edmondsKarp",
+   "noLeetCode": true
   },
   {
    "q": "Small N (&le;20), must visit all nodes/subsets?",

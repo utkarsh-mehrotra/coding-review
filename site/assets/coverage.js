@@ -1,10 +1,26 @@
 // LeetCode coverage view: summary, per-topic breakdown, searchable problem list, gaps.
-// Data comes from <script type="application/json" id="coverage-data">, written by site/build.py
-// from tools/lc-coverage/data/problems.json.
-(function () {
-  var dataEl = document.getElementById("coverage-data");
-  if (!dataEl) return;
-  var DATA = JSON.parse(dataEl.textContent);
+// Data comes from coverage.json (written by site/build.py from tools/lc-coverage/data/problems.json).
+// The file loads once, the first time the view opens, so the main page stays small.
+var coverageLoad = null;
+
+// Fetches coverage.json and calls onData once. A successful load is kept, so later calls return the
+// same promise and the view never renders twice. A failed fetch is forgotten, so the next call retries.
+// onError receives fetch and HTTP failures (and is retried on the next call). showCoverage handles
+// render errors itself, so they never reach onError; if onData does throw, onError gets it and it is not retried.
+function loadCoverage(fetchFn, onData, onError, version) {
+  if (coverageLoad) return coverageLoad;
+  var url = "coverage.json" + (version ? "?v=" + version : "");
+  var p = Promise.resolve().then(function () { return fetchFn(url); }).then(function (res) {
+    if (!res.ok) throw new Error("coverage.json: HTTP " + res.status);
+    return res.json();
+  });
+  coverageLoad = p.then(function (data) {
+    try { onData(data); } catch (e) { onError(e); }
+  }, function (e) { coverageLoad = null; onError(e); });
+  return coverageLoad;
+}
+
+function initCoverage(DATA) {
   var TIERS = [
     { k: "A", name: "Verified", desc: "named in a template or practice map", c: "var(--tA)" },
     { k: "B", name: "Tag match", desc: "a specific tag points to one template", c: "var(--tB)" },
@@ -13,7 +29,7 @@
   ];
   var DIFF = ["Easy", "Medium", "Hard"], DCLS = ["e", "m", "h"];
   var T = DATA.templates, TOP = DATA.topics, VIEW = DATA.templateView;
-  // row: [id, title, slug, diff, paid, ac, tier, topic, tmpl, also[], practiceOnly]
+  // row: [id, title, slug, diff, paid, ac, tier, topic, tmpl, also[], practiceOnly, listMask]
   var R = DATA.rows;
   function $(id) { return document.getElementById(id); }
   function fmt(n) { return n.toLocaleString("en-US"); }
@@ -22,7 +38,7 @@
   function tierCounts(rows) { var c = [0, 0, 0, 0]; rows.forEach(function (r) { c[r[6]]++; }); return c; }
   function toList() { var h = $("cov-list-title"); if (h) h.scrollIntoView({ behavior: "smooth", block: "start" }); }
 
-  var state = { q: "", tiers: { A: 1, B: 1, C: 1, U: 1 }, diffs: { 0: 1, 1: 1, 2: 1 }, topic: -2, free: false, sort: "id", dir: 1, limit: 200 };
+  var state = { q: "", tiers: { A: 1, B: 1, C: 1, U: 1 }, diffs: { 0: 1, 1: 1, 2: 1 }, topic: -2, list: 0, free: false, sort: "id", dir: 1, limit: 200 };
   try { var saved = JSON.parse(localStorage.getItem("coding-review-coverage") || "null"); if (saved) state.free = !!saved.free; } catch (e) {}
 
   // ---- summary
@@ -40,6 +56,11 @@
     b.onclick = function () { state.tiers = {}; state.tiers[t.k] = 1; syncChips(); render(true); toList(); };
     $("cov-legend").appendChild(b);
   });
+  var LISTS = DATA.lists;   // [{key, name, bit, size}]
+  $("cov-lists").innerHTML = LISTS.map(function (l) {
+    var rows = R.filter(function (r) { return r[11] & l.bit; }), c = tierCounts(rows);
+    return esc(l.name) + ": " + (c[0] + c[1]) + " of " + l.size + " covered (" + c[0] + "+" + c[1] + ")";
+  }).join("<br>");
   var exN = 0, exParts = [];
   Object.keys(DATA.excluded).forEach(function (k) { exN += DATA.excluded[k]; exParts.push(DATA.excluded[k] + " " + k); });
   $("cov-excl").textContent = fmt(n) + " algorithm problems in total. Left out: " + fmt(exN) + " non-algorithm problems (" + exParts.join(", ") + ").";
@@ -76,6 +97,9 @@
   function opt(v, label) { var o = document.createElement("option"); o.value = v; o.textContent = label; topicSel.appendChild(o); }
   opt("-2", "All topics"); TOP.forEach(function (t, i) { opt(String(i), t[1]); }); opt("-1", "No topic (not covered)");
   topicSel.onchange = function () { state.topic = +topicSel.value; render(true); };
+  var listSel = $("cov-list");
+  LISTS.forEach(function (l) { var o = document.createElement("option"); o.value = String(l.bit); o.textContent = l.name; listSel.appendChild(o); });
+  listSel.onchange = function () { state.list = +listSel.value; render(true); };
   var free = $("cov-free"); free.checked = state.free;
   free.onchange = function () { state.free = free.checked; try { localStorage.setItem("coding-review-coverage", JSON.stringify({ free: state.free })); } catch (e) {} render(true); };
   var qTimer; $("cov-q").oninput = function (e) { clearTimeout(qTimer); qTimer = setTimeout(function () { state.q = e.target.value.trim().toLowerCase(); render(true); }, 120); };
@@ -113,6 +137,7 @@
     var out = R.filter(function (r) {
       if (!state.tiers["ABCU"[r[6]]] || !state.diffs[r[3]] || (state.free && r[4])) return false;
       if (state.topic !== -2 && r[7] !== state.topic) return false;
+      if (state.list && !(r[11] & state.list)) return false;
       if (!q) return true;
       if (numeric) return String(r[0]).indexOf(q) === 0;
       return r[1].toLowerCase().indexOf(q) !== -1 || (r[8] >= 0 && T[r[8]].toLowerCase().indexOf(q) !== -1);
@@ -120,11 +145,15 @@
     var f = KEY[state.sort], d = state.dir;
     return out.sort(function (a, b) { var x = f(a), y = f(b); return x < y ? -d : x > y ? d : a[0] - b[0]; });
   }
+  var BADGE = { "top-interview-150": "TI", "leetcode-75": "75" };
+  function badges(r) {
+    return LISTS.map(function (l) { return r[11] & l.bit ? '<span class="lc-badge" title="' + esc(l.name) + '">' + esc(BADGE[l.key] || l.name) + "</span>" : ""; }).join("");
+  }
   function tmplCell(r) {
     if (r[8] < 0) return r[10] ? '<span class="cov-also">topic: ' + esc(TOP[r[7]][1]) + "</span>" : '<span class="cov-also">none</span>';
     var key = T[r[8]], v = VIEW[key.split("#")[0]];
     var label = esc(key).replace("#", "#<wbr>");
-    var main = v ? '<a class="tpl" data-goto="' + v + '">' + label + "</a>" : '<span class="tpl">' + label + "</span>";
+    var main = v ? '<a class="tpl" href="#' + v + '" data-goto="' + v + '">' + label + "</a>" : '<span class="tpl">' + label + "</span>";
     var also = r[9].length ? '<span class="cov-also">also: ' + r[9].map(function (i) { return esc(T[i].split("#")[1]); }).join(", ") + "</span>" : "";
     return main + also;
   }
@@ -144,7 +173,7 @@
     body.innerHTML = rows.slice(0, state.limit).map(function (r) {
       var t = "ABCU"[r[6]];
       return '<tr><td class="r cov-muted">' + r[0] + '</td><td><a class="cov-title" href="https://leetcode.com/problems/' + esc(r[2]) + '/" target="_blank" rel="noopener">' +
-        esc(r[1]) + "</a>" + (r[4] ? '<span class="lc-lock" title="Premium">P</span>' : "") + '</td><td class="cov-d-' + DCLS[r[3]] + '">' + DIFF[r[3]] +
+        esc(r[1]) + "</a>" + badges(r) + (r[4] ? '<span class="lc-lock" title="Premium">P</span>' : "") + '</td><td class="cov-d-' + DCLS[r[3]] + '">' + DIFF[r[3]] +
         '</td><td><span class="cov-pill cov-p' + t + '">' + t + " &middot; " + TIERS[r[6]].name + "</span></td><td>" + tmplCell(r) +
         '</td><td class="r cov-muted cov-hide-sm">' + r[5].toFixed(0) + "%</td></tr>";
     }).join("");
@@ -154,11 +183,53 @@
   render(true);
 
   // ---- gaps
-  $("cov-zero-note").textContent = DATA.zero.length + " of " + DATA.decisionCount + " decision-tree templates are not the main match for any problem. " +
-    "Some only need a problem number in their comments (Floyd-Warshall, copy random list); others are design or theory templates with no LeetCode equivalent (rate limiter, Bloom filter, 2-SAT).";
-  $("cov-zero").innerHTML = DATA.zero.map(function (t) {
-    var v = VIEW[t.split("#")[0]];
-    return v ? '<a class="tpl" data-goto="' + v + '">' + esc(t) + "</a>" : '<span class="tpl">' + esc(t) + "</span>";
-  }).join("");
+  function tplLinks(list) {
+    return list.map(function (t) {
+      var v = VIEW[t.split("#")[0]];
+      return v ? '<a class="tpl" href="#' + v + '" data-goto="' + v + '">' + esc(t) + "</a>" : '<span class="tpl">' + esc(t) + "</span>";
+    }).join("");
+  }
+  $("cov-zero-note").textContent = DATA.zero.length
+    ? DATA.zero.length + " of " + DATA.decisionCount + " decision-tree templates have no LeetCode problem listed under them yet."
+    : "Every decision-tree template has at least one LeetCode problem or is marked as having no equivalent.";
+  $("cov-zero").innerHTML = tplLinks(DATA.zero);
+  $("cov-nolc-note").textContent = DATA.noLc.length
+    ? DATA.noLc.length + " templates are design or theory topics that LeetCode has no problem for (" + DATA.noLc.slice(0, 3).map(function (t) { return t.split("#")[1]; }).join(", ") + (DATA.noLc.length > 3 ? ", and more" : "") + ")."
+    : "No templates are marked as lacking a LeetCode equivalent.";
+  $("cov-nolc").innerHTML = tplLinks(DATA.noLc);
   $("cov-utags").innerHTML = DATA.utags.map(function (p) { return '<span class="cov-tag">' + esc(p[0]) + ' <span class="cov-muted">' + p[1] + "</span></span>"; }).join("");
-})();
+}
+
+// One place for the view's visible state: "loading", "ready", "failed", "offline" (opened as a file) or "render" (init threw).
+function setCoverageState(state) {
+  var show = { "cov-status": state === "loading", "cov-body": state === "ready", "cov-offline": state === "offline",
+               "cov-failed": state === "failed", "cov-render": state === "render" };
+  Object.keys(show).forEach(function (id) { document.getElementById(id).hidden = !show[id]; });
+}
+
+function showCoverageError() {
+  setCoverageState(typeof location !== "undefined" && location.protocol === "file:" ? "offline" : "failed");
+}
+
+function showCoverage(data, init) {
+  try { (init || initCoverage)(data); } catch (e) { setCoverageState("render"); return; }
+  setCoverageState("ready");
+}
+
+// Starts loading when the coverage view opens, or at once when the page opens on #coverage
+// (app.js fires its first cr:view before this file runs).
+function wire(doc, loc, fetchFn, onData, onError, init) {
+  function start() {
+    var el = doc.getElementById && doc.getElementById("view-coverage");
+    var version = el && el.getAttribute("data-coverage-version");
+    if (!coverageLoad && !onData) setCoverageState("loading");   // a retry clears the old error
+    loadCoverage(fetchFn, onData || function (d) { showCoverage(d, init); }, onError || showCoverageError, version);
+  }
+  doc.addEventListener("cr:view", function (e) { if (e.detail && e.detail.name === "coverage") start(); });
+  if ((loc.hash || "") === "#coverage") start();
+}
+
+function _reset() { coverageLoad = null; }
+
+if (typeof module !== "undefined" && module.exports) module.exports = { initCoverage: initCoverage, loadCoverage: loadCoverage, wire: wire, _reset: _reset };
+else wire(document, location, function (u) { return window.fetch(u); });

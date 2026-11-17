@@ -151,6 +151,7 @@ public class BitsMathVariants {
         return result;
     }
 
+    // LC 2523
     // ---------- Smallest-prime-factor sieve: factorize in O(log n) after O(n log log n) setup ----------
     static int[] spfSieve(int n) {
         int[] spf = new int[n + 1];
@@ -193,6 +194,7 @@ public class BitsMathVariants {
         return c;
     }
 
+    // LC 509
     static long[][] matPow(long[][] m, long e, long mod) {
         int n = m.length;
         long[][] r = new long[n][n];

@@ -2,6 +2,7 @@ import java.util.*;
 
 public class MatchingColoringFunctional {
 
+    // LC 1820
     // ---------- Kuhn's algorithm: bipartite matching by repeated augmenting DFS ----------
     // O(V*E). Short enough to write live; reach for Hopcroft-Karp (08_NetworkFlow) only on large inputs.
     // adj.get(u) = right-side nodes that left node u can match.
@@ -28,6 +29,7 @@ public class MatchingColoringFunctional {
         return false;
     }
 
+    // LC 1042
     // ---------- k-coloring by backtracking (NP-hard in general; interview versions have small k / small n) ----------
     static boolean kColorable(List<List<Integer>> adj, int k) {
         return colorFrom(0, adj, k, new int[adj.size()]);
@@ -64,6 +66,7 @@ public class MatchingColoringFunctional {
         return slow;
     }
 
+    // LC 142
     // Same idea on a next[] array where -1 means "no next". Returns the first node on the cycle, or -1.
     static int cycleStart(int[] next, int start) {
         int slow = start, fast = start;

@@ -38,6 +38,7 @@ public class DSU {
         return false;
     }
 
+    // LC 323
     // ---------- Usage: count connected components ----------
     static int countComponents(int n, int[][] edges) {
         DSU dsu = new DSU(n);

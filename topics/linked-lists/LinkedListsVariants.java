@@ -201,6 +201,7 @@ public class LinkedListsVariants {
         DNode(int v) { val = v; }
     }
 
+    // LC 430
     static DNode flatten(DNode head) {
         Deque<DNode> st = new ArrayDeque<>();
         DNode cur = head, last = null;

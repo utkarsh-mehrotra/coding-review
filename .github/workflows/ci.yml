@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Tests and checks
+        run: make test check test-site
+      - name: Generated files are up to date
+        run: |
+          make problems site
+          if ! git diff --exit-code || test -n "$(git status --porcelain)"; then
+            echo "::error::Generated files are out of date or untracked. Run 'make problems site' and commit the result."
+            git status --short
+            exit 1
+          fi

@@ -27,6 +27,7 @@ public class DPLinear {
         return dp[n];
     }
 
+    // LC 70
     static int climbStairsO1(int n) {
         int prev = 1, cur = 1;
         for (int i = 2; i <= n; i++) { int next = prev + cur; prev = cur; cur = next; }
