@@ -19,6 +19,7 @@ site:
 
 test-site:
 	python3 -m unittest discover -s site/tests
+	node --test site/tests/*.test.js
 
 # LeetCode coverage: map every problem to a template (offline, uses the cached list in tools/lc-coverage/data)
 LC := tools/lc-coverage

@@ -93,8 +93,8 @@
   document.getElementById("searchInput").addEventListener("input", function(e){
     var q = e.target.value.trim().toLowerCase();
     document.querySelectorAll(".nav-item").forEach(function(item){
-      var text = (item.textContent + " " + (item.getAttribute("data-kw") || "")).toLowerCase();
-      item.classList.toggle("hidden-by-search", q.length > 0 && text.indexOf(q) === -1);
+      var text = item.textContent + " " + (item.getAttribute("data-kw") || "");
+      item.classList.toggle("hidden-by-search", q.length > 0 && !CRSearch.matchesSidebar(text, q));
     });
   });
 
@@ -133,6 +133,109 @@
     essOn = !essOn;
     applyEssentials(essOn);
     try { localStorage.setItem("coding-review-essentials", essOn ? "1" : "0"); } catch(e) {}
+  });
+
+  // ---------- Jump box ----------
+  var jumpIndex = [];
+  try { jumpIndex = JSON.parse(document.getElementById("jump-index").textContent); } catch(e) {}
+  var jumpBackdrop = document.getElementById("jumpBackdrop");
+  var jumpInput = document.getElementById("jumpInput");
+  var jumpList = document.getElementById("jumpList");
+  var jumpButton = document.getElementById("jumpButton");
+  var jumpResults = [], jumpActive = 0, jumpOpener = null;
+
+  function jumpIsOpen() { return !jumpBackdrop.hidden; }
+
+  function jumpSetActive(i) {
+    var rows = jumpList.children;
+    if (!rows.length) { jumpActive = 0; return; }
+    jumpActive = (i + rows.length) % rows.length;
+    for (var k = 0; k < rows.length; k++) {
+      var on = k === jumpActive;
+      rows[k].classList.toggle("active", on);
+      rows[k].setAttribute("aria-selected", on ? "true" : "false");
+    }
+    if (rows[jumpActive].scrollIntoView) rows[jumpActive].scrollIntoView({ block: "nearest" });
+  }
+
+  function jumpRender() {
+    var q = jumpInput.value;
+    jumpResults = CRSearch.rank(jumpIndex, q, 12);
+    jumpList.textContent = "";
+    if (!jumpResults.length) {
+      if (q.trim()) {
+        var li = document.createElement("li");
+        li.className = "jump-empty";
+        li.textContent = "No matches.";
+        jumpList.appendChild(li);
+      }
+      return;
+    }
+    jumpResults.forEach(function(r, i){
+      var li = document.createElement("li");
+      li.className = "jump-row";
+      li.setAttribute("role", "option");
+      var a = document.createElement("span"); a.className = "jump-label"; a.textContent = r[0];
+      var b = document.createElement("span"); b.className = "jump-sub"; b.textContent = r[1];
+      var c = document.createElement("span"); c.className = "jump-kind"; c.textContent = r[4];
+      li.appendChild(a); li.appendChild(b); li.appendChild(c);
+      li.addEventListener("mousemove", function(){ if (jumpActive !== i) jumpSetActive(i); });
+      li.addEventListener("click", function(){ jumpGo(i); });
+      jumpList.appendChild(li);
+    });
+    jumpSetActive(0);
+  }
+
+  function jumpOpen() {
+    if (jumpIsOpen()) { jumpInput.focus(); return; }
+    jumpOpener = document.activeElement;
+    jumpBackdrop.hidden = false;
+    jumpInput.value = "";
+    jumpRender();
+    jumpInput.focus();
+  }
+
+  function jumpClose() {
+    if (!jumpIsOpen()) return;
+    jumpBackdrop.hidden = true;
+    var o = jumpOpener; jumpOpener = null;
+    if (o && o.focus) o.focus();
+  }
+
+  function jumpGo(i) {
+    var r = jumpResults[i];
+    if (!r) return;
+    jumpClose();
+    window.crGoto(r[2], r[3]);
+  }
+
+  jumpButton.addEventListener("click", jumpOpen);
+  jumpInput.addEventListener("input", jumpRender);
+  jumpBackdrop.addEventListener("mousedown", function(e){
+    if (e.target === jumpBackdrop) { e.preventDefault(); jumpClose(); }
+  });
+  jumpBackdrop.addEventListener("keydown", function(e){
+    if (e.key === "Escape") { e.preventDefault(); jumpClose(); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); jumpSetActive(jumpActive + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); jumpSetActive(jumpActive - 1); }
+    else if (e.key === "Enter") { e.preventDefault(); jumpGo(jumpActive); }
+    else if (e.key === "Tab") { e.preventDefault(); jumpInput.focus(); }
+  });
+  jumpInput.addEventListener("blur", function(){
+    if (jumpIsOpen()) setTimeout(function(){ if (jumpIsOpen()) jumpInput.focus(); }, 0);
+  });
+  document.addEventListener("keydown", function(e){
+    if ((e.metaKey || e.ctrlKey) && !e.altKey && (e.key === "k" || e.key === "K")) {
+      e.preventDefault();
+      jumpOpen();
+      return;
+    }
+    if (e.key === "/" && !e.metaKey && !e.ctrlKey && !e.altKey && !jumpIsOpen()) {
+      var a = document.activeElement, tag = a && a.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (a && a.isContentEditable)) return;
+      e.preventDefault();
+      jumpOpen();
+    }
   });
 
   // ---------- Mobile sidebar ----------

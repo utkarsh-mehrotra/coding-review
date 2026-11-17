@@ -241,5 +241,39 @@ class BuildTest(unittest.TestCase):
         self.assertNotIn("cs-pitfalls", out)
         self.assertEqual(out.count('class="sig-row"'), 1)
 
+    def test_jump_index_embedded_and_unique(self):
+        import json
+        m = re.search(r'<script type="application/json" id="jump-index">(.*?)</script>', self.page, re.S)
+        self.assertTrue(m)
+        idx = json.loads(m.group(1))
+        kinds = {e[4] for e in idx}
+        self.assertEqual(kinds, {"view", "template", "problem"})
+        ids = [e[0].split(" ", 1)[0] for e in idx if e[4] == "problem"]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertIn("743 Network Delay Time", [e[0] for e in idx])
+
+    def test_jump_index_targets_exist(self):
+        import json
+        m = re.search(r'<script type="application/json" id="jump-index">(.*?)</script>', self.page, re.S)
+        for label, sub, view, anchor, kind in json.loads(m.group(1)):
+            self.assertIn('id="view-%s"' % view, self.page, label)
+            if anchor:
+                self.assertIn('id="%s"' % anchor, self.page, label)
+
+    def test_jump_modal_and_button(self):
+        self.assertIn('id="jumpButton"', self.page)
+        self.assertIn('aria-haspopup="dialog"', self.page)
+        self.assertIn('role="dialog"', self.page)
+        self.assertIn('id="jumpInput"', self.page)
+        self.assertIn('role="listbox"', self.page)
+        self.assertLess(self.page.index("window.CRSearch"), self.page.index("window.crGoto"))
+        self.assertNotIn("text.indexOf(q)", self.page)
+
+    def test_jump_css_uses_tokens(self):
+        css = (SITE / "assets" / "style.css").read_text()
+        block = css[css.index(".jump-modal"):]
+        self.assertNotRegex(block, r"#[0-9A-Fa-f]{3,6}\b")
+
+
 if __name__ == "__main__":
     unittest.main()
