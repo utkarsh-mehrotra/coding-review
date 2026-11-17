@@ -215,6 +215,12 @@ class BuildTest(unittest.TestCase):
         self.assertRegex(block, r"\.sidebar[^{]*\{[^}]*display:\s*none")
         self.assertIn(block.strip("{} \n"), self.page)
         self.assertIn("window.print()", self.page)
+        # dark and auto-dark themes must print on light tokens
+        self.assertIn("color-scheme: light", block)
+        self.assertRegex(block, r"--bg:\s*#F6F7F9")
+        self.assertRegex(block, r"--text:\s*#1C2127")
+        self.assertIn('data-theme="dark"', block)
+        self.assertIn("columns: 2", block)
 
     def _fixture(self, views):
         return {"title": "Fix <T>", "_dir": None, "decisions": [

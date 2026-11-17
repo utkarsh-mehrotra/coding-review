@@ -666,11 +666,56 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 
 /* ---------- Print ---------- */
 @media print {
+  @page { margin: 12mm; }
+  :root:not([data-theme="light"]), :root[data-theme="dark"] {
+    --bg: #F6F7F9;
+    --panel: #FFFFFF;
+    --sidebar: #EEF0F3;
+    --border: #DADDE2;
+    --text: #1C2127;
+    --text-muted: #5B6472;
+    --accent: #0E7C7B;
+    --accent-soft: #E3F3F2;
+    --accent2: #A9690A;
+    --code-bg: #F4F6F8;
+    --code-text: #1C2127;
+    --tab-active-border: #0E7C7B;
+    --scrollbar: #C7CCD3;
+    --kw: #0E5B9A;
+    --str: #0E7C4A;
+    --com: #7A8290;
+    --type: #A9690A;
+    --easy: #1F8A5B;
+    --med: #A9690A;
+    --hard: #B4443C;
+    --tA: #0E7C7B;
+    --tB: #6DB8B4;
+    --tC: #A9690A;
+    --tU: #C3C8D0;
+    color-scheme: light;
+  }
+  body { font-size: 10pt; }
   .topbar, .sidebar, .sidebar-overlay, .tabbar, button, .copy-btn, .view:not(.active) { display: none !important; }
   body, .app, .main, .content, .body-row { background: none; height: auto; overflow: visible; display: block; }
+  .content { padding: 0; max-width: none; }
   .code-card, .code-card pre, .code-block { background: none; }
   tr, .lc-group, .code-card { break-inside: avoid; }
   a, a.tpl { color: inherit; text-decoration: none; }
+  a.tpl, span.tpl { background: none; padding: 0; margin-left: 0; border-radius: 0; font-size: 8.5pt; white-space: normal; overflow-wrap: anywhere; }
+  .page-kicker { margin-bottom: 2px; }
+  h1.page-title { font-size: 15pt; margin: 0 0 2px; }
+  .page-intro { margin-bottom: 6px; font-size: 9pt; }
+  h3.group-title { font-size: 11pt; margin: 10px 0 3px; break-after: avoid; }
+  table.ref-table { font-size: 8pt; margin-bottom: 4px; }
+  table.ref-table th, table.ref-table td { padding: 2px 6px; }
+  table.ref-table th { font-size: 7.5pt; }
+  table.ref-table td.complexity { font-size: 8pt; }
+  table.ref-table { line-height: 1.2; }
+  table.ref-table .sig-row td:last-child { width: 31%; }
+  table.ref-table .sig-row td:first-child { width: 34%; }
+  table.ref-table td:last-child a.tpl { font-size: 7pt; letter-spacing: -0.2px; }
+  .cs-pitfalls { columns: 2; column-gap: 18px; margin: 4px 0 0; font-size: 8.5pt; }
+  .cs-pitfalls li { margin: 1px 0; break-inside: avoid; }
 }
 
 /* ---------- Jump box ---------- */
@@ -1324,7 +1369,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <div class="view" id="view-cheatsheet">
 <div class="page-kicker">CS &mdash; CHEAT SHEET</div>
 <div class="cs-head"><h1 class="page-title">Cheat Sheet</h1><button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div>
-<p class="page-intro">Every signal, pattern and pitfall on one page. Print it, or save it as a PDF.</p>
+<p class="page-intro">Every signal, pattern and pitfall in one place. Print it, or save it as a PDF.</p>
 <h3 class="group-title">Graphs</h3>
 <table class="ref-table">
 <tr><th>Signal</th><th>Approach</th><th>Template</th></tr>

@@ -619,7 +619,7 @@ def build_cheatsheet_view(topics, problems=None):
     p = ['<div class="page-kicker">CS &mdash; CHEAT SHEET</div>',
          '<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1>'
          '<button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div>',
-         '<p class="page-intro">Every signal, pattern and pitfall on one page. Print it, or save it as a PDF.</p>']
+         '<p class="page-intro">Every signal, pattern and pitfall in one place. Print it, or save it as a PDF.</p>']
     for t in topics:
         vmap = view_of_file(t)
         p.append('<h3 class="group-title">%s</h3>' % esc(t["title"]))
