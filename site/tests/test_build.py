@@ -335,7 +335,8 @@ class BuildTest(unittest.TestCase):
         cov = build.coverage_data(topics, build.load_problems())
         self.assertEqual(cov["zero"], [])
         self.assertTrue(cov["noLc"])
-        self.assertIn("BinarySearch#sqrt", cov["noLc"])
+        self.assertNotIn("BinarySearch#sqrt", cov["noLc"])
+        self.assertIn("DesignVariants#BloomFilter", cov["noLc"])
 
     def test_noleetcode_conflict_is_error(self):
         topics = build.load_topics()
