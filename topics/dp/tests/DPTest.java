@@ -3,7 +3,7 @@ import java.util.*;
 public class DPTest {
     public static void main(String[] a) {
         // Linear
-        Check.eq("climb", DPLinear.climbStairsMemo(10) + "," + DPLinear.climbStairsTab(10) + "," + DPLinear.climbStairsO1(10), "89,89,89");
+        Check.eq("climb", DPLinear.climbStairsMemo(10), 89);
         Check.eq("rob", DPLinear.rob(new int[]{2, 7, 9, 3, 1}), 12);
         Check.eq("robCirc", DPLinear.robCircular(new int[]{2, 3, 2}), 3);
         Check.eq("decode", DPLinear.numDecodings("226") + "," + DPLinear.numDecodings("06") + "," + DPLinear.numDecodings("12"), "3,0,2");
@@ -86,7 +86,7 @@ public class DPTest {
             int n = r.nextInt(12);
             int[] x = new int[n];
             for (int i = 0; i < n; i++) x[i] = r.nextInt(8);
-            Check.eq("lisRand", DPSequences.lengthOfLIS(x), DPSequences.lengthOfLISQuadratic(x));
+            Check.eq("lisRand", DPSequences.lengthOfLIS(x), lisBrute(x));
 
             int items = 1 + r.nextInt(6), cap = r.nextInt(15);
             int[] w = new int[items], v = new int[items];
@@ -141,5 +141,16 @@ public class DPTest {
                 if (new StringBuilder(t).reverse().toString().equals(t)) c++;
             }
         return c;
+    }
+
+    // Independent check for LIS: every subset of indices, keep the longest strictly increasing one (small n only).
+    static int lisBrute(int[] a) {
+        int n = a.length, best = 0;
+        for (int mask = 0; mask < (1 << n); mask++) {
+            int prev = Integer.MIN_VALUE, len = 0; boolean ok = true;
+            for (int i = 0; i < n && ok; i++) if ((mask >> i & 1) == 1) { if (a[i] <= prev) ok = false; else { prev = a[i]; len++; } }
+            if (ok) best = Math.max(best, len);
+        }
+        return best;
     }
 }

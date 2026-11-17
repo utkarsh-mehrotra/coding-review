@@ -6,7 +6,7 @@
     {
       "id": "dp-linear",
       "title": "Linear DP & State Machines",
-      "intro": "Run the six-step framework on every problem: state, choice, transition, base, order, shrink. One climbing-stairs problem is written three ways (memo, table, O(1)) so you can move between them on demand.",
+      "intro": "Every DP here is top-down: name the state, write the choice at that state, set the base case, then memoize. Recursion depth is the length of the state chain, so very long inputs need a bigger thread stack.",
       "table": [
         [
           "1D recurrence",
@@ -15,17 +15,17 @@
         ],
         [
           "Take / skip",
-          "House robber family",
+          "House robber family: f(i) = take or skip",
           "O(n)"
         ],
         [
-          "Kadane",
-          "Best subarray ending here (track max and min for products)",
+          "Best ending here",
+          "Max subarray / product: memo the best ending at i",
           "O(n)"
         ],
         [
           "Stock state machine",
-          "Holding / not holding, transactions used, cooldown, fee",
+          "f(day, holding, transactions left), cooldown, fee",
           "O(nk)"
         ]
       ],
@@ -37,6 +37,7 @@
         }
       ],
       "pitfalls": [
+        "Recursion depth equals the length of the state chain. Java's default stack holds about 10^4 frames; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, \"solve\", 1 << 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).",
         "Max product needs both max AND min: a negative flips them.",
         "Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.",
         "Stock with k transactions: if k >= n/2 it degenerates to unlimited."
@@ -46,26 +47,26 @@
     {
       "id": "dp-knapsack",
       "title": "Knapsack Family",
-      "intro": "Loop direction over capacity decides reuse: downward means each item once, upward means reusable. For counting, coins outer gives combinations; amount outer gives ordered sequences.",
+      "intro": "Knapsack memo is f(i, capacity). Each item once: taking item i moves to i + 1. Reusable: taking item i stays at i. For counting, combinations fix the coin order with f(coin index, amount); ordered sequences try every coin from f(amount).",
       "table": [
         [
           "0/1",
-          "Subset under a capacity, each item once",
+          "f(i, cap): skip, or take and move to i + 1",
           "O(nW)"
         ],
         [
           "Unbounded",
-          "Items reusable (coin change, perfect squares)",
+          "f(i, cap): take and stay at i, or move on",
           "O(nW)"
         ],
         [
           "Bounded",
-          "Split count into 1,2,4,... chunks then run 0/1",
-          "O(nW log c)"
+          "Take 0..count copies of item i",
+          "O(nW c)"
         ],
         [
           "Subset-sum reductions",
-          "Partition, target sum, last stone II",
+          "Partition, target sum, last stone II: f(i, remaining)",
           "O(n * sum)"
         ]
       ],
@@ -77,8 +78,8 @@
         }
       ],
       "pitfalls": [
-        "Iterating capacity upward in a 0/1 problem silently reuses items.",
-        "Coin Change II (combinations) vs Combination Sum IV (sequences) differ only in loop order.",
+        "In a 0/1 problem, taking an item must move to i + 1; staying at i silently reuses it.",
+        "Coin Change II (combinations) memoizes f(coin index, amount); Combination Sum IV (sequences) memoizes f(amount) and tries every coin.",
         "Target Sum: the reduction is subsets summing to (total + target) / 2; check parity and range first."
       ],
       "group": "Dynamic Programming"
@@ -86,26 +87,26 @@
     {
       "id": "dp-sequences",
       "title": "Sequences & Strings",
-      "intro": "Two sequences give a prefix table dp[i][j]. One sequence with a pairwise condition gives LIS-style dp or the O(n log n) tails array. Palindromes use interval dp or center expansion.",
+      "intro": "Two sequences give a memo over (i, j) suffixes. One sequence with a pairwise condition gives LIS-style take/skip memo. Palindromes use an interval memo f(i, j) or center expansion.",
       "table": [
         [
           "LIS",
-          "Longest chain, each element larger than the previous",
-          "O(n log n)"
+          "f(i, prev): take a[i] if larger, or skip",
+          "O(n^2)"
         ],
         [
           "LCS / edit distance",
-          "Two strings, match or edit prefixes",
+          "f(i, j) over the two suffixes",
           "O(nm)"
         ],
         [
           "Palindromes",
-          "Interval dp or expand around a center",
+          "Interval memo f(i, j) or expand around a center",
           "O(n^2)"
         ],
         [
           "Matching",
-          "Wildcard, regex, interleave, distinct subsequences",
+          "Wildcard, regex, interleave, distinct subsequences: f(i, j)",
           "O(nm)"
         ]
       ],
@@ -119,33 +120,33 @@
       "pitfalls": [
         "Russian Doll: sort width ascending and height DESCENDING so equal widths cannot chain.",
         "Subsequence means order kept, substring means contiguous: contiguous resets to 0 on mismatch.",
-        "Regex star: zero copies is dp[i][j-2]; one more copy needs the preceding char to match."
+        "Regex star: zero copies is f(i, j + 2); one more copy needs the current char to match, then f(i + 1, j)."
       ],
       "group": "Dynamic Programming"
     },
     {
       "id": "dp-grid-interval",
       "title": "Grid & Interval DP",
-      "intro": "Grids depend on up/left (or backward for dungeon-style). Interval dp answers a range [i, j] by trying every split k; loop by length. In burst balloons, k is the LAST item processed.",
+      "intro": "Grids memoize f(r, c) over the moves left (dungeon-style answers depend on what comes AFTER, which is the natural top-down direction). Interval memo f(i, j) tries every split k; in burst balloons, k is the LAST balloon burst.",
       "table": [
         [
           "Grid paths",
-          "Right/down moves, count or min/max path sum",
+          "f(r, c) over right/down moves, count or min/max path sum",
           "O(mn)"
         ],
         [
           "Max square",
-          "Min of three neighbors plus one",
+          "f(r, c) = 1 + min of three neighbors",
           "O(mn)"
         ],
         [
           "Interval",
-          "Matrix chain, burst balloons, cut stick, strange printer",
+          "f(i, j) over splits: matrix chain, burst balloons, cut stick, strange printer",
           "O(n^3)"
         ],
         [
           "Game dp",
-          "Score difference the mover can force",
+          "f(i, j) = score difference the mover can force",
           "O(n^2)"
         ]
       ],
@@ -166,7 +167,7 @@
     {
       "id": "dp-bitmask-digit",
       "title": "Bitmask & Digit DP",
-      "intro": "Bitmask dp when n <= 20 and you must use each item once: dp[mask]. Digit dp when counting numbers up to N with a digit property: state is (position, tight, started, property).",
+      "intro": "Bitmask memo f(mask) when n <= 20 and each item is used once. Digit memo f(pos, tight, started, property) when counting numbers up to N with a digit property.",
       "table": [
         [
           "Assignment",
@@ -206,20 +207,20 @@
     {
       "id": "dp-combined",
       "title": "DP + Other Structures",
-      "intro": "The hard-round combinations: dp with binary search (job scheduling), dp with a monotonic deque (jump game VI), probability dp, hash-map state, and memoized DFS on an implicit DAG.",
+      "intro": "The hard-round combinations: memo with binary search (job scheduling), memo over a window of next indices (jump game VI), probability memo, hash-map state, and memoized DFS on an implicit DAG.",
       "table": [
         [
-          "dp + binary search",
-          "Weighted job scheduling: best profit up to the last compatible job",
+          "Memo + binary search",
+          "Weighted job scheduling: skip, or take and jump to the next compatible job",
           "O(n log n)"
         ],
         [
-          "dp + deque",
-          "Window max over earlier dp values",
-          "O(n)"
+          "Memo over a window",
+          "f(i) = nums[i] + best f(j) for j in the next k",
+          "O(nk); a monotonic deque gives O(n)"
         ],
         [
-          "Probability dp",
+          "Probability memo",
           "Distribution over states after k steps",
           "O(k * states)"
         ],
@@ -237,7 +238,7 @@
         }
       ],
       "pitfalls": [
-        "When transitions look at a sliding window of earlier dp values, reach for a monotonic deque before a segment tree.",
+        "Memo over a sliding window is O(nk); if that times out, the follow-up is a monotonic deque, which is not top-down.",
         "Longest increasing path needs no visited set: strictly increasing values make the graph a DAG."
       ],
       "group": "Dynamic Programming"
@@ -249,27 +250,27 @@
       "table": [
         [
           "Interval + extra state",
-          "Remove boxes, merge stones, palindromic subsequences",
+          "Remove boxes, merge stones, palindromic subsequences: f(l, r, extra)",
           "O(n^3)"
         ],
         [
           "Two walkers",
-          "Cherry pickup",
+          "Cherry pickup: f(step, row1, row2)",
           "O(n^3)"
         ],
         [
           "Difference as state",
-          "Equal towers",
+          "Equal towers: f(i, difference)",
           "O(n x sum)"
         ],
         [
-          "Flip the question",
-          "Egg drop: floors per move count",
-          "O(k log n)"
+          "Eggs and floors",
+          "f(eggs, floors) with binary search on the drop",
+          "O(k n log n)"
         ],
         [
           "Reconstruction",
-          "Supersequence, divisible subset",
+          "Supersequence, divisible subset: walk the memo",
           "O(nm)"
         ]
       ],
@@ -283,7 +284,7 @@
       "pitfalls": [
         "State the dimension you added and what it stands for before writing the recurrence.",
         "Interval DP with an extra state: memoize with the extra dimension, not just (l, r).",
-        "Reconstruction: keep a parent pointer or walk the table backwards, never recompute."
+        "Reconstruction: walk the memo forward from the start state, choosing the transition that produced each value; never recompute from scratch."
       ],
       "group": "Dynamic Programming"
     }
@@ -291,134 +292,134 @@
   "decisions": [
     {
       "q": "<strong>Count ways / min cost where step i reads a few earlier steps?</strong>",
-      "a": "1D dp, then shrink to O(1) space",
-      "template": "DPLinear#climbStairsO1"
+      "a": "Memo over i: f(i) reads f(i-1), f(i-2)",
+      "template": "DPLinear#climbStairsMemo"
     },
     {
       "q": "<strong>Pick or skip adjacent items?</strong>",
-      "a": "Take / skip state machine",
+      "a": "Memo f(i) = max(take a[i] + f(i+2), skip f(i+1))",
       "template": "DPLinear#rob"
     },
     {
       "q": "<strong>Best contiguous subarray?</strong>",
-      "a": "Kadane (track max AND min if products)",
+      "a": "Memo best subarray ending at i (track max AND min for products)",
       "template": "DPLinear#maxSubArray"
     },
     {
       "q": "<strong>Buy / sell with limits, cooldown or fee?</strong>",
-      "a": "Stock state machine (hold / sold / rest)",
+      "a": "Memo over (day, holding, transactions left)",
       "template": "DPLinear#maxProfitK"
     },
     {
       "q": "<strong>Choose a subset under a capacity, each item once?</strong>",
-      "a": "0/1 knapsack, capacity loop DOWNWARD",
+      "a": "Memo f(i, cap): skip item i, or take it once and move to i+1",
       "template": "DPKnapsack#knapsack01"
     },
     {
       "q": "<strong>Items reusable, fewest items?</strong>",
-      "a": "Unbounded dp, capacity loop upward",
+      "a": "Memo f(i, amount): take coin i again (stay at i) or move on",
       "template": "DPKnapsack#coinChangeMin"
     },
     {
       "q": "<strong>Count combinations vs ordered sequences?</strong>",
-      "a": "Coins OUTER = combinations, amount OUTER = sequences",
+      "a": "Combinations: memo f(coin index, amount); sequences: memo f(amount) trying every coin",
       "template": "DPKnapsack#coinChangeWays"
     },
     {
       "q": "<strong>Can the array be split into equal halves / signs assigned to hit a target?</strong>",
-      "a": "Subset-sum reduction",
+      "a": "Subset-sum reduction, then memo f(i, remaining)",
       "template": "DPKnapsack#findTargetSumWays"
     },
     {
       "q": "<strong>Longest increasing chain?</strong>",
-      "a": "Tails array with binary search, O(n log n)",
+      "a": "Memo f(i, prev) take/skip; or LIS ending at i",
       "template": "DPSequences#lengthOfLIS"
     },
     {
       "q": "<strong>Two strings, edits or common parts?</strong>",
-      "a": "Prefix table dp[i][j]",
+      "a": "Memo f(i, j) over the two string suffixes",
       "template": "DPSequences#minDistance"
     },
     {
       "q": "<strong>Does a pattern with wildcards match?</strong>",
-      "a": "Prefix table; star means skip or consume",
+      "a": "Memo f(i, j); star means skip it or consume one char",
       "template": "DPSequences#isMatchRegex"
     },
     {
       "q": "<strong>Can the string be segmented into dictionary words?</strong>",
-      "a": "dp over prefix length",
+      "a": "Memo f(start): can s[start..] be segmented?",
       "template": "DPSequences#wordBreak"
     },
     {
       "q": "<strong>Grid with right/down moves?</strong>",
-      "a": "Row-rolling dp",
+      "a": "Memo f(r, c) over right/down moves",
       "template": "DPGridInterval#minPathSum"
     },
     {
       "q": "<strong>Answer for range [i, j] from splitting at k?</strong>",
-      "a": "Interval dp, loop by length",
+      "a": "Memo f(i, j) trying every split k (k = last to burst)",
       "template": "DPGridInterval#maxCoins"
     },
     {
       "q": "<strong>n &le; 20, each item used once?</strong>",
-      "a": "Bitmask dp over subsets",
+      "a": "Memo f(mask) over the set already used",
       "template": "DPBitmaskDigit#minCostAssignment"
     },
     {
       "q": "<strong>Count numbers up to N with a digit property?</strong>",
-      "a": "Digit dp with tight flag",
+      "a": "Memo f(pos, tight, started, property) over digits",
       "template": "DPBitmaskDigit#countDigitOne"
     },
     {
       "q": "<strong>dp transition looks at a sliding window of earlier values?</strong>",
-      "a": "Monotonic deque on dp",
+      "a": "Memo f(i) over the next k indices",
       "template": "DPCombined#maxResult"
     },
     {
       "q": "<strong>Intervals with weights, pick a compatible set?</strong>",
-      "a": "Sort by end, binary-search the last compatible job",
+      "a": "Memo f(i) = skip job i, or take it and jump to the next compatible job",
       "template": "DPCombined#jobScheduling"
     },
     {
       "q": "<strong>Interval DP where equal items attach to a group?</strong>",
-      "a": "dp[l][r][k] with k attached on the left",
+      "a": "Memo f(l, r, k) with k equal boxes attached on the left",
       "template": "DPVariants#removeBoxes"
     },
     {
       "q": "<strong>Merge k adjacent piles into one?</strong>",
-      "a": "dp[i][j][piles]",
+      "a": "Memo f(i, j, piles)",
       "template": "DPVariants#mergeStones"
     },
     {
       "q": "<strong>Two walkers on one grid?</strong>",
-      "a": "Step index + both rows",
+      "a": "Memo f(step, row1, row2) for both walkers at once",
       "template": "DPVariants#cherryPickup"
     },
     {
       "q": "<strong>Two groups must end up equal?</strong>",
-      "a": "dp over the difference",
+      "a": "Memo f(i, difference) = best height of the shorter side",
       "template": "DPVariants#tallestBillboard"
     },
     {
       "q": "<strong>Eggs and floors?</strong>",
-      "a": "Flip: floors covered with m moves",
+      "a": "Memo f(eggs, floors), binary search the drop floor",
       "template": "DPVariants#superEggDrop"
     },
     {
       "q": "<strong>Return the actual supersequence, not just its length?</strong>",
-      "a": "LCS table, walk back merging",
+      "a": "Memo LCS f(i, j), then walk the memo to merge",
       "template": "DPVariants#shortestCommonSupersequence"
     },
     {
       "q": "<strong>Count distinct palindromic subsequences?</strong>",
-      "a": "Interval DP, subtract the double count",
+      "a": "Memo f(i, j), subtract the double-counted inner palindromes",
       "template": "DPVariants#countPalindromicSubsequences"
     }
   ],
   "calibration": [
-    "<strong>SDE2 bar:</strong> climbing stairs, house robber, coin change, LIS, LCS, edit distance, unique paths, word break &mdash; define state and transition out loud, then code it, with the space optimization when asked.",
-    "<strong>SDE3 bar:</strong> knapsack variants and the loop-order rules, interval dp (burst balloons), bitmask dp, stock state machines, regex/wildcard matching, and converting memo to table without prompting.",
-    "<strong>Staff bar (for context):</strong> digit dp, dp + data structure optimizations (deque, binary search, segment tree), proving a greedy fails and DP is needed, and estimating state-space size to choose between memo and bottom-up.",
+    "<strong>SDE2 bar:</strong> climbing stairs, house robber, coin change, LIS, LCS, edit distance, unique paths, word break &mdash; say the state, the choice and the base case out loud, then write the memoized recursion.",
+    "<strong>SDE3 bar:</strong> knapsack variants (move to i + 1 vs stay at i), interval memo (burst balloons), bitmask memo, stock state machines, regex/wildcard matching, and reconstructing the answer from the memo.",
+    "<strong>Staff bar (for context):</strong> digit memo, memo + binary search, knowing when an O(nk) memo needs a deque follow-up, proving a greedy fails and DP is needed, and estimating state-space size and recursion depth.",
     "<strong>Staff bar:</strong> explain the extra state and prove the transition is exhaustive; reconstruct the answer, not only its value."
   ],
   "practice": [

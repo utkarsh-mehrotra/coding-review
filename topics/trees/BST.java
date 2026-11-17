@@ -127,11 +127,16 @@ public class BST {
 
     // ---------- Unique BSTs count (LC 96): Catalan ----------
     static int numTrees(int n) {
-        int[] dp = new int[n + 1];
-        dp[0] = dp[1] = 1;
-        for (int i = 2; i <= n; i++)
-            for (int j = 0; j < i; j++) dp[i] += dp[j] * dp[i - 1 - j];
-        return dp[n];
+        return trees(n, new Integer[n + 1]);
+    }
+
+    // state: n = number of nodes | choice: root size split j / n-1-j | base: n <= 1 -> 1. O(n^2)
+    private static int trees(int n, Integer[] memo) {
+        if (n <= 1) return 1;
+        if (memo[n] != null) return memo[n];
+        int res = 0;
+        for (int j = 0; j < n; j++) res += trees(j, memo) * trees(n - 1 - j, memo);
+        return memo[n] = res;
     }
 
     // TreeMap cheat sheet (when an ordered structure is needed in an interview):

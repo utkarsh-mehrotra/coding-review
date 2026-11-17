@@ -3,125 +3,138 @@ import java.util.*;
 public class DPCombined {
 
     // ---------- DP + binary search: Maximum Profit in Job Scheduling (LC 1235) ----------
-    // dp[i] = best profit using the first i jobs (sorted by end). Binary-search the last compatible job.
+    // memo over job index (jobs sorted by start); binary-search the first job starting at or after this one ends. O(n log n)
     static int jobScheduling(int[] start, int[] end, int[] profit) {
         int n = start.length;
         Integer[] idx = new Integer[n];
         for (int i = 0; i < n; i++) idx[i] = i;
-        Arrays.sort(idx, Comparator.comparingInt(i -> end[i]));
-        int[] ends = new int[n], dp = new int[n + 1];
-        for (int i = 0; i < n; i++) ends[i] = end[idx[i]];
-        for (int i = 1; i <= n; i++) {
-            int job = idx[i - 1];
-            int lo = 0, hi = i - 1; // count of jobs among first i-1 with end <= start[job]
-            while (lo < hi) {
-                int mid = (lo + hi) >>> 1;
-                if (ends[mid] <= start[job]) lo = mid + 1; else hi = mid;
-            }
-            dp[i] = Math.max(dp[i - 1], dp[lo] + profit[job]);
-        }
-        return dp[n];
+        Arrays.sort(idx, Comparator.comparingInt(i -> start[i]));
+        int[] st = new int[n], en = new int[n], pr = new int[n];
+        for (int i = 0; i < n; i++) { st[i] = start[idx[i]]; en[i] = end[idx[i]]; pr[i] = profit[idx[i]]; }
+        return bestJobs(0, st, en, pr, new Integer[n + 1]);
     }
 
-    // ---------- DP + monotonic deque: sliding-window max over dp ----------
-    // Constrained Subset Sum (LC 1425): pick a subsequence, adjacent picks at most k apart
-    static int constrainedSubsetSum(int[] nums, int k) {
-        Deque<Integer> dq = new ArrayDeque<>(); // indices, dp values decreasing
-        int[] dp = new int[nums.length];
-        int best = Integer.MIN_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            while (!dq.isEmpty() && dq.peekFirst() < i - k) dq.pollFirst();
-            dp[i] = nums[i] + (dq.isEmpty() ? 0 : Math.max(0, dp[dq.peekFirst()]));
-            while (!dq.isEmpty() && dp[dq.peekLast()] <= dp[i]) dq.pollLast();
-            dq.addLast(i);
-            best = Math.max(best, dp[i]);
+    // state: i = first job still allowed | choice: skip job i, or take it and jump to the next compatible job | base: i == n -> 0
+    private static int bestJobs(int i, int[] st, int[] en, int[] pr, Integer[] memo) {
+        int n = st.length;
+        if (i >= n) return 0;
+        if (memo[i] != null) return memo[i];
+        int lo = i + 1, hi = n; // first job with start >= en[i]
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            if (st[mid] >= en[i]) hi = mid; else lo = mid + 1;
         }
+        return memo[i] = Math.max(bestJobs(i + 1, st, en, pr, memo), pr[i] + bestJobs(lo, st, en, pr, memo));
+    }
+
+    // ---------- Window-max DP: memo over index, scan the next k ----------
+    // Constrained Subset Sum (LC 1425): pick a subsequence, adjacent picks at most k apart
+    // Faster: monotonic deque for the window max, O(n) — not DP-memo; mention as a follow-up.
+    static int constrainedSubsetSum(int[] nums, int k) {
+        Integer[] memo = new Integer[nums.length];
+        int best = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) best = Math.max(best, sumFrom(i, nums, k, memo));
         return best;
+    }
+
+    // state: i = first picked index | choice: next pick j in i+1..i+k, or stop (take 0) | base: none, falls out of the loop. O(n*k)
+    private static int sumFrom(int i, int[] nums, int k, Integer[] memo) {
+        if (memo[i] != null) return memo[i];
+        int next = 0;
+        for (int j = i + 1; j <= Math.min(nums.length - 1, i + k); j++) next = Math.max(next, sumFrom(j, nums, k, memo));
+        return memo[i] = nums[i] + next;
     }
 
     // Jump Game VI (LC 1696): max score path with jumps of 1..k
+    // Faster: monotonic deque for the window max, O(n) — not DP-memo; mention as a follow-up.
     static int maxResult(int[] nums, int k) {
-        int n = nums.length;
-        int[] dp = new int[n];
-        dp[0] = nums[0];
-        Deque<Integer> dq = new ArrayDeque<>();
-        dq.addLast(0);
-        for (int i = 1; i < n; i++) {
-            while (dq.peekFirst() < i - k) dq.pollFirst();
-            dp[i] = nums[i] + dp[dq.peekFirst()];
-            while (!dq.isEmpty() && dp[dq.peekLast()] <= dp[i]) dq.pollLast();
-            dq.addLast(i);
-        }
-        return dp[n - 1];
+        return scoreFrom(0, nums, k, new Integer[nums.length]);
+    }
+
+    // state: i = current index | choice: jump j in i+1..i+k | base: i == n-1 -> nums[i]. O(n*k)
+    private static int scoreFrom(int i, int[] nums, int k, Integer[] memo) {
+        if (i == nums.length - 1) return nums[i];
+        if (memo[i] != null) return memo[i];
+        int best = Integer.MIN_VALUE;
+        for (int j = i + 1; j <= Math.min(nums.length - 1, i + k); j++) best = Math.max(best, scoreFrom(j, nums, k, memo));
+        return memo[i] = nums[i] + best;
     }
 
     // ---------- Probability DP ----------
-    // Knight Probability in Chessboard (LC 688)
+    // Knight Probability in Chessboard (LC 688). O(k * n^2 * 8)
     static double knightProbability(int n, int k, int row, int col) {
-        int[][] mv = {{1, 2}, {2, 1}, {-1, 2}, {-2, 1}, {1, -2}, {2, -1}, {-1, -2}, {-2, -1}};
-        double[][] cur = new double[n][n];
-        cur[row][col] = 1;
-        for (int s = 0; s < k; s++) {
-            double[][] nx = new double[n][n];
-            for (int r = 0; r < n; r++)
-                for (int c = 0; c < n; c++) {
-                    if (cur[r][c] == 0) continue;
-                    for (int[] m : mv) {
-                        int nr = r + m[0], nc = c + m[1];
-                        if (nr >= 0 && nr < n && nc >= 0 && nc < n) nx[nr][nc] += cur[r][c] / 8.0;
-                    }
-                }
-            cur = nx;
-        }
-        double sum = 0;
-        for (double[] r : cur) for (double v : r) sum += v;
-        return sum;
+        return stay(k, row, col, n, new Double[k + 1][n][n]);
     }
 
-    // New 21 Game (LC 837): dp[i] = P(reach score i), sliding window sum
+    // state: (moves left, r, c) | choice: 8 knight moves, each 1/8 | base: off board -> 0, no moves left -> 1
+    private static double stay(int left, int r, int c, int n, Double[][][] memo) {
+        if (r < 0 || r >= n || c < 0 || c >= n) return 0;
+        if (left == 0) return 1;
+        if (memo[left][r][c] != null) return memo[left][r][c];
+        int[][] mv = {{1, 2}, {2, 1}, {-1, 2}, {-2, 1}, {1, -2}, {2, -1}, {-1, -2}, {-2, -1}};
+        double sum = 0;
+        for (int[] m : mv) sum += stay(left - 1, r + m[0], c + m[1], n, memo) / 8.0;
+        return memo[left][r][c] = sum;
+    }
+
+    // New 21 Game (LC 837): memo over current points, each draw 1..maxPts equally likely. O(k * maxPts)
+    // Faster: sliding-window sum over the next maxPts values, O(n + maxPts) — not DP-memo; mention as a follow-up.
     static double new21Game(int n, int k, int maxPts) {
         if (k == 0 || n >= k + maxPts) return 1.0;
-        double[] dp = new double[n + 1];
-        dp[0] = 1.0;
-        double window = 1.0, ans = 0;
-        for (int i = 1; i <= n; i++) {
-            dp[i] = window / maxPts;
-            if (i < k) window += dp[i]; else ans += dp[i];
-            if (i - maxPts >= 0 && i - maxPts < k) window -= dp[i - maxPts];
-        }
-        return ans;
+        return ending(0, n, k, maxPts, new Double[k]);
+    }
+
+    // state: pts = current score | choice: draw x in 1..maxPts | base: pts >= k stops -> 1 if pts <= n else 0
+    private static double ending(int pts, int n, int k, int maxPts, Double[] memo) {
+        if (pts >= k) return pts <= n ? 1.0 : 0.0;
+        if (memo[pts] != null) return memo[pts];
+        double sum = 0;
+        for (int x = 1; x <= maxPts; x++) sum += ending(pts + x, n, k, maxPts, memo);
+        return memo[pts] = sum / maxPts;
     }
 
     // ---------- Hash-map-state DP ----------
-    // Longest Arithmetic Subsequence (LC 1027): dp[i][diff]
+    // Longest Arithmetic Subsequence (LC 1027): memo over (i, diff), one HashMap per index.
+    // COST: O(n^2 log n) — each (i, diff) state finds its previous index by binary search.
     static int longestArithSeqLength(int[] nums) {
         int n = nums.length, best = 2;
         if (n <= 2) return n;
-        List<Map<Integer, Integer>> dp = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            Map<Integer, Integer> m = new HashMap<>();
-            for (int j = 0; j < i; j++) {
-                int diff = nums[i] - nums[j];
-                int len = dp.get(j).getOrDefault(diff, 1) + 1;
-                m.merge(diff, len, Math::max);
-                best = Math.max(best, len);
-            }
-            dp.add(m);
-        }
+        Map<Integer, List<Integer>> positions = new HashMap<>();          // value -> indices, ascending
+        for (int i = 0; i < n; i++) positions.computeIfAbsent(nums[i], v -> new ArrayList<>()).add(i);
+        List<Map<Integer, Integer>> memo = new ArrayList<>();
+        for (int i = 0; i < n; i++) memo.add(new HashMap<>());
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < i; j++) best = Math.max(best, arithEnding(i, nums[i] - nums[j], nums, positions, memo));
         return best;
+    }
+
+    // state: (i, diff) = longest arithmetic run ending at i with this diff | choice: latest j < i with nums[j] == nums[i] - diff | base: no such j -> 1
+    private static int arithEnding(int i, int diff, int[] nums, Map<Integer, List<Integer>> positions, List<Map<Integer, Integer>> memo) {
+        Integer c = memo.get(i).get(diff);
+        if (c != null) return c;
+        int res = 1;
+        List<Integer> at = positions.get(nums[i] - diff);
+        if (at != null) {
+            int lo = 0, hi = at.size() - 1, j = -1;                         // largest index in `at` that is < i
+            while (lo <= hi) { int mid = (lo + hi) >>> 1; if (at.get(mid) < i) { j = at.get(mid); lo = mid + 1; } else hi = mid - 1; }
+            if (j >= 0) res = 1 + arithEnding(j, diff, nums, positions, memo);
+        }
+        memo.get(i).put(diff, res);
+        return res;
     }
 
     // ---------- Memoized DFS on a DAG: Longest Increasing Path in a Matrix (LC 329) ----------
     static int longestIncreasingPath(int[][] g) {
         int m = g.length, n = g[0].length, best = 0;
-        int[][] memo = new int[m][n];
+        Integer[][] memo = new Integer[m][n];
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++) best = Math.max(best, lip(g, i, j, memo));
         return best;
     }
 
-    private static int lip(int[][] g, int i, int j, int[][] memo) {
-        if (memo[i][j] != 0) return memo[i][j];
+    // state: (i, j) = longest increasing path starting at this cell | choice: step to a larger neighbour | base: no larger neighbour -> 1
+    private static int lip(int[][] g, int i, int j, Integer[][] memo) {
+        if (memo[i][j] != null) return memo[i][j];
         int best = 1;
         int[] d = {0, 1, 0, -1, 0};
         for (int k = 0; k < 4; k++) {

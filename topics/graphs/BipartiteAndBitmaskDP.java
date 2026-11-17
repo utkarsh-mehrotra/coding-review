@@ -32,29 +32,21 @@ public class BipartiteAndBitmaskDP {
     // dist[i][j] = cost from i to j. Returns min cost to visit all nodes starting at 0.
     static int heldKarpTSP(int[][] dist) {
         int n = dist.length;
-        int[][] dp = new int[1 << n][n];
-        for (int[] row : dp) Arrays.fill(row, Integer.MAX_VALUE / 2);
-        dp[1][0] = 0; // start at node 0, only node 0 visited
+        if (n == 1) return Integer.MAX_VALUE; // no tour back to start through another node
+        return tourFrom(1, 0, dist, new Integer[1 << n][n]); // O(2^n * n^2)
+    }
 
-        for (int mask = 1; mask < (1 << n); mask++) {
-            for (int u = 0; u < n; u++) {
-                if ((mask & (1 << u)) == 0 || dp[mask][u] == Integer.MAX_VALUE / 2) continue;
-                for (int v = 0; v < n; v++) {
-                    if ((mask & (1 << v)) != 0) continue; // already visited
-                    int nextMask = mask | (1 << v);
-                    dp[nextMask][v] = Math.min(dp[nextMask][v], dp[mask][u] + dist[u][v]);
-                }
-            }
+    // state: (mask visited, last node) | choice: next unvisited node v | base: all visited -> dist[last][0] (return to start)
+    private static int tourFrom(int mask, int last, int[][] dist, Integer[][] memo) {
+        int n = dist.length;
+        if (mask == (1 << n) - 1) return dist[last][0];
+        if (memo[mask][last] != null) return memo[mask][last];
+        int best = Integer.MAX_VALUE;
+        for (int v = 0; v < n; v++) {
+            if ((mask & (1 << v)) != 0) continue;
+            best = Math.min(best, dist[last][v] + tourFrom(mask | 1 << v, v, dist, memo));
         }
-
-        int fullMask = (1 << n) - 1;
-        int minCost = Integer.MAX_VALUE;
-        for (int u = 1; u < n; u++) {
-            if (dp[fullMask][u] != Integer.MAX_VALUE / 2) {
-                minCost = Math.min(minCost, dp[fullMask][u] + dist[u][0]); // return to start
-            }
-        }
-        return minCost;
+        return memo[mask][last] = best;
     }
 
     // ---------- Bitmask DP: Shortest Path Visiting All Nodes (LeetCode 847 shape) ----------

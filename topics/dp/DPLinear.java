@@ -7,160 +7,174 @@ public class DPLinear {
     //   2. Choice     what can I do from this state?
     //   3. Transition dp[state] = best over choices of (choice cost + dp[next state])
     //   4. Base       states whose answer needs no recursion
-    //   5. Order      evaluate so every dependency is ready (memo: automatic; table: loop direction)
-    //   6. Shrink     keep only the rows or values later states still read
+    //   5. Order      memo makes it automatic: recurse, cache by state, never recompute
+    //   6. Memo       cache each state's answer (null = not computed yet)
 
-    // ---------- Climbing Stairs (LC 70): one problem, three forms ----------
+    // ---------- Climbing Stairs (LC 70): top-down memo ----------
     // RECOGNIZE: count ways / min cost where step i depends on a few earlier steps.
-    static int climbStairsMemo(int n) { return climb(n, new int[n + 1]); }
+    // COST: O(n) time, O(n) memo + recursion stack.
+    static int climbStairsMemo(int n) { return ways(n, new Integer[n + 1]); }
 
-    private static int climb(int n, int[] memo) {
+    // state: n = steps left | choice: take 1 or 2 steps | base: n <= 1 -> 1 way
+    private static int ways(int n, Integer[] memo) {
         if (n <= 1) return 1;
-        if (memo[n] != 0) return memo[n];
-        return memo[n] = climb(n - 1, memo) + climb(n - 2, memo);
-    }
-
-    static int climbStairsTab(int n) {
-        int[] dp = new int[n + 2];
-        dp[0] = 1; dp[1] = 1;
-        for (int i = 2; i <= n; i++) dp[i] = dp[i - 1] + dp[i - 2];
-        return dp[n];
-    }
-
-    // LC 70
-    static int climbStairsO1(int n) {
-        int prev = 1, cur = 1;
-        for (int i = 2; i <= n; i++) { int next = prev + cur; prev = cur; cur = next; }
-        return cur;
+        if (memo[n] != null) return memo[n];
+        return memo[n] = ways(n - 1, memo) + ways(n - 2, memo);
     }
 
     // ---------- House Robber (LC 198): take / skip state ----------
-    static int rob(int[] nums) {
-        int take = 0, skip = 0; // best total if the previous house was robbed / not robbed
-        for (int x : nums) {
-            int newTake = skip + x;
-            skip = Math.max(skip, take);
-            take = newTake;
-        }
-        return Math.max(take, skip);
+    // COST: O(n) time, O(n) memo.
+    static int rob(int[] nums) { return robFrom(0, nums.length - 1, nums, new Integer[nums.length]); }
+
+    // state: i = first house still available | choice: rob it (jump to i+2) or skip it | base: past hi -> 0
+    private static int robFrom(int i, int hi, int[] a, Integer[] memo) {
+        if (i > hi) return 0;
+        if (memo[i] != null) return memo[i];
+        return memo[i] = Math.max(a[i] + robFrom(i + 2, hi, a, memo), robFrom(i + 1, hi, a, memo));
     }
 
     // House Robber II (LC 213): circle = best of "drop first" and "drop last"
     static int robCircular(int[] nums) {
         int n = nums.length;
         if (n == 1) return nums[0];
-        return Math.max(robRange(nums, 0, n - 2), robRange(nums, 1, n - 1));
+        return Math.max(robFrom(0, n - 2, nums, new Integer[n]), robFrom(1, n - 1, nums, new Integer[n]));
     }
 
-    private static int robRange(int[] a, int lo, int hi) {
-        int take = 0, skip = 0;
-        for (int i = lo; i <= hi; i++) {
-            int newTake = skip + a[i];
-            skip = Math.max(skip, take);
-            take = newTake;
-        }
-        return Math.max(take, skip);
-    }
+    // ---------- Decode Ways (LC 91): state = suffix start, 1- and 2-digit choices ----------
+    // COST: O(n) time, O(n) memo.
+    static int numDecodings(String s) { return decodeFrom(0, s, new Integer[s.length() + 1]); }
 
-    // ---------- Decode Ways (LC 91): dp over prefix length, 1- and 2-digit choices ----------
-    static int numDecodings(String s) {
+    // state: i = start of undecoded suffix | choice: decode 1 digit or 2 digits | base: i == n -> 1 way
+    private static int decodeFrom(int i, String s, Integer[] memo) {
         int n = s.length();
-        int prev2 = 1, prev1 = s.charAt(0) == '0' ? 0 : 1; // ways for prefix lengths i-2 and i-1
-        for (int i = 2; i <= n; i++) {
-            int cur = 0;
-            if (s.charAt(i - 1) != '0') cur += prev1;
-            int two = Integer.parseInt(s.substring(i - 2, i));
-            if (two >= 10 && two <= 26) cur += prev2;
-            prev2 = prev1;
-            prev1 = cur;
-        }
-        return prev1;
+        if (i == n) return 1;
+        if (s.charAt(i) == '0') return 0;
+        if (memo[i] != null) return memo[i];
+        int r = decodeFrom(i + 1, s, memo);
+        if (i + 2 <= n && Integer.parseInt(s.substring(i, i + 2)) <= 26) r += decodeFrom(i + 2, s, memo);
+        return memo[i] = r;
     }
 
-    // ---------- Kadane (LC 53): best subarray ending here ----------
+    // ---------- Kadane (LC 53): best subarray STARTING here (extend right only if the rest is positive) ----------
+    // Faster: Kadane's running max, O(n) time O(1) space — not DP-memo; mention as a follow-up.
     static int maxSubArray(int[] nums) {
-        int best = nums[0], cur = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            cur = Math.max(nums[i], cur + nums[i]);
-            best = Math.max(best, cur);
-        }
+        Integer[] memo = new Integer[nums.length];
+        int best = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) best = Math.max(best, startAt(i, nums, memo));
         return best;
+    }
+
+    // state: i = subarray must start at i | choice: stop here or extend to i+1 | base: last element -> itself
+    private static int startAt(int i, int[] a, Integer[] memo) {
+        if (i == a.length - 1) return a[i];
+        if (memo[i] != null) return memo[i];
+        return memo[i] = a[i] + Math.max(0, startAt(i + 1, a, memo));
     }
 
     // ---------- Maximum Product Subarray (LC 152): track max AND min (negatives flip them) ----------
+    // COST: O(n) time, O(n) memo.
     static int maxProduct(int[] nums) {
-        int hi = nums[0], lo = nums[0], best = nums[0];
-        for (int i = 1; i < nums.length; i++) {
-            int x = nums[i];
-            if (x < 0) { int t = hi; hi = lo; lo = t; }
-            hi = Math.max(x, hi * x);
-            lo = Math.min(x, lo * x);
-            best = Math.max(best, hi);
-        }
+        int n = nums.length;
+        Integer[] hi = new Integer[n], lo = new Integer[n];
+        int best = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) best = Math.max(best, prodHi(i, nums, hi, lo));
         return best;
+    }
+
+    // state: i = subarray starts at i | choice: stop at i or extend with the best/worst product from i+1 | base: last element
+    private static int prodHi(int i, int[] a, Integer[] hi, Integer[] lo) {
+        if (i == a.length - 1) return a[i];
+        if (hi[i] != null) return hi[i];
+        int x = a[i];
+        return hi[i] = Math.max(x, Math.max(x * prodHi(i + 1, a, hi, lo), x * prodLo(i + 1, a, hi, lo)));
+    }
+
+    // state: i = subarray starts at i | choice: as prodHi but keeps the minimum | base: last element
+    private static int prodLo(int i, int[] a, Integer[] hi, Integer[] lo) {
+        if (i == a.length - 1) return a[i];
+        if (lo[i] != null) return lo[i];
+        int x = a[i];
+        return lo[i] = Math.min(x, Math.min(x * prodHi(i + 1, a, hi, lo), x * prodLo(i + 1, a, hi, lo)));
     }
 
     // ---------- Stock family: state machine (holding / not holding, transactions used) ----------
-    // I (LC 121): one transaction
-    static int maxProfitOne(int[] p) {
-        int min = Integer.MAX_VALUE, best = 0;
-        for (int x : p) { min = Math.min(min, x); best = Math.max(best, x - min); }
-        return best;
+    // I (LC 121): one transaction. COST: O(n) time, O(n) memo.
+    static int maxProfitOne(int[] p) { return oneFrom(0, 0, p, new Integer[p.length][2]); }
+
+    // state: (day i, hold 0/1) | choice: buy / sell (sell ends the only transaction) / rest | base: i == n -> 0
+    private static int oneFrom(int i, int hold, int[] p, Integer[][] memo) {
+        if (i == p.length) return 0;
+        if (memo[i][hold] != null) return memo[i][hold];
+        int rest = oneFrom(i + 1, hold, p, memo);
+        int act = hold == 0 ? -p[i] + oneFrom(i + 1, 1, p, memo) : p[i];
+        return memo[i][hold] = Math.max(rest, act);
     }
 
-    // II (LC 122): unlimited transactions = sum of every uphill step
-    static int maxProfitUnlimited(int[] p) {
-        int sum = 0;
-        for (int i = 1; i < p.length; i++) sum += Math.max(0, p[i] - p[i - 1]);
-        return sum;
+    // II (LC 122): unlimited transactions. COST: O(n) time, O(n) memo.
+    static int maxProfitUnlimited(int[] p) { return unlimFrom(0, 0, p, new Integer[p.length][2]); }
+
+    // state: (day i, hold 0/1) | choice: buy / sell / rest | base: i == n -> 0
+    private static int unlimFrom(int i, int hold, int[] p, Integer[][] memo) {
+        if (i == p.length) return 0;
+        if (memo[i][hold] != null) return memo[i][hold];
+        int rest = unlimFrom(i + 1, hold, p, memo);
+        int act = hold == 0 ? -p[i] + unlimFrom(i + 1, 1, p, memo) : p[i] + unlimFrom(i + 1, 0, p, memo);
+        return memo[i][hold] = Math.max(rest, act);
     }
 
-    // IV (LC 188): at most k transactions. hold[t] / sold[t] = best cash while holding / after finishing transaction t
+    // IV (LC 188): at most k transactions. COST: O(n*k) time and memo.
     static int maxProfitK(int k, int[] p) {
         int n = p.length;
         if (n < 2 || k == 0) return 0;
         if (k >= n / 2) return maxProfitUnlimited(p);
-        int[] hold = new int[k + 1], sold = new int[k + 1];
-        Arrays.fill(hold, Integer.MIN_VALUE / 2);
-        for (int x : p) {
-            for (int t = 1; t <= k; t++) {
-                hold[t] = Math.max(hold[t], sold[t - 1] - x); // buy: open transaction t
-                sold[t] = Math.max(sold[t], hold[t] + x);     // sell: close transaction t
-            }
-        }
-        return sold[k];
+        return kFrom(0, 0, k, p, new Integer[n][2][k + 1]);
     }
 
-    // with cooldown (LC 309): hold / sold today / rest (free to buy)
-    static int maxProfitCooldown(int[] p) {
-        int hold = Integer.MIN_VALUE / 2, sold = 0, rest = 0;
-        for (int x : p) {
-            int prevSold = sold;
-            sold = hold + x;
-            hold = Math.max(hold, rest - x);
-            rest = Math.max(rest, prevSold);
-        }
-        return Math.max(sold, rest);
+    // state: (day i, hold 0/1, t = buys left) | choice: buy (uses one t) / sell / rest | base: i == n -> 0
+    private static int kFrom(int i, int hold, int t, int[] p, Integer[][][] memo) {
+        if (i == p.length) return 0;
+        if (memo[i][hold][t] != null) return memo[i][hold][t];
+        int best = kFrom(i + 1, hold, t, p, memo);
+        if (hold == 0 && t > 0) best = Math.max(best, -p[i] + kFrom(i + 1, 1, t - 1, p, memo));
+        if (hold == 1) best = Math.max(best, p[i] + kFrom(i + 1, 0, t, p, memo));
+        return memo[i][hold][t] = best;
     }
 
-    // with fee (LC 714)
-    static int maxProfitFee(int[] p, int fee) {
-        int cash = 0, hold = -p[0];
-        for (int i = 1; i < p.length; i++) {
-            cash = Math.max(cash, hold + p[i] - fee);
-            hold = Math.max(hold, cash - p[i]);
-        }
-        return cash;
+    // with cooldown (LC 309): selling forces a one-day rest. COST: O(n) time, O(n) memo.
+    static int maxProfitCooldown(int[] p) { return coolFrom(0, 0, p, new Integer[p.length][2]); }
+
+    // state: (day i, hold 0/1) | choice: buy / sell (then jump to i+2) / rest | base: i >= n -> 0
+    private static int coolFrom(int i, int hold, int[] p, Integer[][] memo) {
+        if (i >= p.length) return 0;
+        if (memo[i][hold] != null) return memo[i][hold];
+        int rest = coolFrom(i + 1, hold, p, memo);
+        int act = hold == 0 ? -p[i] + coolFrom(i + 1, 1, p, memo) : p[i] + coolFrom(i + 2, 0, p, memo);
+        return memo[i][hold] = Math.max(rest, act);
+    }
+
+    // with fee (LC 714): fee paid on each sale. COST: O(n) time, O(n) memo.
+    static int maxProfitFee(int[] p, int fee) { return feeFrom(0, 0, p, fee, new Integer[p.length][2]); }
+
+    // state: (day i, hold 0/1) | choice: buy / sell (pay fee) / rest | base: i == n -> 0
+    private static int feeFrom(int i, int hold, int[] p, int fee, Integer[][] memo) {
+        if (i == p.length) return 0;
+        if (memo[i][hold] != null) return memo[i][hold];
+        int rest = feeFrom(i + 1, hold, p, fee, memo);
+        int act = hold == 0 ? -p[i] + feeFrom(i + 1, 1, p, fee, memo) : p[i] - fee + feeFrom(i + 1, 0, p, fee, memo);
+        return memo[i][hold] = Math.max(rest, act);
     }
 
     // ---------- Min Cost Climbing Stairs (LC 746) ----------
+    // COST: O(n) time, O(n) memo.
     static int minCostClimbingStairs(int[] cost) {
-        int a = 0, b = 0; // cost to stand on step i-2 and i-1
-        for (int i = 2; i <= cost.length; i++) {
-            int c = Math.min(b + cost[i - 1], a + cost[i - 2]);
-            a = b;
-            b = c;
-        }
-        return b;
+        Integer[] memo = new Integer[cost.length];
+        return Math.min(costFrom(0, cost, memo), costFrom(1, cost, memo));
+    }
+
+    // state: i = step stood on (cost not yet paid) | choice: climb 1 or 2 | base: i >= n -> past the top, 0
+    private static int costFrom(int i, int[] cost, Integer[] memo) {
+        if (i >= cost.length) return 0;
+        if (memo[i] != null) return memo[i];
+        return memo[i] = cost[i] + Math.min(costFrom(i + 1, cost, memo), costFrom(i + 2, cost, memo));
     }
 }

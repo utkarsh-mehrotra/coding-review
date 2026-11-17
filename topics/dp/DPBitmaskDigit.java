@@ -5,54 +5,58 @@ public class DPBitmaskDigit {
     // ---------- Bitmask DP: dp[mask] over a subset of <= ~20 items ----------
     // RECOGNIZE: n <= 20, "assign / partition / visit every item once".
 
-    // Minimum Cost Assignment: cost[i][j] = worker i on task j, one each
+    // Minimum Cost Assignment: cost[i][j] = worker i on task j, one each. O(2^n * n) time, O(2^n) memo
     static int minCostAssignment(int[][] cost) {
         int n = cost.length;
-        int[] dp = new int[1 << n];
-        Arrays.fill(dp, Integer.MAX_VALUE);
-        dp[0] = 0;
-        for (int mask = 0; mask < (1 << n); mask++) {
-            if (dp[mask] == Integer.MAX_VALUE) continue;
-            int worker = Integer.bitCount(mask); // next worker to place
-            if (worker == n) continue;
-            for (int t = 0; t < n; t++)
-                if ((mask >> t & 1) == 0)
-                    dp[mask | 1 << t] = Math.min(dp[mask | 1 << t], dp[mask] + cost[worker][t]);
-        }
-        return dp[(1 << n) - 1];
+        return assignFrom(0, cost, new Integer[1 << n]);
     }
 
-    // Partition to K Equal Sum Subsets (LC 698): dp[mask] = sum mod target of items used, -1 if unreachable
+    // state: mask = tasks taken (worker = popcount(mask) is next) | choice: which free task t | base: all tasks taken -> 0
+    private static int assignFrom(int mask, int[][] cost, Integer[] memo) {
+        int n = cost.length;
+        if (mask == (1 << n) - 1) return 0;
+        if (memo[mask] != null) return memo[mask];
+        int worker = Integer.bitCount(mask), best = Integer.MAX_VALUE;
+        for (int t = 0; t < n; t++)
+            if ((mask >> t & 1) == 0)
+                best = Math.min(best, cost[worker][t] + assignFrom(mask | 1 << t, cost, memo));
+        return memo[mask] = best;
+    }
+
+    // Partition to K Equal Sum Subsets (LC 698): memo over mask of used items; fill = their sum mod target. O(2^n * n)
     static boolean canPartitionKSubsets(int[] nums, int k) {
         int sum = 0;
         for (int x : nums) sum += x;
         if (sum % k != 0) return false;
         int target = sum / k, n = nums.length;
         for (int x : nums) if (x > target) return false;
-        int[] fill = new int[1 << n];
-        Arrays.fill(fill, -1);
-        fill[0] = 0;
-        for (int mask = 0; mask < (1 << n); mask++) {
-            if (fill[mask] < 0) continue;
-            for (int i = 0; i < n; i++) {
-                if ((mask >> i & 1) != 0 || fill[mask] + nums[i] > target) continue;
-                fill[mask | 1 << i] = (fill[mask] + nums[i]) % target;
-            }
-        }
-        return fill[(1 << n) - 1] == 0;
+        return canFill(0, 0, nums, target, new Boolean[1 << n]);
     }
 
-    // Beautiful Arrangement (LC 526): position = popcount(mask) + 1
-    static int countArrangement(int n) {
-        int[] dp = new int[1 << n];
-        dp[0] = 1;
-        for (int mask = 0; mask < (1 << n); mask++) {
-            if (dp[mask] == 0) continue;
-            int pos = Integer.bitCount(mask) + 1;
-            for (int v = 1; v <= n; v++)
-                if ((mask >> (v - 1) & 1) == 0 && (v % pos == 0 || pos % v == 0)) dp[mask | 1 << (v - 1)] += dp[mask];
+    // state: mask = items used, fill = sum of current bucket (determined by mask) | choice: next unused item | base: all used -> true
+    private static boolean canFill(int mask, int fill, int[] nums, int target, Boolean[] memo) {
+        if (mask == (1 << nums.length) - 1) return true;
+        if (memo[mask] != null) return memo[mask];
+        for (int i = 0; i < nums.length; i++) {
+            if ((mask >> i & 1) != 0 || fill + nums[i] > target) continue;
+            if (canFill(mask | 1 << i, (fill + nums[i]) % target, nums, target, memo)) return memo[mask] = true;
         }
-        return dp[(1 << n) - 1];
+        return memo[mask] = false;
+    }
+
+    // Beautiful Arrangement (LC 526): position = popcount(mask) + 1. O(2^n * n)
+    static int countArrangement(int n) {
+        return arrange(0, n, new Integer[1 << n]);
+    }
+
+    // state: mask = values already placed | choice: value v for position popcount+1 if divisible either way | base: all placed -> 1
+    private static int arrange(int mask, int n, Integer[] memo) {
+        if (mask == (1 << n) - 1) return 1;
+        if (memo[mask] != null) return memo[mask];
+        int pos = Integer.bitCount(mask) + 1, res = 0;
+        for (int v = 1; v <= n; v++)
+            if ((mask >> (v - 1) & 1) == 0 && (v % pos == 0 || pos % v == 0)) res += arrange(mask | 1 << (v - 1), n, memo);
+        return memo[mask] = res;
     }
 
     // Can I Win (LC 464): memo over the set of numbers already taken
@@ -62,6 +66,7 @@ public class DPBitmaskDigit {
         return win(maxChoosable, desiredTotal, 0, new Boolean[1 << maxChoosable]);
     }
 
+    // state: used = numbers taken (remain is determined by used) | choice: pick i; win if i >= remain or opponent loses | base: no winning pick -> false
     private static boolean win(int max, int remain, int used, Boolean[] memo) {
         if (memo[used] != null) return memo[used];
         for (int i = 1; i <= max; i++) {
@@ -76,32 +81,42 @@ public class DPBitmaskDigit {
     // ---------- Digit DP ----------
     // RECOGNIZE: "count numbers in [0, N] with a digit property". State = (pos, tight, started, property).
 
-    // Number of Digit One (LC 233)
+    // Number of Digit One (LC 233): total count of digit 1 over [0, n]. O(len^2 * 10)
     static int countDigitOne(int n) {
-        long count = 0;
-        for (long p = 1; p <= n; p *= 10) {
-            long high = n / (p * 10), cur = (n / p) % 10, low = n % p;
-            if (cur == 0) count += high * p;
-            else if (cur == 1) count += high * p + low + 1;
-            else count += (high + 1) * p;
-        }
-        return (int) count;
+        char[] s = String.valueOf(n).toCharArray();
+        return (int) onesFrom(0, true, 0, s, new Long[s.length + 1][2][s.length + 1]);
     }
 
-    // Numbers At Most N Given Digit Set (LC 902)
+    // state: (pos, tight, ones so far) | choice: digit d in 0..limit | base: pos == len -> ones so far
+    private static long onesFrom(int pos, boolean tight, int ones, char[] s, Long[][][] memo) {
+        if (pos == s.length) return ones;
+        int t = tight ? 1 : 0;
+        if (memo[pos][t][ones] != null) return memo[pos][t][ones];
+        int lim = tight ? s[pos] - '0' : 9;
+        long res = 0;
+        for (int d = 0; d <= lim; d++) res += onesFrom(pos + 1, tight && d == lim, ones + (d == 1 ? 1 : 0), s, memo);
+        return memo[pos][t][ones] = res;
+    }
+
+    // Numbers At Most N Given Digit Set (LC 902): digit DP over (pos, tight, started)
     static int atMostNGivenDigitSet(String[] digits, int n) {
-        String s = String.valueOf(n);
-        int L = s.length(), d = digits.length, res = 0;
-        for (int len = 1; len < L; len++) res += (int) Math.pow(d, len);
-        for (int i = 0; i < L; i++) {
-            boolean sameDigit = false;
-            for (String dg : digits) {
-                if (dg.charAt(0) < s.charAt(i)) res += (int) Math.pow(d, L - i - 1);
-                else if (dg.charAt(0) == s.charAt(i)) sameDigit = true;
-            }
-            if (!sameDigit) return res;
+        char[] s = String.valueOf(n).toCharArray();
+        return buildable(0, true, false, digits, s, new Integer[s.length][2][2]);
+    }
+
+    // state: (pos, tight, started) | choice: skip a leading position, or place a digit from the set (<= s[pos] if tight) | base: pos == len -> started ? 1 : 0
+    private static int buildable(int pos, boolean tight, boolean started, String[] digits, char[] s, Integer[][][] memo) {
+        if (pos == s.length) return started ? 1 : 0;
+        int t = tight ? 1 : 0, st = started ? 1 : 0;
+        if (memo[pos][t][st] != null) return memo[pos][t][st];
+        int res = 0;
+        if (!started) res += buildable(pos + 1, false, false, digits, s, memo); // shorter number: leave this slot empty
+        for (String dg : digits) {
+            char c = dg.charAt(0);
+            if (tight && c > s[pos]) continue;
+            res += buildable(pos + 1, tight && c == s[pos], true, digits, s, memo);
         }
-        return res + 1; // n itself is buildable
+        return memo[pos][t][st] = res;
     }
 
     // Generic digit DP: count x in [1, n] with no repeated digit (LC 1012)
@@ -111,22 +126,20 @@ public class DPBitmaskDigit {
 
     private static int countUniqueDigits(int n) {
         char[] s = String.valueOf(n).toCharArray();
-        Map<String, Integer> memo = new HashMap<>();
-        return dig(s, 0, 0, true, false, memo);
+        return dig(s, 0, 0, true, false, new Integer[s.length][1 << 10][2][2]);
     }
 
-    private static int dig(char[] s, int pos, int mask, boolean tight, boolean started, Map<String, Integer> memo) {
+    // state: (pos, digit-mask used, tight, started) | choice: digit d <= limit not already used | base: pos == len -> started ? 1 : 0
+    private static int dig(char[] s, int pos, int mask, boolean tight, boolean started, Integer[][][][] memo) {
         if (pos == s.length) return started ? 1 : 0;
-        String key = pos + "," + mask + "," + tight + "," + started;
-        Integer c = memo.get(key);
-        if (c != null) return c;
+        int t = tight ? 1 : 0, st = started ? 1 : 0;
+        if (memo[pos][mask][t][st] != null) return memo[pos][mask][t][st];
         int res = 0, lim = tight ? s[pos] - '0' : 9;
         for (int d = 0; d <= lim; d++) {
             boolean nt = tight && d == lim;
             if (!started && d == 0) res += dig(s, pos + 1, mask, nt, false, memo);
             else if ((mask >> d & 1) == 0) res += dig(s, pos + 1, mask | 1 << d, nt, true, memo);
         }
-        memo.put(key, res);
-        return res;
+        return memo[pos][mask][t][st] = res;
     }
 }

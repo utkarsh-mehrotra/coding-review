@@ -64,5 +64,5 @@ interval merge, LRU vs LinkedHashMap, and more).
 
 ## Conventions
 - One public class per file, file named after the class, so every template compiles with plain `javac`.
-- Recursive DFS in the SCC/bridges templates needs `runWithBigStack` on very deep inputs.
+- DP templates are top-down memoization only. Recursive templates (DP memo, SCC/bridges DFS) need a big-stack thread on inputs deeper than about 10^4 (`runWithBigStack`).
 - Complexity and "RECOGNIZE" comments live next to the code they describe; pitfalls live in `topic.json`.

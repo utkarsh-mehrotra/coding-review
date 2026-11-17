@@ -30,11 +30,19 @@ public class BitsMath {
     // Number of 1 Bits (LC 191)
     static int hammingWeight(int n) { int c = 0; while (n != 0) { n &= n - 1; c++; } return c; }
 
-    // Counting Bits (LC 338): dp[i] = dp[i >> 1] + (i & 1)
+    // Counting Bits (LC 338): bits(i) = bits(i >> 1) + (i & 1)
     static int[] countBits(int n) {
+        Integer[] memo = new Integer[n + 1];
         int[] d = new int[n + 1];
-        for (int i = 1; i <= n; i++) d[i] = d[i >> 1] + (i & 1);
+        for (int i = 0; i <= n; i++) d[i] = bitsOf(i, memo);
         return d;
+    }
+
+    // state: i | choice: none, drop the lowest bit | base: i == 0 -> 0
+    private static int bitsOf(int i, Integer[] memo) {
+        if (i == 0) return 0;
+        if (memo[i] != null) return memo[i];
+        return memo[i] = bitsOf(i >> 1, memo) + (i & 1);
     }
 
     // Power of Two / Four
