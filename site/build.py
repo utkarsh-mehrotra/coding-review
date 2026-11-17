@@ -89,6 +89,111 @@ def load_problems():
     return by
 
 
+def coverage_data(topics, problems):
+    """Compact data for the coverage view: every algorithm problem, all tiers."""
+    if not PROBLEMS.exists():
+        return None
+    import collections
+    raw = json.loads(PROBLEMS.read_text())
+    rows_in, names = raw["problems"], raw["topics"]
+    topic_ids = sorted(names, key=lambda t: names[t])
+    tp = {t: i for i, t in enumerate(topic_ids)}
+    tmpl = sorted({k for r in rows_in for k in r["templates"] + r["also"]})
+    ti = {k: i for i, k in enumerate(tmpl)}
+    diff = ["Easy", "Medium", "Hard"]
+    rows = [[r["id"], r["title"], r["slug"], diff.index(r["difficulty"]), int(r["paid"]), r["ac"], "ABCU".index(r["tier"]),
+             tp.get(r["topic"], -1), ti[r["templates"][0]] if r["templates"] else -1, [ti[k] for k in r["also"]],
+             1 if r["how"] == "listed in practice map" else 0] for r in rows_in]
+    view_of = {}
+    for t in topics:
+        view_of.update(view_of_file(t))
+    decision_tpls = sorted({d["template"] for t in topics for d in t["decisions"]})
+    main = collections.Counter(k for r in rows_in for k in r["templates"])
+    utags = collections.Counter(tag for r in rows_in if r["tier"] == "U" for tag in r["tags"])
+    return {"topics": [[t, names[t]] for t in topic_ids], "templates": tmpl, "rows": rows, "excluded": raw["excluded"],
+            "templateView": {f: v for f, v in view_of.items()}, "decisionCount": len(decision_tpls),
+            "zero": [k for k in decision_tpls if main[k] == 0], "utags": utags.most_common(10)}
+
+
+def build_coverage_view(data):
+    payload = json.dumps(data, separators=(",", ":")).replace("</", "<\\/")
+    return f"""<div class="view" id="view-coverage">
+<div class="page-kicker">LC &mdash; LEETCODE COVERAGE</div>
+<h1 class="page-title">LeetCode Template Coverage</h1>
+<p class="page-intro" id="cov-lede"></p>
+<div class="cov-panel">
+  <div class="cov-bigbar" id="cov-bigbar" role="img"></div>
+  <div class="cov-legend" id="cov-legend"></div>
+  <p class="cov-note" id="cov-excl"></p>
+</div>
+
+<h2 class="section-title">Coverage by topic</h2>
+<div class="cov-grid2">
+  <div class="cov-panel cov-scroll">
+    <table class="cov-table">
+      <thead><tr><th>Topic</th><th class="r">A</th><th class="r">B</th><th class="r">C</th><th class="r cov-hide-sm">Total</th><th style="width:34%">Mix</th></tr></thead>
+      <tbody id="cov-topics"></tbody>
+    </table>
+    <p class="cov-note">Click a topic to filter the problem list.</p>
+  </div>
+  <div class="cov-panel">
+    <div class="cov-eyebrow">By difficulty</div>
+    <div id="cov-diffs"></div>
+    <p class="cov-note" id="cov-diffnote"></p>
+  </div>
+</div>
+
+<h2 class="section-title" id="cov-list-title">Problems</h2>
+<div class="cov-panel cov-stack">
+  <div class="cov-filters">
+    <input type="search" id="cov-q" placeholder="Search number, title or template (e.g. 743, islands, DSU)" aria-label="Search problems" autocomplete="off">
+    <select id="cov-topic" aria-label="Topic"></select>
+    <label class="cov-check"><input type="checkbox" id="cov-free"> Hide premium</label>
+  </div>
+  <div class="cov-filters">
+    <div class="cov-chips" id="cov-tierchips" aria-label="Match level"></div>
+    <div class="cov-chips" id="cov-diffchips" aria-label="Difficulty"></div>
+    <span class="cov-count" id="cov-count"></span>
+  </div>
+  <div class="cov-scroll">
+    <table class="cov-table cov-list">
+      <thead><tr>
+        <th class="cov-sort r" data-k="id">#</th><th class="cov-sort" data-k="title">Problem</th>
+        <th class="cov-sort" data-k="diff">Level</th><th class="cov-sort" data-k="tier">Match</th>
+        <th class="cov-sort" data-k="tmpl">Template</th><th class="cov-sort r cov-hide-sm" data-k="ac">Accept</th>
+      </tr></thead>
+      <tbody id="cov-rows"></tbody>
+    </table>
+  </div>
+  <button type="button" class="cov-more" id="cov-more" hidden>Show 200 more</button>
+</div>
+
+<h2 class="section-title">Gaps</h2>
+<div class="cov-grid2 cov-even">
+  <div class="cov-panel">
+    <div class="cov-eyebrow">Templates with no problem assigned</div>
+    <p class="cov-note" id="cov-zero-note"></p>
+    <div class="cov-taglist" id="cov-zero"></div>
+  </div>
+  <div class="cov-panel">
+    <div class="cov-eyebrow">What the uncovered problems are</div>
+    <p class="cov-note">Most common LeetCode tags among uncovered problems: simulation, enumeration and one-off math, which a template would not help with.</p>
+    <div class="cov-taglist" id="cov-utags"></div>
+  </div>
+</div>
+
+<h2 class="section-title">How matches were made</h2>
+<dl class="cov-method">
+  <dt>A &middot; Verified</dt><dd>The problem number appears in a template comment (<code>// LC 215</code>) or in a topic's practice map. Every one of these numbers was checked against LeetCode's title.</dd>
+  <dt>B &middot; Tag match</dt><dd>A specific LeetCode tag or title keyword points at one template, for example <code>union-find</code> &rarr; DSU, <code>monotonic-stack</code> &rarr; nextGreater. Rules run from most specific to least. Spot checks found about 9 in 10 correct.</dd>
+  <dt>C &middot; Likely</dt><dd>Only broad tags matched (dynamic programming, greedy, hash table, sorting). The technique family is covered, but the specific trick may not be. Not listed under the templates.</dd>
+  <dt>Not covered</dt><dd>No rule matched. Mostly simulation, string formatting and one-off math.</dd>
+  <dt>Source</dt><dd>LeetCode's public problem list, cached in <code>tools/lc-coverage/data</code>. Database, shell, concurrency, pandas and JavaScript problems are excluded. Rebuild with <code>make problems</code>; refresh the list with <code>make fetch-lc</code>.</dd>
+</dl>
+<script type="application/json" id="coverage-data">{payload}</script>
+</div>"""
+
+
 def check(topics, problems=None):
     errors, files_shown = [], set()
     all_members = {}
@@ -242,7 +347,8 @@ def build_overview(topics, counts, problems=None):
         n_a = sum(1 for r in rows if r["tier"] == "A")
         p.append('<div class="calib-block"><strong>LeetCode coverage:</strong> %s problems map to a template here: %s named in the template code or practice map, '
                  '%s matched by a specific LeetCode tag. Each template view lists its problems under the code. '
-                 'Type a problem number or title in the filter box to find its template.</div>' % (
+                 'Type a problem number or title in the filter box to find its template, or open the '
+                 '<a class="tpl" data-goto="coverage">LeetCode Coverage</a> view for the full list.</div>' % (
                      format(len(rows), ","), format(n_a, ","), format(len(rows) - n_a, ",")))
     p.append('<h2 class="section-title">Topics</h2>\n<div class="topic-grid">')
     for t in topics:
@@ -297,6 +403,11 @@ def main():
     nav, views, view_ids, number = [], [], ["overview"], 0
     nav.append('<div class="sidebar-label">Reference</div>')
     nav.append('<div class="nav-item" data-view="overview"><span class="fname">00</span>Overview &amp; Decision Tree</div>')
+    cov = coverage_data(topics, problems)
+    if cov:
+        nav.append('<div class="nav-item" data-view="coverage" data-kw="leetcode coverage problems all tiers gaps">'
+                   '<span class="fname">LC</span>LeetCode Coverage</div>')
+        view_ids.append("coverage")
     last_group = None
     for t in topics:
         for v in t["views"]:
@@ -325,6 +436,8 @@ def main():
 
     css = (ASSETS / "style.css").read_text()
     js = (ASSETS / "app.js").read_text().replace("/*VIEWS*/[]", json.dumps(view_ids))
+    if cov:
+        js += "\n" + (ASSETS / "coverage.js").read_text()
     js += """
 document.addEventListener("click", function(e){
   var g = e.target.closest("[data-goto]");
@@ -369,6 +482,7 @@ document.addEventListener("click", function(e){
       <div class="content">
 
 {overview}
+{build_coverage_view(cov) if cov else ""}
 {chr(10).join(views)}
         <footer class="app-footer">Coding review &mdash; {len(topics)} topics, {n_files} tested Java template files, {n_dec} decision-tree entries, each linked to a template; {n_lc:,} LeetCode problems mapped to templates.</footer>
       </div>

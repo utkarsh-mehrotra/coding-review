@@ -44,8 +44,9 @@ String Algorithms, Bits & Math, Data-Structure Design. 51 template files, 232 de
 
 ## LeetCode coverage
 2,196 of LeetCode's 3,696 algorithm problems map to a template: 522 named in template comments or practice maps,
-1,674 matched by a specific LeetCode tag. Each template view lists its problems under the code, and the filter box
-finds a template by problem number or title. `make check` fails if a listed problem points at a missing method.
+1,674 matched by a specific LeetCode tag. Each template view lists its problems under the code, the filter box
+finds a template by problem number or title, and the **LeetCode Coverage** view (`#coverage`) has the full
+searchable list with gaps. `make check` fails if a listed problem points at a missing method.
 Details and tiers: [`tools/lc-coverage/README.md`](tools/lc-coverage/README.md).
 
 ## Tests
