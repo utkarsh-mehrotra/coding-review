@@ -7,7 +7,17 @@ public class Deepen3Test {
     static String str(int n, int alpha) { StringBuilder sb = new StringBuilder(); for (int i = 0; i < n; i++) sb.append((char) ('a' + rnd.nextInt(alpha))); return sb.toString(); }
     static List<Integer> sorted(Collection<Integer> c) { List<Integer> l = new ArrayList<>(c); Collections.sort(l); return l; }
 
-    public static void main(String[] x) {
+    // Top-down DP recurses ~10^4 deep on some cases (e.g. checkRecord(10101)); Linux gives the main thread a small
+    // stack, so run the suite in a big-stack thread and rethrow anything it throws so a failure still exits non-zero.
+    public static void main(String[] x) throws Throwable {
+        Throwable[] err = new Throwable[1];
+        Thread t = new Thread(null, () -> { try { run(x); } catch (Throwable e) { err[0] = e; } }, "dp-tests", 1L << 28);
+        t.start();
+        t.join();
+        if (err[0] != null) throw err[0];
+    }
+
+    static void run(String[] x) {
         lists();
         bits();
         trees();

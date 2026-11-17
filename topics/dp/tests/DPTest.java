@@ -1,7 +1,17 @@
 import java.util.*;
 
 public class DPTest {
-    public static void main(String[] a) {
+    // Top-down DP recurses ~10^4 deep on some cases (e.g. checkRecord(10101)); Linux gives the main thread a small
+    // stack, so run the suite in a big-stack thread and rethrow anything it throws so a failure still exits non-zero.
+    public static void main(String[] a) throws Throwable {
+        Throwable[] err = new Throwable[1];
+        Thread t = new Thread(null, () -> { try { run(a); } catch (Throwable e) { err[0] = e; } }, "dp-tests", 1L << 28);
+        t.start();
+        t.join();
+        if (err[0] != null) throw err[0];
+    }
+
+    static void run(String[] a) {
         // Linear
         Check.eq("climb", DPLinear.climbStairsMemo(10), 89);
         Check.eq("rob", DPLinear.rob(new int[]{2, 7, 9, 3, 1}), 12);
