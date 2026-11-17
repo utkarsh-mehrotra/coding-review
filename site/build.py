@@ -155,6 +155,7 @@ def build_coverage_view(data):
 <p class="cov-note" id="cov-status">Loading the problem list&hellip;</p>
 <p class="cov-offline" id="cov-offline" hidden>The problem list loads from coverage.json, which browsers block when the page is opened as a file. Run <code>make serve</code> and open <code>http://localhost:8000</code>.</p>
 <p class="cov-offline" id="cov-failed" hidden>The problem list didn't load. Check your connection, then open this view again.</p>
+<p class="cov-offline" id="cov-render" hidden>The problem list couldn't be displayed. Reload the page to try again.</p>
 <div id="cov-body" hidden>
 <p class="page-intro" id="cov-lede"></p>
 <div class="cov-panel">

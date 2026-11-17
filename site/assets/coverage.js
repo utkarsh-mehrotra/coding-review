@@ -199,26 +199,30 @@ function initCoverage(DATA) {
   $("cov-utags").innerHTML = DATA.utags.map(function (p) { return '<span class="cov-tag">' + esc(p[0]) + ' <span class="cov-muted">' + p[1] + "</span></span>"; }).join("");
 }
 
-function showCoverageError() {
-  var file = typeof location !== "undefined" && location.protocol === "file:";
-  document.getElementById("cov-status").hidden = true;
-  document.getElementById("cov-body").hidden = true;
-  document.getElementById(file ? "cov-offline" : "cov-failed").hidden = false;
+// One place for the view's visible state: "loading", "ready", "failed", "offline" (opened as a file) or "render" (init threw).
+function setCoverageState(state) {
+  var show = { "cov-status": state === "loading", "cov-body": state === "ready", "cov-offline": state === "offline",
+               "cov-failed": state === "failed", "cov-render": state === "render" };
+  Object.keys(show).forEach(function (id) { document.getElementById(id).hidden = !show[id]; });
 }
 
-function showCoverage(data) {
-  initCoverage(data);   // a throw here reaches showCoverageError through loadCoverage
-  document.getElementById("cov-status").hidden = true;
-  document.getElementById("cov-body").hidden = false;
+function showCoverageError() {
+  setCoverageState(typeof location !== "undefined" && location.protocol === "file:" ? "offline" : "failed");
+}
+
+function showCoverage(data, init) {
+  try { (init || initCoverage)(data); } catch (e) { setCoverageState("render"); return; }
+  setCoverageState("ready");
 }
 
 // Starts loading when the coverage view opens, or at once when the page opens on #coverage
 // (app.js fires its first cr:view before this file runs).
-function wire(doc, loc, fetchFn, onData, onError) {
+function wire(doc, loc, fetchFn, onData, onError, init) {
   function start() {
     var el = doc.getElementById && doc.getElementById("view-coverage");
     var version = el && el.getAttribute("data-coverage-version");
-    loadCoverage(fetchFn, onData || showCoverage, onError || showCoverageError, version);
+    if (!coverageLoad && !onData) setCoverageState("loading");   // a retry clears the old error
+    loadCoverage(fetchFn, onData || function (d) { showCoverage(d, init); }, onError || showCoverageError, version);
   }
   doc.addEventListener("cr:view", function (e) { if (e.detail && e.detail.name === "coverage") start(); });
   if ((loc.hash || "") === "#coverage") start();

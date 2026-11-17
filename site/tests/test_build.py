@@ -427,6 +427,9 @@ class ListBadgesTest(unittest.TestCase):
     def test_coverage_view_has_failure_message(self):
         self.assertIn("The problem list didn't load. Check your connection, then open this view again.", build.render_page())
 
+    def test_coverage_view_has_render_message(self):
+        self.assertIn("The problem list couldn't be displayed. Reload the page to try again.", build.render_page())
+
     def test_coverage_view_has_offline_message(self):
         page = build.render_page()
         self.assertIn("The problem list loads from coverage.json, which browsers block when the page is opened as a file. "

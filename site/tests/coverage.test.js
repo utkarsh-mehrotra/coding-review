@@ -85,3 +85,45 @@ test("fetch URL carries the version", async () => {
   await settle();
   assert.deepEqual(f.calls, ["coverage.json?v=abc123def456"]);
 });
+
+function fakeDom() {
+  const els = {};
+  ["cov-status", "cov-body", "cov-offline", "cov-failed", "cov-render"].forEach((id) => { els[id] = { hidden: true }; });
+  els["cov-status"].hidden = false;
+  els["view-coverage"] = { getAttribute: () => "v1" };
+  return els;
+}
+const visible = (els) => Object.keys(els).filter((k) => els[k].hidden === false);
+
+test("fail, retry, success leaves only the body visible", async () => {
+  _reset();
+  const els = fakeDom(), doc = fakeDoc();
+  doc.getElementById = (id) => els[id];
+  global.document = doc;
+  global.location = { protocol: "http:" };
+  let n = 0;
+  const f = (url) => { n++; return n === 1 ? Promise.reject(new Error("net")) : fakeFetch()(url); };
+  let inits = 0;
+  wire(doc, { hash: "" }, f, null, null, () => { inits++; });
+  doc.fire("coverage");
+  await settle();
+  assert.deepEqual(visible(els), ["cov-failed"]);
+  doc.fire("coverage");
+  assert.deepEqual(visible(els), ["cov-status"]);   // loading line shows again at once
+  await settle();
+  assert.deepEqual(visible(els), ["cov-body"]);
+  doc.fire("coverage");
+  await settle();
+  assert.deepEqual(visible(els), ["cov-body"]);
+  assert.equal(inits, 1);
+});
+
+test("init throw shows the render message", async () => {
+  _reset();
+  const els = fakeDom(), doc = fakeDoc();
+  doc.getElementById = (id) => els[id];
+  global.document = doc;
+  wire(doc, { hash: "#coverage" }, fakeFetch(), null, null, () => { throw new Error("x"); });
+  await settle();
+  assert.deepEqual(visible(els), ["cov-render"]);
+});
