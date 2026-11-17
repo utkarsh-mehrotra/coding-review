@@ -652,6 +652,21 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 .cues .tpl { margin-left: 4px; }
 .cues summary { cursor: pointer; color: var(--accent); padding: 2px 0; }
 
+/* ---------- Cheat sheet ---------- */
+.cs-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cs-head .page-title { margin: 0; }
+.cs-pitfalls { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: var(--text-muted); }
+.cs-pitfalls li { margin: 2px 0; }
+
+/* ---------- Print ---------- */
+@media print {
+  .topbar, .sidebar, .sidebar-overlay, .tabbar, button, .copy-btn, .view:not(.active) { display: none !important; }
+  body, .app, .main, .content, .body-row { background: none; height: auto; overflow: visible; display: block; }
+  .code-card, .code-card pre, .code-block { background: none; }
+  tr, .lc-group, .code-card { break-inside: avoid; }
+  a, a.tpl { color: inherit; text-decoration: none; }
+}
+
 </style>
 </head>
 <body>
@@ -676,6 +691,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-label">Reference</div>
 <div class="nav-item" data-view="overview"><span class="fname">00</span>Overview &amp; Decision Tree</div>
+<div class="nav-item" data-view="cheatsheet"><span class="fname">CS</span>Cheat Sheet</div>
 <div class="nav-item" data-view="coverage" data-kw="leetcode coverage problems all tiers gaps"><span class="fname">LC</span>LeetCode Coverage</div>
 <div class="sidebar-label">Graph Templates</div>
 <div class="nav-item" data-view="traversal" data-kw="Graphs Traversal (BFS / DFS)  Traversal.java Traversal bfs dfs dfsRec dial multiSourceBFS zeroOneBFS Unweighted, shortest path? 847 Shortest Path Visiting All Nodes 365 Water and Jug Problem 565 Array Nesting 672 Bulb Switcher II 815 Bus Routes 841 Keys and Rooms 967 Numbers With Same Consecutive Differences 997 Find the Town Judge 1036 Escape a Large Maze 1042 Flower Planting With No Adjacent 1129 Shortest Path with Alternating Colors 1298 Maximum Candies You Can Get from Boxes 1306 Jump Game III 1311 Get Watched Videos by Your Friends 1345 Jump Game IV 1466 Reorder Routes to Make All Paths Lead to the City Zero 1615 Maximal Network Rank 1654 Minimum Jumps to Reach Home 1743 Restore the Array From Adjacent Pairs 1761 Minimum Degree of a Connected Trio in a Graph 1791 Find Center of Star Graph 2039 The Time When the Network Becomes Idle 2059 Minimum Operations to Convert Number 2065 Maximum Path Quality of a Graph 2101 Detonate the Maximum Bombs 2242 Maximum Score of a Node Sequence 2285 Maximum Total Importance of Roads 2359 Find Closest Node to Given Two Nodes 2374 Node With Highest Edge Score 2497 Maximum Star Sum of a Graph 2508 Add Edges to Make Degrees of All Nodes Even 2608 Shortest Cycle in a Graph 2858 Minimum Edge Reversals So Every Node Is Reachable 2924 Find Champion II 2998 Minimum Number of Operations to Make X and Y Equal 3017 Count the Number of Houses at a Certain Distance II 3244 Shortest Distance After Road Addition Queries II 3283 Maximum Number of Moves to Kill All Pawns 3310 Remove Methods From Project 3311 Construct 2D Grid Matching Graph Layout 3387 Maximize Amount After Two Days of Conversions 3528 Unit Conversion I 3543 Maximum Weighted K-Edge Path 3547 Maximum Sum of Edge Values in a Graph 3629 Minimum Jumps to Reach End via Prime Teleportation 3690 Split and Merge Array Transformation 3898 Find the Degree of Each Vertex 277 Find the Celebrity 339 Nested List Weight Sum 1153 String Transforms Into Another String 1197 Minimum Knight Moves 1215 Stepping Numbers 1548 The Most Similar Path in a Graph 2077 Paths in Maze That Lead to Same Room 3535 Unit Conversion II 3991 Sort Array Using Prefix Reversals 4004 Minimum Moves to Balance Circular Array II 559 Maximum Depth of N-ary Tree 589 N-ary Tree Preorder Traversal 590 N-ary Tree Postorder Traversal 690 Employee Importance 1376 Time Needed to Inform All Employees 1377 Frog Position After T Seconds 1600 Throne Inheritance 1719 Number Of Ways To Reconstruct A Tree 1766 Tree of Coprimes 1993 Operations on Tree 2322 Minimum Score After Removals on a Tree 2440 Create Components With Same Value 2467 Most Profitable Path in a Tree 2477 Minimum Fuel Cost to Report to the Capital 2581 Count Number of Possible Root Nodes 2646 Minimize the Total Price of the Trips 2791 Count Paths That Can Form a Palindrome in a Tree 2846 Minimum Edge Weight Equilibrium Queries in a Tree 2867 Count Valid Paths in a Tree 2872 Maximum Number of K-Divisible Components 3067 Count Pairs of Connectable Servers in a Weighted Tree Network 3249 Count the Number of Good Nodes 3327 Check if DFS Strings Are Palindromes 3331 Find Subtree Sizes After Changes 3367 Maximize Sum of Weights after Edge Removals 3372 Maximize the Number of Target Nodes After Connecting Trees I 3373 Maximize the Number of Target Nodes After Connecting Trees II 3425 Longest Special Path 3486 Longest Special Path II 3544 Subtree Inversion Sum 3553 Minimum Weighted Subgraph With the Required Paths II 3558 Number of Ways to Assign Edge Weights I 3559 Number of Ways to Assign Edge Weights II 3585 Find Weighted Median Node in Tree 3590 Kth Smallest Path XOR Sum 3593 Minimum Increments to Equalize Leaf Paths 3715 Sum of Perfect Square Ancestors 3772 Maximum Subgraph Score in a Tree 3786 Total Sum of Interaction Cost in Tree Groups 3939 Count Non Adjacent Subsets in a Rooted Tree 3965 Finish Time of Tasks I 4015 Weighted Sum of a Tree 4100 Minimum Cost Path With Even XOR Parity 4108 Minimum Cost to Make Red Nodes Connected 582 Kill Process 1490 Clone N-ary Tree 1506 Find Root of N-Ary Tree 1516 Move Sub-Tree of N-Ary Tree 2277 Closest Node to Path in Tree 2378 Choose Edges to Maximize Score in a Tree 3004 Maximum Subtree of the Same Color 3313 Find the Last Marked Nodes in Tree 3949 Subtree Inversion Sum II 3967 Finish Time of Tasks II 3973 Distinct Gate Paths to LCA 4018 Total Sum of Interaction Cost in Tree Groups II 3015 Count the Number of Houses at a Certain Distance I 3243 Shortest Distance After Road Addition Queries I 3141 Maximum Hamming Distances"><span class="fname">01</span>Traversal (BFS / DFS)</div>
@@ -1222,6 +1238,638 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <tr><td>Feeds / counters</td><td><span class="problem-pill">355 Design Twitter</span><span class="problem-pill">362 Design Hit Counter</span><span class="problem-pill">359 Logger Rate Limiter</span><span class="problem-pill">284 Peeking Iterator</span></td></tr>
 <tr><td>Design variants</td><td><span class="problem-pill">706 Design HashMap</span><span class="problem-pill">432 All O`one Data Structure</span><span class="problem-pill">1206 Design Skiplist</span><span class="problem-pill">642 Design Search Autocomplete System</span><span class="problem-pill">1472 Design Browser History</span><span class="problem-pill">1396 Design Underground System</span><span class="problem-pill">622 Design Circular Queue</span><span class="problem-pill">346 Moving Average from Data Stream</span></td></tr>
 </table>
+</div>
+<div class="view" id="view-cheatsheet">
+<div class="page-kicker">CS &mdash; CHEAT SHEET</div>
+<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1><button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div>
+<p class="page-intro">Every signal, pattern and pitfall on one page. Print it, or save it as a PDF.</p>
+<h3 class="group-title">Graphs</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Unweighted, shortest path?</td><td>BFS (multi-source if multiple starts; 0-1 BFS if weights are 0/1)</td><td><a class="tpl" data-goto="traversal" data-anchor="m-Traversal-bfs">Traversal#bfs</a></td></tr>
+<tr class="sig-row"><td>Weighted, non-negative, single source?</td><td>Dijkstra</td><td><a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-dijkstra">ShortestPath#dijkstra</a></td></tr>
+<tr class="sig-row"><td>Weighted, negative edges possible, single source?</td><td>Bellman-Ford (also detects negative cycles)</td><td><a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-bellmanFord">ShortestPath#bellmanFord</a></td></tr>
+<tr class="sig-row"><td>All-pairs shortest path, dense graph?</td><td>Floyd-Warshall</td><td><a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-floydWarshall">ShortestPath#floydWarshall</a></td></tr>
+<tr class="sig-row"><td>All-pairs shortest path, sparse graph?</td><td>Johnson's</td><td><a class="tpl" data-goto="shortest-path" data-anchor="m-ShortestPath-johnsons">ShortestPath#johnsons</a></td></tr>
+<tr class="sig-row"><td>DAG + need ordering/dependency resolution?</td><td>Topological sort (Kahn's or DFS)</td><td><a class="tpl" data-goto="topo-dag" data-anchor="m-TopoSortDAG-kahnsTopoSort">TopoSortDAG#kahnsTopoSort</a></td></tr>
+<tr class="sig-row"><td>DAG + need longest/shortest/count paths?</td><td>DP over topo order</td><td><a class="tpl" data-goto="topo-dag" data-anchor="m-TopoSortDAG-longestPathDAG">TopoSortDAG#longestPathDAG</a></td></tr>
+<tr class="sig-row"><td>Undirected + dynamic connectivity/merge queries?</td><td>DSU</td><td><a class="tpl" data-goto="dsu" data-anchor="m-DSU-countComponents">DSU#countComponents</a></td></tr>
+<tr class="sig-row"><td>Connect all nodes, minimize total edge weight?</td><td>Kruskal's (sparse/edge-list) or Prim's (dense/adjacency-matrix)</td><td><a class="tpl" data-goto="mst" data-anchor="m-MST-kruskalsMST">MST#kruskalsMST</a></td></tr>
+<tr class="sig-row"><td>Directed graph, need tightly-coupled clusters?</td><td>Tarjan's/Kosaraju's (SCC), condense to DAG if there's a follow-up</td><td><a class="tpl" data-goto="scc" data-anchor="m-SCC_Bridges_2SAT-tarjanSCC">SCC_Bridges_2SAT#tarjanSCC</a></td></tr>
+<tr class="sig-row"><td>Need critical/fragile points in a network?</td><td>Bridges &amp; articulation points</td><td><a class="tpl" data-goto="scc" data-anchor="m-SCC_Bridges_2SAT-findBridgesAndArticulation">SCC_Bridges_2SAT#findBridgesAndArticulation</a></td></tr>
+<tr class="sig-row"><td>Need to traverse every edge exactly once?</td><td>Hierholzer's (Eulerian path/circuit)</td><td><a class="tpl" data-goto="eulerian" data-anchor="m-EulerianPath-hierholzer">EulerianPath#hierholzer</a></td></tr>
+<tr class="sig-row"><td>Boolean 2-variable clause satisfaction?</td><td>2-SAT via implication graph + SCC</td><td><a class="tpl" data-goto="scc" data-anchor="m-SCC_Bridges_2SAT-solve2SAT">SCC_Bridges_2SAT#solve2SAT</a></td></tr>
+<tr class="sig-row"><td>Assignment/matching with capacity constraints?</td><td>Max flow (Edmonds-Karp/Dinic's) or bipartite matching (Hopcroft-Karp)</td><td><a class="tpl" data-goto="flow" data-anchor="m-NetworkFlow-edmondsKarp">NetworkFlow#edmondsKarp</a></td></tr>
+<tr class="sig-row"><td>Small N (≤20), must visit all nodes/subsets?</td><td>Bitmask DP (Held-Karp style)</td><td><a class="tpl" data-goto="bipartite-bitmask" data-anchor="m-BipartiteAndBitmaskDP-heldKarpTSP">BipartiteAndBitmaskDP#heldKarpTSP</a></td></tr>
+<tr class="sig-row"><td>Grid, board or string-transformation problem?</td><td>Implicit graph: name the node, generate neighbors, BFS (bidirectional if both ends are known)</td><td><a class="tpl" data-goto="implicit" data-anchor="m-ImplicitGraphs-wordLadder">ImplicitGraphs#wordLadder</a></td></tr>
+<tr class="sig-row"><td>Shortest path with an extra constraint (K stops, fuel, keys, obstacle budget)?</td><td>Put the resource in the state: Dijkstra/BFS over (node, used), or Bellman-Ford capped at K+1 rounds</td><td><a class="tpl" data-goto="dijkstra-variants" data-anchor="m-DijkstraVariants-cheapestFlightsDijkstraState">DijkstraVariants#cheapestFlightsDijkstraState</a></td></tr>
+<tr class="sig-row"><td>Path cost is the worst edge, not the sum?</td><td>Dijkstra with max() as the combiner (or sort edges + DSU)</td><td><a class="tpl" data-goto="dijkstra-variants" data-anchor="m-DijkstraVariants-minimumEffortPath">DijkstraVariants#minimumEffortPath</a></td></tr>
+<tr class="sig-row"><td>Count the shortest paths, or print one?</td><td>Dijkstra with ways[] or prev[]</td><td><a class="tpl" data-goto="dijkstra-variants" data-anchor="m-DijkstraVariants-countShortestPaths">DijkstraVariants#countShortestPaths</a></td></tr>
+<tr class="sig-row"><td>Directed cycle, safe nodes, or an order inferred from data (Alien Dictionary)?</td><td>3-color DFS or Kahn's, after building the edges from the data</td><td><a class="tpl" data-goto="cycles-courses" data-anchor="m-CycleAndCourseGraphs-alienOrder">CycleAndCourseGraphs#alienOrder</a></td></tr>
+<tr class="sig-row"><td>Ratios or equivalences between named things (evaluate division)?</td><td>Weighted DSU, or DFS multiplying along the path</td><td><a class="tpl" data-goto="dsu-extended" data-anchor="m-DSUExtended-calcEquation">DSUExtended#calcEquation</a></td></tr>
+<tr class="sig-row"><td>Tree question: LCA, distance, diameter, an answer for every root?</td><td>Binary lifting, double BFS, or rerooting</td><td><a class="tpl" data-goto="trees" data-anchor="m-TreeGraphs-treeDiameter">TreeGraphs#treeDiameter</a></td></tr>
+<tr class="sig-row"><td>Small bipartite matching to code live?</td><td>Kuhn's; Hopcroft-Karp only for large inputs</td><td><a class="tpl" data-goto="matching-coloring" data-anchor="m-MatchingColoringFunctional-kuhnMatching">MatchingColoringFunctional#kuhnMatching</a></td></tr>
+<tr class="sig-row"><td>Every node has exactly one outgoing edge?</td><td>Functional graph: Floyd's or a timestamp walk</td><td><a class="tpl" data-goto="matching-coloring" data-anchor="m-MatchingColoringFunctional-cycleStart">MatchingColoringFunctional#cycleStart</a></td></tr>
+<tr class="sig-row"><td>Small k-coloring, or "can this be split into k groups"?</td><td>Backtracking coloring (k = 2 is the bipartite check)</td><td><a class="tpl" data-goto="matching-coloring" data-anchor="m-MatchingColoringFunctional-kColorable">MatchingColoringFunctional#kColorable</a></td></tr>
+</table>
+<h3 class="group-title">Dynamic Programming</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Count ways / min cost where step i reads a few earlier steps?</td><td>1D dp, then shrink to O(1) space</td><td><a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-climbStairsO1">DPLinear#climbStairsO1</a></td></tr>
+<tr class="sig-row"><td>Pick or skip adjacent items?</td><td>Take / skip state machine</td><td><a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-rob">DPLinear#rob</a></td></tr>
+<tr class="sig-row"><td>Best contiguous subarray?</td><td>Kadane (track max AND min if products)</td><td><a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-maxSubArray">DPLinear#maxSubArray</a></td></tr>
+<tr class="sig-row"><td>Buy / sell with limits, cooldown or fee?</td><td>Stock state machine (hold / sold / rest)</td><td><a class="tpl" data-goto="dp-linear" data-anchor="m-DPLinear-maxProfitK">DPLinear#maxProfitK</a></td></tr>
+<tr class="sig-row"><td>Choose a subset under a capacity, each item once?</td><td>0/1 knapsack, capacity loop DOWNWARD</td><td><a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-knapsack01">DPKnapsack#knapsack01</a></td></tr>
+<tr class="sig-row"><td>Items reusable, fewest items?</td><td>Unbounded dp, capacity loop upward</td><td><a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-coinChangeMin">DPKnapsack#coinChangeMin</a></td></tr>
+<tr class="sig-row"><td>Count combinations vs ordered sequences?</td><td>Coins OUTER = combinations, amount OUTER = sequences</td><td><a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-coinChangeWays">DPKnapsack#coinChangeWays</a></td></tr>
+<tr class="sig-row"><td>Can the array be split into equal halves / signs assigned to hit a target?</td><td>Subset-sum reduction</td><td><a class="tpl" data-goto="dp-knapsack" data-anchor="m-DPKnapsack-findTargetSumWays">DPKnapsack#findTargetSumWays</a></td></tr>
+<tr class="sig-row"><td>Longest increasing chain?</td><td>Tails array with binary search, O(n log n)</td><td><a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-lengthOfLIS">DPSequences#lengthOfLIS</a></td></tr>
+<tr class="sig-row"><td>Two strings, edits or common parts?</td><td>Prefix table dp[i][j]</td><td><a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-minDistance">DPSequences#minDistance</a></td></tr>
+<tr class="sig-row"><td>Does a pattern with wildcards match?</td><td>Prefix table; star means skip or consume</td><td><a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-isMatchRegex">DPSequences#isMatchRegex</a></td></tr>
+<tr class="sig-row"><td>Can the string be segmented into dictionary words?</td><td>dp over prefix length</td><td><a class="tpl" data-goto="dp-sequences" data-anchor="m-DPSequences-wordBreak">DPSequences#wordBreak</a></td></tr>
+<tr class="sig-row"><td>Grid with right/down moves?</td><td>Row-rolling dp</td><td><a class="tpl" data-goto="dp-grid-interval" data-anchor="m-DPGridInterval-minPathSum">DPGridInterval#minPathSum</a></td></tr>
+<tr class="sig-row"><td>Answer for range [i, j] from splitting at k?</td><td>Interval dp, loop by length</td><td><a class="tpl" data-goto="dp-grid-interval" data-anchor="m-DPGridInterval-maxCoins">DPGridInterval#maxCoins</a></td></tr>
+<tr class="sig-row"><td>n ≤ 20, each item used once?</td><td>Bitmask dp over subsets</td><td><a class="tpl" data-goto="dp-bitmask-digit" data-anchor="m-DPBitmaskDigit-minCostAssignment">DPBitmaskDigit#minCostAssignment</a></td></tr>
+<tr class="sig-row"><td>Count numbers up to N with a digit property?</td><td>Digit dp with tight flag</td><td><a class="tpl" data-goto="dp-bitmask-digit" data-anchor="m-DPBitmaskDigit-countDigitOne">DPBitmaskDigit#countDigitOne</a></td></tr>
+<tr class="sig-row"><td>dp transition looks at a sliding window of earlier values?</td><td>Monotonic deque on dp</td><td><a class="tpl" data-goto="dp-combined" data-anchor="m-DPCombined-maxResult">DPCombined#maxResult</a></td></tr>
+<tr class="sig-row"><td>Intervals with weights, pick a compatible set?</td><td>Sort by end, binary-search the last compatible job</td><td><a class="tpl" data-goto="dp-combined" data-anchor="m-DPCombined-jobScheduling">DPCombined#jobScheduling</a></td></tr>
+<tr class="sig-row"><td>Interval DP where equal items attach to a group?</td><td>dp[l][r][k] with k attached on the left</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-removeBoxes">DPVariants#removeBoxes</a></td></tr>
+<tr class="sig-row"><td>Merge k adjacent piles into one?</td><td>dp[i][j][piles]</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-mergeStones">DPVariants#mergeStones</a></td></tr>
+<tr class="sig-row"><td>Two walkers on one grid?</td><td>Step index + both rows</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-cherryPickup">DPVariants#cherryPickup</a></td></tr>
+<tr class="sig-row"><td>Two groups must end up equal?</td><td>dp over the difference</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-tallestBillboard">DPVariants#tallestBillboard</a></td></tr>
+<tr class="sig-row"><td>Eggs and floors?</td><td>Flip: floors covered with m moves</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-superEggDrop">DPVariants#superEggDrop</a></td></tr>
+<tr class="sig-row"><td>Return the actual supersequence, not just its length?</td><td>LCS table, walk back merging</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-shortestCommonSupersequence">DPVariants#shortestCommonSupersequence</a></td></tr>
+<tr class="sig-row"><td>Count distinct palindromic subsequences?</td><td>Interval DP, subtract the double count</td><td><a class="tpl" data-goto="dp-variants" data-anchor="m-DPVariants-countPalindromicSubsequences">DPVariants#countPalindromicSubsequences</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>1D recurrence</td><td>Count ways or min cost where step i reads a few earlier steps</td><td class="complexity">O(n)</td></tr>
+<tr><td>Take / skip</td><td>House robber family</td><td class="complexity">O(n)</td></tr>
+<tr><td>Kadane</td><td>Best subarray ending here (track max and min for products)</td><td class="complexity">O(n)</td></tr>
+<tr><td>Stock state machine</td><td>Holding / not holding, transactions used, cooldown, fee</td><td class="complexity">O(nk)</td></tr>
+<tr><td>0/1</td><td>Subset under a capacity, each item once</td><td class="complexity">O(nW)</td></tr>
+<tr><td>Unbounded</td><td>Items reusable (coin change, perfect squares)</td><td class="complexity">O(nW)</td></tr>
+<tr><td>Bounded</td><td>Split count into 1,2,4,... chunks then run 0/1</td><td class="complexity">O(nW log c)</td></tr>
+<tr><td>Subset-sum reductions</td><td>Partition, target sum, last stone II</td><td class="complexity">O(n * sum)</td></tr>
+<tr><td>LIS</td><td>Longest chain, each element larger than the previous</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>LCS / edit distance</td><td>Two strings, match or edit prefixes</td><td class="complexity">O(nm)</td></tr>
+<tr><td>Palindromes</td><td>Interval dp or expand around a center</td><td class="complexity">O(n^2)</td></tr>
+<tr><td>Matching</td><td>Wildcard, regex, interleave, distinct subsequences</td><td class="complexity">O(nm)</td></tr>
+<tr><td>Grid paths</td><td>Right/down moves, count or min/max path sum</td><td class="complexity">O(mn)</td></tr>
+<tr><td>Max square</td><td>Min of three neighbors plus one</td><td class="complexity">O(mn)</td></tr>
+<tr><td>Interval</td><td>Matrix chain, burst balloons, cut stick, strange printer</td><td class="complexity">O(n^3)</td></tr>
+<tr><td>Game dp</td><td>Score difference the mover can force</td><td class="complexity">O(n^2)</td></tr>
+<tr><td>Assignment</td><td>Each worker takes one task, position = popcount(mask)</td><td class="complexity">O(2^n n)</td></tr>
+<tr><td>Subset partition</td><td>Fill buckets, track sum mod target</td><td class="complexity">O(2^n n)</td></tr>
+<tr><td>Game on a set</td><td>Memoize on the set of numbers taken</td><td class="complexity">O(2^n n)</td></tr>
+<tr><td>Digit dp</td><td>Count x in [0, N] with a property</td><td class="complexity">O(digits * states)</td></tr>
+<tr><td>dp + binary search</td><td>Weighted job scheduling: best profit up to the last compatible job</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>dp + deque</td><td>Window max over earlier dp values</td><td class="complexity">O(n)</td></tr>
+<tr><td>Probability dp</td><td>Distribution over states after k steps</td><td class="complexity">O(k * states)</td></tr>
+<tr><td>Memo DFS</td><td>Longest increasing path in a grid</td><td class="complexity">O(mn)</td></tr>
+<tr><td>Interval + extra state</td><td>Remove boxes, merge stones, palindromic subsequences</td><td class="complexity">O(n^3)</td></tr>
+<tr><td>Two walkers</td><td>Cherry pickup</td><td class="complexity">O(n^3)</td></tr>
+<tr><td>Difference as state</td><td>Equal towers</td><td class="complexity">O(n x sum)</td></tr>
+<tr><td>Flip the question</td><td>Egg drop: floors per move count</td><td class="complexity">O(k log n)</td></tr>
+<tr><td>Reconstruction</td><td>Supersequence, divisible subset</td><td class="complexity">O(nm)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Max product needs both max AND min: a negative flips them.</li>
+<li>Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.</li>
+<li>Stock with k transactions: if k &gt;= n/2 it degenerates to unlimited.</li>
+<li>Iterating capacity upward in a 0/1 problem silently reuses items.</li>
+<li>Coin Change II (combinations) vs Combination Sum IV (sequences) differ only in loop order.</li>
+<li>Target Sum: the reduction is subsets summing to (total + target) / 2; check parity and range first.</li>
+<li>Russian Doll: sort width ascending and height DESCENDING so equal widths cannot chain.</li>
+<li>Subsequence means order kept, substring means contiguous: contiguous resets to 0 on mismatch.</li>
+<li>Regex star: zero copies is dp[i][j-2]; one more copy needs the preceding char to match.</li>
+<li>Dungeon must run backward: the minimum health needed depends on what comes AFTER.</li>
+<li>Burst balloons: think "last to burst" so the two sides become independent.</li>
+<li>Pad the array with sentinels (1 at both ends) instead of special-casing borders.</li>
+<li>Digit dp: tight is only true while every prefix digit equals the bound; started handles leading zeros.</li>
+<li>Subset enumeration sub = (sub - 1) &amp; mask totals 3^n across all masks.</li>
+<li>Use Integer.bitCount(mask) as the implicit "how many placed" index.</li>
+<li>When transitions look at a sliding window of earlier dp values, reach for a monotonic deque before a segment tree.</li>
+<li>Longest increasing path needs no visited set: strictly increasing values make the graph a DAG.</li>
+<li>State the dimension you added and what it stands for before writing the recurrence.</li>
+<li>Interval DP with an extra state: memoize with the extra dimension, not just (l, r).</li>
+<li>Reconstruction: keep a parent pointer or walk the table backwards, never recompute.</li>
+</ul>
+<h3 class="group-title">Trees &amp; Range Structures</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Visit every node with a value flowing up?</td><td>One post-order returning a value (and a global for the answer)</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-diameter">BinaryTree#diameter</a></td></tr>
+<tr class="sig-row"><td>Answer per level?</td><td>BFS with a level-size snapshot</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-levelOrder">BinaryTree#levelOrder</a></td></tr>
+<tr class="sig-row"><td>Best path that may bend at a node?</td><td>Return best downward gain, update global with the bent path</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-maxPathSum">BinaryTree#maxPathSum</a></td></tr>
+<tr class="sig-row"><td>Count paths with a given sum?</td><td>Prefix-sum map along the root path, backtrack</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-pathSumIII">BinaryTree#pathSumIII</a></td></tr>
+<tr class="sig-row"><td>Lowest common ancestor?</td><td>Post-order: both sides non-null means this node</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-lowestCommonAncestor">BinaryTree#lowestCommonAncestor</a></td></tr>
+<tr class="sig-row"><td>Rebuild or store a tree?</td><td>Preorder + inorder map, or preorder with null markers</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-serialize">BinaryTree#serialize</a></td></tr>
+<tr class="sig-row"><td>Choose nodes with no two adjacent (tree dp)?</td><td>Return {take, skip} per node</td><td><a class="tpl" data-goto="binary-tree" data-anchor="m-BinaryTree-robTree">BinaryTree#robTree</a></td></tr>
+<tr class="sig-row"><td>Validate or order-query a BST?</td><td>Carry bounds; use inorder = sorted</td><td><a class="tpl" data-goto="bst" data-anchor="m-BST-isValidBST">BST#isValidBST</a></td></tr>
+<tr class="sig-row"><td>Kth smallest in a BST, or lazy iteration?</td><td>Iterative inorder / stack of left spine</td><td><a class="tpl" data-goto="bst" data-anchor="m-BST-kthSmallest">BST#kthSmallest</a></td></tr>
+<tr class="sig-row"><td>Prefix queries over many words?</td><td>Trie</td><td><a class="tpl" data-goto="trie" data-anchor="m-Trie-insert">Trie#insert</a></td></tr>
+<tr class="sig-row"><td>Find words on a board?</td><td>Trie + grid DFS with pruning</td><td><a class="tpl" data-goto="trie" data-anchor="m-Trie-findWords">Trie#findWords</a></td></tr>
+<tr class="sig-row"><td>Maximum XOR of two numbers?</td><td>Binary trie, greedy opposite bit</td><td><a class="tpl" data-goto="trie" data-anchor="m-Trie-findMaximumXOR">Trie#findMaximumXOR</a></td></tr>
+<tr class="sig-row"><td>Many range sums, no updates?</td><td>Prefix sums</td><td><a class="tpl" data-goto="range-structures" data-anchor="m-RangeStructures-prefix">RangeStructures#prefix</a></td></tr>
+<tr class="sig-row"><td>Point updates plus prefix sums, or counting inversions?</td><td>Fenwick tree</td><td><a class="tpl" data-goto="range-structures" data-anchor="m-RangeStructures-countInversions">RangeStructures#countInversions</a></td></tr>
+<tr class="sig-row"><td>Range updates and range queries?</td><td>Lazy segment tree</td><td><a class="tpl" data-goto="range-structures" data-anchor="m-RangeStructures-LazySeg">RangeStructures#LazySeg</a></td></tr>
+<tr class="sig-row"><td>Count moves or flow along each edge?</td><td>Return subtree excess, add |excess|</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-distributeCoins">TreesVariants#distributeCoins</a></td></tr>
+<tr class="sig-row"><td>Spread outward from a start node?</td><td>One DFS returning depth or negative distance</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-amountOfTime">TreesVariants#amountOfTime</a></td></tr>
+<tr class="sig-row"><td>Find repeated subtrees?</td><td>Canonical id per subtree</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-findDuplicateSubtrees">TreesVariants#findDuplicateSubtrees</a></td></tr>
+<tr class="sig-row"><td>Enumerate all trees of a kind?</td><td>Choose root, combine left x right</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-generateTrees">TreesVariants#generateTrees</a></td></tr>
+<tr class="sig-row"><td>Count nodes of a complete tree quickly?</td><td>Compare leftmost and rightmost depth</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-countNodes">TreesVariants#countNodes</a></td></tr>
+<tr class="sig-row"><td>Rebuild from inorder + postorder?</td><td>Consume postorder from the end, right first</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-buildTreeInPost">TreesVariants#buildTreeInPost</a></td></tr>
+<tr class="sig-row"><td>Width of a level?</td><td>Heap indices, subtract the level's first</td><td><a class="tpl" data-goto="trees-variants" data-anchor="m-TreesVariants-widthOfBinaryTree">TreesVariants#widthOfBinaryTree</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Traversals</td><td>Inorder / preorder / postorder iterative, Morris for O(1) space</td><td class="complexity">O(n)</td></tr>
+<tr><td>Level order</td><td>Queue with a level-size snapshot</td><td class="complexity">O(n)</td></tr>
+<tr><td>Post-order value + global</td><td>Height, diameter, max path sum, balanced</td><td class="complexity">O(n)</td></tr>
+<tr><td>Tree dp</td><td>Rob III, cameras: return a small state tuple per node</td><td class="complexity">O(n)</td></tr>
+<tr><td>Validate</td><td>Carry (lo, hi) bounds, never compare only to the parent</td><td class="complexity">O(n)</td></tr>
+<tr><td>Kth / iterator</td><td>Iterative inorder, stop early; stack of the left spine</td><td class="complexity">O(h)</td></tr>
+<tr><td>Search / LCA</td><td>Walk down; no recursion needed</td><td class="complexity">O(h)</td></tr>
+<tr><td>Recover</td><td>Two inversions in the inorder sequence</td><td class="complexity">O(n)</td></tr>
+<tr><td>Insert / search / prefix</td><td>26-way children with end marker and pass count</td><td class="complexity">O(L)</td></tr>
+<tr><td>Wildcard</td><td>DFS over children on a dot</td><td class="complexity">O(26^L) worst</td></tr>
+<tr><td>Grid + trie</td><td>Prune words as they are found</td><td class="complexity">O(cells * 4^L)</td></tr>
+<tr><td>Binary trie</td><td>Maximum XOR pair, greedy bit by bit</td><td class="complexity">O(32n)</td></tr>
+<tr><td>Prefix / difference</td><td>Static range sum, offline range add</td><td class="complexity">O(n)</td></tr>
+<tr><td>Fenwick</td><td>Point update, prefix sum, inversion counting</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Segment tree</td><td>Point update, range query (any associative op)</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Lazy segment tree</td><td>Range add + range sum</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Sparse table</td><td>Static range min in O(1)</td><td class="complexity">O(n log n) build</td></tr>
+<tr><td>Return excess</td><td>Moves, cameras, coin distribution</td><td class="complexity">O(n)</td></tr>
+<tr><td>Canonical id</td><td>Duplicate subtrees</td><td class="complexity">O(n)</td></tr>
+<tr><td>Enumerate</td><td>All BSTs / full binary trees</td><td class="complexity">Catalan</td></tr>
+<tr><td>Rebuild</td><td>Inorder + postorder, BST from preorder</td><td class="complexity">O(n)</td></tr>
+<tr><td>Level indices</td><td>Width of a tree</td><td class="complexity">O(n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Max path sum: return the best DOWNWARD gain (a path cannot fork upward), but update the answer with the bent path through the node.</li>
+<li>Path Sum III: backtrack the prefix-sum map after both children return.</li>
+<li>Recursion depth can hit 10^5 on a skewed tree; mention the iterative form.</li>
+<li>Comparing a node only against its parent accepts invalid trees; carry bounds.</li>
+<li>Recover BST: the first inversion marks first = prev, the last marks second = cur.</li>
+<li>TreeMap gives floor/ceiling/first/last in O(log n) when a whole ordered structure is needed.</li>
+<li>Word Search II: null out the stored word after finding it so duplicates are not reported.</li>
+<li>Binary trie over 31 bits (not 32) for non-negative ints keeps the sign bit out of the way.</li>
+<li>Fenwick is 1-indexed internally; the template exposes a 0-indexed API.</li>
+<li>Count-smaller problems: compress values to ranks first, then scan right to left.</li>
+<li>Skyline: process starts before ends at equal x and keep a TreeMap multiset of heights.</li>
+<li>Width with heap indices overflows: subtract the level's first index.</li>
+<li>Building from postorder: take the root from the end and build the RIGHT subtree first.</li>
+<li>Shared subtrees in enumeration are fine if the trees are only read afterwards.</li>
+</ul>
+<h3 class="group-title">Arrays &amp; Hashing</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Pair that hits a target?</td><td>Value to index map</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-twoSum">ArraysHashing#twoSum</a></td></tr>
+<tr class="sig-row"><td>Count contiguous subarrays with a sum condition (negatives allowed)?</td><td>Prefix sum + frequency map</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-subarraySum">ArraysHashing#subarraySum</a></td></tr>
+<tr class="sig-row"><td>Longest subarray with equal 0s and 1s?</td><td>Map 0 to -1, first-seen index of each balance</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-findMaxLength">ArraysHashing#findMaxLength</a></td></tr>
+<tr class="sig-row"><td>Product / aggregate of everything except self?</td><td>Left pass then right pass</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-productExceptSelf">ArraysHashing#productExceptSelf</a></td></tr>
+<tr class="sig-row"><td>Values in 1..n, find missing or duplicate?</td><td>Cyclic sort or Floyd on i to a[i]</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-firstMissingPositive">ArraysHashing#firstMissingPositive</a></td></tr>
+<tr class="sig-row"><td>Majority element?</td><td>Boyer-Moore vote</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-majorityElement">ArraysHashing#majorityElement</a></td></tr>
+<tr class="sig-row"><td>Sort three kinds in place?</td><td>Dutch national flag</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-sortColors">ArraysHashing#sortColors</a></td></tr>
+<tr class="sig-row"><td>Top K by frequency in O(n)?</td><td>Bucket by frequency</td><td><a class="tpl" data-goto="arrays-hashing" data-anchor="m-ArraysHashing-topKFrequent">ArraysHashing#topKFrequent</a></td></tr>
+<tr class="sig-row"><td>Count pairs i</td><td>Merge sort counting (or Fenwick on ranks)</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-countRangeSum">ArraysVariants#countRangeSum</a></td></tr>
+<tr class="sig-row"><td>Maximum subarray on a circular array?</td><td>max(linear best, total - linear worst)</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-maxSubarraySumCircular">ArraysVariants#maxSubarraySumCircular</a></td></tr>
+<tr class="sig-row"><td>Elements appearing more than n/k times?</td><td>Boyer-Moore with k - 1 candidates, then verify</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-majorityElementII">ArraysVariants#majorityElementII</a></td></tr>
+<tr class="sig-row"><td>Most independent chunks to sort?</td><td>Cut where prefix max &lt;= suffix min</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-maxChunksToSortedII">ArraysVariants#maxChunksToSortedII</a></td></tr>
+<tr class="sig-row"><td>Furthest pair with a[i]</td><td>Decreasing stack of left candidates, sweep right</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-maxWidthRamp">ArraysVariants#maxWidthRamp</a></td></tr>
+<tr class="sig-row"><td>Values in 1..n, find duplicates in O(1) space?</td><td>Negate a[|x| - 1] as a visited mark</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-findDuplicates">ArraysVariants#findDuplicates</a></td></tr>
+<tr class="sig-row"><td>Sort integers in linear time?</td><td>Radix or counting sort</td><td><a class="tpl" data-goto="arrays-variants" data-anchor="m-ArraysVariants-radixSort">ArraysVariants#radixSort</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Complement map</td><td>Two sum, pair conditions</td><td class="complexity">O(n)</td></tr>
+<tr><td>Prefix sum + map</td><td>Subarray sum = k, divisible by k, balanced 0/1</td><td class="complexity">O(n)</td></tr>
+<tr><td>Index as hash</td><td>First missing positive, find duplicate</td><td class="complexity">O(n)</td></tr>
+<tr><td>In-place passes</td><td>Dutch flag, rotate, next permutation, matrices</td><td class="complexity">O(n)</td></tr>
+<tr><td>Merge-sort counting</td><td>Count pairs i &lt; j with a value relation</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Prefix / suffix scan</td><td>Chunks, unsorted window, sightseeing pair</td><td class="complexity">O(n)</td></tr>
+<tr><td>Boyer-Moore k</td><td>Elements appearing more than n/k times</td><td class="complexity">O(n)</td></tr>
+<tr><td>Sign marking</td><td>Duplicates / missing in range 1..n</td><td class="complexity">O(n), O(1) space</td></tr>
+<tr><td>Radix / counting sort</td><td>Bounded keys</td><td class="complexity">O(n + range)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Prefix-sum maps must be seeded with {0: 1} (or {0: -1} for earliest index).</li>
+<li>Negative mod: normalize with ((x % k) + k) % k.</li>
+<li>Longest consecutive: only start counting at sequence heads to stay O(n).</li>
+<li>Use long for prefix sums and for 2 * a[j] comparisons in pair counting.</li>
+<li>Circular max subarray: if all values are negative the answer is the linear max, not total - min.</li>
+<li>Count pairs during merge, before merging, while both halves are still sorted.</li>
+</ul>
+<h3 class="group-title">Sliding Window &amp; Two Pointers</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Longest substring / subarray satisfying a condition?</td><td>Variable window; update after shrinking</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-lengthOfLongestSubstring">SlidingWindowPointers#lengthOfLongestSubstring</a></td></tr>
+<tr class="sig-row"><td>Shortest window covering requirements?</td><td>Variable window; update inside the shrink loop</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-minWindow">SlidingWindowPointers#minWindow</a></td></tr>
+<tr class="sig-row"><td>Count subarrays with exactly K distinct?</td><td>atMost(K) minus atMost(K - 1)</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-subarraysWithKDistinct">SlidingWindowPointers#subarraysWithKDistinct</a></td></tr>
+<tr class="sig-row"><td>Window of fixed size, anagram check?</td><td>Fixed window with a difference counter</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-findAnagrams">SlidingWindowPointers#findAnagrams</a></td></tr>
+<tr class="sig-row"><td>Sorted array, pair or triple sums?</td><td>Sort + two pointers</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-threeSum">SlidingWindowPointers#threeSum</a></td></tr>
+<tr class="sig-row"><td>Maximize area between two walls?</td><td>Move the shorter wall</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-maxArea">SlidingWindowPointers#maxArea</a></td></tr>
+<tr class="sig-row"><td>Product / sum below a bound with positives?</td><td>Variable window with running product or sum</td><td><a class="tpl" data-goto="sliding-window-pointers" data-anchor="m-SlidingWindowPointers-numSubarrayProductLessThanK">SlidingWindowPointers#numSubarrayProductLessThanK</a></td></tr>
+<tr class="sig-row"><td>Window must contain t as a subsequence?</td><td>Forward match then backward tighten</td><td><a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-minWindowSubsequence">WindowsVariants#minWindowSubsequence</a></td></tr>
+<tr class="sig-row"><td>Every character in the window appears at least k times?</td><td>Fix distinct count 1..26, slide</td><td><a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-longestSubstringAtLeastK">WindowsVariants#longestSubstringAtLeastK</a></td></tr>
+<tr class="sig-row"><td>Take items from both ends?</td><td>Complement: slide a window in the middle</td><td><a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-maxScoreCards">WindowsVariants#maxScoreCards</a></td></tr>
+<tr class="sig-row"><td>Exactly k odd numbers or distinct values?</td><td>atMost(k) - atMost(k - 1)</td><td><a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-numberOfSubarrays">WindowsVariants#numberOfSubarrays</a></td></tr>
+<tr class="sig-row"><td>Values within t and indices within k?</td><td>TreeSet floor / ceiling over the window</td><td><a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-containsNearbyAlmostDuplicate">WindowsVariants#containsNearbyAlmostDuplicate</a></td></tr>
+<tr class="sig-row"><td>4-sum or k-sum?</td><td>Recursive kSum down to two pointers</td><td><a class="tpl" data-goto="windows-variants" data-anchor="m-WindowsVariants-fourSum">WindowsVariants#fourSum</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Variable window</td><td>Longest / shortest substring or subarray under a condition</td><td class="complexity">O(n)</td></tr>
+<tr><td>Exact-K counting</td><td>atMost(k) minus atMost(k - 1)</td><td class="complexity">O(n)</td></tr>
+<tr><td>Fixed window</td><td>Anagrams, max average</td><td class="complexity">O(n)</td></tr>
+<tr><td>Two pointers</td><td>Sorted pair sums, 3Sum, container, dedupe, merge</td><td class="complexity">O(n) after sort</td></tr>
+<tr><td>Forward match + backward tighten</td><td>Window containing t as a subsequence</td><td class="complexity">O(nm)</td></tr>
+<tr><td>Fix distinct count</td><td>Every char at least k times</td><td class="complexity">O(26 n)</td></tr>
+<tr><td>Complement window</td><td>Take from both ends</td><td class="complexity">O(n)</td></tr>
+<tr><td>atMost difference</td><td>Exactly k odd / distinct</td><td class="complexity">O(n)</td></tr>
+<tr><td>TreeSet window</td><td>Values within t, indices within k</td><td class="complexity">O(n log k)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Sliding window with negatives breaks the "shrink" logic; use prefix sums + map or a deque instead.</li>
+<li>3Sum: skip duplicates for the fixed element AND after recording a triple.</li>
+<li>Minimum window: track missing as a count so validity is O(1) per step.</li>
+<li>Window of a subsequence cannot use counts: use the forward-then-backward greedy.</li>
+<li>Words of fixed length: run one pass per offset 0..w-1.</li>
+<li>Exactly k = atMost(k) - atMost(k - 1); handle k - 1 &lt; 0.</li>
+</ul>
+<h3 class="group-title">Monotonic Stack &amp; Deque</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Nearest greater or smaller element for each index?</td><td>Monotonic stack of indices</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-nextGreater">MonotonicStructures#nextGreater</a></td></tr>
+<tr class="sig-row"><td>Largest rectangle / contribution of each element as min or max?</td><td>Monotonic stack with left and right bounds</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-largestRectangleArea">MonotonicStructures#largestRectangleArea</a></td></tr>
+<tr class="sig-row"><td>Max or min of every window of size k?</td><td>Monotonic deque</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-maxSlidingWindow">MonotonicStructures#maxSlidingWindow</a></td></tr>
+<tr class="sig-row"><td>Shortest subarray with sum at least K and negatives present?</td><td>Deque over prefix sums</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-shortestSubarray">MonotonicStructures#shortestSubarray</a></td></tr>
+<tr class="sig-row"><td>Evaluate an expression?</td><td>Stack with operator precedence</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-calculate2">MonotonicStructures#calculate2</a></td></tr>
+<tr class="sig-row"><td>Nested brackets or encodings?</td><td>Stack of partial results</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-decodeString">MonotonicStructures#decodeString</a></td></tr>
+<tr class="sig-row"><td>Smallest number after removing K digits?</td><td>Greedy monotonic stack</td><td><a class="tpl" data-goto="monotonic-structures" data-anchor="m-MonotonicStructures-removeKdigits">MonotonicStructures#removeKdigits</a></td></tr>
+<tr class="sig-row"><td>Sum over all subarrays of min or max?</td><td>Per-element contribution with left and right boundaries</td><td><a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-subArrayRanges">StacksVariants#subArrayRanges</a></td></tr>
+<tr class="sig-row"><td>Pattern a</td><td>Scan right to left with a stack</td><td><a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-find132pattern">StacksVariants#find132pattern</a></td></tr>
+<tr class="sig-row"><td>Collisions processed in order?</td><td>Stack of survivors</td><td><a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-asteroidCollision">StacksVariants#asteroidCollision</a></td></tr>
+<tr class="sig-row"><td>Expression with parentheses and precedence?</td><td>Recursive descent with a stack of terms</td><td><a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-calculate3">StacksVariants#calculate3</a></td></tr>
+<tr class="sig-row"><td>Pop the most frequent, ties by recency?</td><td>Frequency buckets of stacks</td><td><a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-FreqStack">StacksVariants#FreqStack</a></td></tr>
+<tr class="sig-row"><td>Queue built from stacks?</td><td>Two stacks, transfer only when empty</td><td><a class="tpl" data-goto="stacks-variants" data-anchor="m-StacksVariants-MyQueue">StacksVariants#MyQueue</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Next greater / smaller</td><td>Daily temperatures, next greater element</td><td class="complexity">O(n)</td></tr>
+<tr><td>Histogram</td><td>Largest rectangle, maximal rectangle, subarray minimums</td><td class="complexity">O(n)</td></tr>
+<tr><td>Monotonic deque</td><td>Sliding window max, shortest subarray with negatives</td><td class="complexity">O(n)</td></tr>
+<tr><td>Stack parsers</td><td>Parentheses, calculators, decode string, RPN</td><td class="complexity">O(n)</td></tr>
+<tr><td>Contribution counting</td><td>Sum of subarray min / max / ranges</td><td class="complexity">O(n)</td></tr>
+<tr><td>Right-to-left stack</td><td>132 pattern, visible people</td><td class="complexity">O(n)</td></tr>
+<tr><td>Simulation stack</td><td>Asteroids, adjacent duplicates</td><td class="complexity">O(n)</td></tr>
+<tr><td>Recursive descent</td><td>Calculator with parentheses</td><td class="complexity">O(n)</td></tr>
+<tr><td>Composite structures</td><td>Frequency stack, queue from stacks</td><td class="complexity">O(1) amortized</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Use strict vs non-strict comparison on exactly one side to avoid double-counting equal elements (sum of subarray minimums).</li>
+<li>Append a sentinel 0 height to flush the stack in the histogram problem.</li>
+<li>Deque stores indices so expired elements can be dropped from the front.</li>
+<li>Contribution counting needs strict on one side and non-strict on the other to count ties once.</li>
+<li>Calculator III: recurse on "(" and return at ")", sharing one index.</li>
+<li>Queue from two stacks moves elements only when the output stack is empty.</li>
+</ul>
+<h3 class="group-title">Heaps &amp; Top-K</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>K largest / smallest / closest / most frequent?</td><td>Heap of size K</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-findKthLargest">HeapsTopK#findKthLargest</a></td></tr>
+<tr class="sig-row"><td>Single Kth element, average O(n)?</td><td>Quickselect with random pivot</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-quickselectKthLargest">HeapsTopK#quickselectKthLargest</a></td></tr>
+<tr class="sig-row"><td>Median of a stream?</td><td>Two heaps (max-heap lower half, min-heap upper half)</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-MedianFinder">HeapsTopK#MedianFinder</a></td></tr>
+<tr class="sig-row"><td>Merge K sorted sequences?</td><td>Heap of (value, list, index)</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-mergeKSorted">HeapsTopK#mergeKSorted</a></td></tr>
+<tr class="sig-row"><td>Fewest rooms / concurrent intervals?</td><td>Sort by start + min-heap of end times</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-minMeetingRooms">HeapsTopK#minMeetingRooms</a></td></tr>
+<tr class="sig-row"><td>Rearrange so equal items are not adjacent?</td><td>Max-heap by count, hold back the previous item</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-reorganizeString">HeapsTopK#reorganizeString</a></td></tr>
+<tr class="sig-row"><td>Repeatedly pick the best available option as capacity grows?</td><td>Sort by unlock key + max-heap of rewards</td><td><a class="tpl" data-goto="heaps-topk" data-anchor="m-HeapsTopK-findMaximizedCapital">HeapsTopK#findMaximizedCapital</a></td></tr>
+<tr class="sig-row"><td>Median of every sliding window?</td><td>Two ordered sets of indices (removal is required)</td><td><a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-medianSlidingWindowTwoSets">HeapsVariants#medianSlidingWindowTwoSets</a></td></tr>
+<tr class="sig-row"><td>Choose k workers, minimize cost when pay depends on a ratio?</td><td>Sort by wage/quality, keep a max-heap of qualities</td><td><a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-mincostToHireWorkers">HeapsVariants#mincostToHireWorkers</a></td></tr>
+<tr class="sig-row"><td>Need decrease-key (Dijkstra, Prim) in a heap?</td><td>Indexed min priority queue</td><td><a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-IndexedMinPQ">HeapsVariants#IndexedMinPQ</a></td></tr>
+<tr class="sig-row"><td>Maximum number of tasks with deadlines?</td><td>Sort by deadline, max-heap of durations, evict the longest</td><td><a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-scheduleCourse">HeapsVariants#scheduleCourse</a></td></tr>
+<tr class="sig-row"><td>3D water level or flooding from the edges?</td><td>Min-heap on the boundary, expand from the lowest wall</td><td><a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-trapRainWater">HeapsVariants#trapRainWater</a></td></tr>
+<tr class="sig-row"><td>Smallest k pairs from two sorted arrays?</td><td>Seed (i, 0), push (i, j + 1) after each pop</td><td><a class="tpl" data-goto="heaps-variants" data-anchor="m-HeapsVariants-kSmallestPairs">HeapsVariants#kSmallestPairs</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Top K</td><td>K largest / closest / most frequent</td><td class="complexity">O(n log k)</td></tr>
+<tr><td>Quickselect</td><td>Kth element, average linear</td><td class="complexity">O(n) avg</td></tr>
+<tr><td>Two heaps</td><td>Running median</td><td class="complexity">O(log n) per add</td></tr>
+<tr><td>K-way merge</td><td>Merge sorted lists, kth in sorted matrix, smallest range</td><td class="complexity">O(N log k)</td></tr>
+<tr><td>Sort + heap</td><td>Pick k items minimizing a ratio-weighted cost</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Two ordered sets</td><td>Median or order statistic of a sliding window (needs removal)</td><td class="complexity">O(n log k)</td></tr>
+<tr><td>Indexed PQ</td><td>Decrease-key for Dijkstra / Prim</td><td class="complexity">O(log n) per update</td></tr>
+<tr><td>Boundary heap</td><td>3D flooding: always expand from the lowest wall</td><td class="complexity">O(mn log mn)</td></tr>
+<tr><td>Deadline + max-heap</td><td>Schedule maximum tasks, evict the longest</td><td class="complexity">O(n log n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Heap of size K for K largest is a MIN-heap; people reach for a max-heap by reflex.</li>
+<li>PriorityQueue has no decrease-key: push duplicates and skip stale entries on pop.</li>
+<li>Comparator subtraction can overflow; use Integer.compare for large values.</li>
+<li>A PriorityQueue cannot remove from the middle in O(log n); use TreeSet of (value, index) pairs when a window slides.</li>
+<li>Ratio problems: sort by the ratio first, then the heap holds the quantity you want to drop.</li>
+<li>Duplicate values in a TreeSet collapse; key by index, or by (value, index).</li>
+</ul>
+<h3 class="group-title">Intervals &amp; Sweep Line</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Merge overlapping ranges?</td><td>Sort by start, extend the last output</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-merge">Intervals#merge</a></td></tr>
+<tr class="sig-row"><td>Insert into a sorted disjoint list?</td><td>Three phases: before, overlapping, after</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-insert">Intervals#insert</a></td></tr>
+<tr class="sig-row"><td>Remove fewest to make the rest disjoint, or fewest arrows?</td><td>Sort by END, greedy keep</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-eraseOverlapIntervals">Intervals#eraseOverlapIntervals</a></td></tr>
+<tr class="sig-row"><td>Maximum overlap at any instant?</td><td>Sweep line with +1 / -1 events</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-maxOverlap">Intervals#maxOverlap</a></td></tr>
+<tr class="sig-row"><td>Capacity over a route or time?</td><td>Difference array</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-carPooling">Intervals#carPooling</a></td></tr>
+<tr class="sig-row"><td>Online bookings that must not collide?</td><td>TreeMap floor / ceiling</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-MyCalendar">Intervals#MyCalendar</a></td></tr>
+<tr class="sig-row"><td>Intersection of two interval lists?</td><td>Two pointers, advance the one that ends first</td><td><a class="tpl" data-goto="intervals" data-anchor="m-Intervals-intervalIntersection">Intervals#intervalIntersection</a></td></tr>
+<tr class="sig-row"><td>Smallest interval containing each query point?</td><td>Sort both, sweep queries, heap keyed by size</td><td><a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-minInterval">IntervalsVariants#minInterval</a></td></tr>
+<tr class="sig-row"><td>Attend the most events, one per day?</td><td>Sweep days, min-heap of end days, drop expired</td><td><a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-maxEvents">IntervalsVariants#maxEvents</a></td></tr>
+<tr class="sig-row"><td>Cover [0, T] with the fewest clips?</td><td>Greedy furthest reach</td><td><a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-videoStitching">IntervalsVariants#videoStitching</a></td></tr>
+<tr class="sig-row"><td>Dynamic set of covered ranges?</td><td>TreeMap of disjoint intervals</td><td><a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-RangeModule">IntervalsVariants#RangeModule</a></td></tr>
+<tr class="sig-row"><td>Union area of rectangles?</td><td>Sweep line with coordinate compression</td><td><a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-rectangleArea">IntervalsVariants#rectangleArea</a></td></tr>
+<tr class="sig-row"><td>Room assignment with counts per room?</td><td>Two heaps: free rooms by index, busy rooms by end time</td><td><a class="tpl" data-goto="intervals-variants" data-anchor="m-IntervalsVariants-mostBooked">IntervalsVariants#mostBooked</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Merge / insert</td><td>Sort by start, extend the last output interval</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Max non-overlapping</td><td>Sort by END, keep the earliest finisher</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Sweep line</td><td>+1 at start, -1 at end, track the running max</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Online booking</td><td>TreeMap floor / ceiling checks</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Offline queries</td><td>Smallest interval containing each query</td><td class="complexity">O((n + q) log n)</td></tr>
+<tr><td>Day sweep + heap</td><td>Attend the most events, one per day</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Greedy cover</td><td>Fewest clips / taps to cover a range</td><td class="complexity">O(n)</td></tr>
+<tr><td>TreeMap of ranges</td><td>Add / remove / query covered ranges dynamically</td><td class="complexity">O(log n) amortized</td></tr>
+<tr><td>Sweep line</td><td>Union area of rectangles</td><td class="complexity">O(n² ) or O(n log n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Half-open [s, e): process ends before starts at the same timestamp.</li>
+<li>Touching intervals: decide up front whether [1,2] and [2,3] overlap.</li>
+<li>Insert interval needs no sort when the input is already sorted: three phases in one pass.</li>
+<li>Sort queries and intervals together, offline; never answer queries in input order.</li>
+<li>Greedy cover: extend to the furthest reach among intervals starting at or before the current end.</li>
+<li>Half-open [l, r) intervals avoid off-by-one in touching ranges.</li>
+</ul>
+<h3 class="group-title">Binary Search</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>First index meeting a monotone condition?</td><td>Lower-bound template: while (lo &lt; hi), hi = mid on true</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-lowerBound">BinarySearch#lowerBound</a></td></tr>
+<tr class="sig-row"><td>First and last position of a value?</td><td>lowerBound and upperBound</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-searchRange">BinarySearch#searchRange</a></td></tr>
+<tr class="sig-row"><td>Rotated sorted array?</td><td>Decide which half is sorted</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-searchRotated">BinarySearch#searchRotated</a></td></tr>
+<tr class="sig-row"><td>Minimize the maximum (or maximize the minimum) with a feasibility check?</td><td>Binary search on the answer</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-shipWithinDays">BinarySearch#shipWithinDays</a></td></tr>
+<tr class="sig-row"><td>Smallest rate finishing in time?</td><td>Binary search on the answer</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-minEatingSpeed">BinarySearch#minEatingSpeed</a></td></tr>
+<tr class="sig-row"><td>Median or kth of two sorted arrays?</td><td>Partition the smaller array</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-findMedianSortedArrays">BinarySearch#findMedianSortedArrays</a></td></tr>
+<tr class="sig-row"><td>Latest value at or before a timestamp?</td><td>Binary search the history list</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-TimeMap">BinarySearch#TimeMap</a></td></tr>
+<tr class="sig-row"><td>Real-valued answer?</td><td>Fixed iteration count, not an epsilon test</td><td><a class="tpl" data-goto="binary-search" data-anchor="m-BinarySearch-sqrt">BinarySearch#sqrt</a></td></tr>
+<tr class="sig-row"><td>Maximize the minimum (or minimize the maximum)?</td><td>Binary search the answer with a greedy feasibility check</td><td><a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-maxDistance">BinarySearchVariants#maxDistance</a></td></tr>
+<tr class="sig-row"><td>k-th smallest of an implicit set such as pair distances?</td><td>Search the value, count &lt;= mid with two pointers</td><td><a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-smallestDistancePair">BinarySearchVariants#smallestDistancePair</a></td></tr>
+<tr class="sig-row"><td>Answer is a real number?</td><td>Fixed iteration count</td><td><a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-minmaxGasDist">BinarySearchVariants#minmaxGasDist</a></td></tr>
+<tr class="sig-row"><td>Where does the missing count cross k?</td><td>Search on a[i] - (i + 1)</td><td><a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-findKthPositive">BinarySearchVariants#findKthPositive</a></td></tr>
+<tr class="sig-row"><td>Best rectangle with sum at most k?</td><td>Fix column pair, prefix sums with TreeSet.ceiling</td><td><a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-maxSumSubmatrix">BinarySearchVariants#maxSumSubmatrix</a></td></tr>
+<tr class="sig-row"><td>Peak then two monotone sides?</td><td>Find the peak, search both sides</td><td><a class="tpl" data-goto="binary-search-variants" data-anchor="m-BinarySearchVariants-searchMountain">BinarySearchVariants#searchMountain</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Bounds</td><td>lowerBound / upperBound, first and last position</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Rotated arrays</td><td>One half is always sorted</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Search on answer</td><td>Min speed / capacity / days such that feasible</td><td class="complexity">O(n log range)</td></tr>
+<tr><td>Partition search</td><td>Median of two sorted arrays</td><td class="complexity">O(log min(m, n))</td></tr>
+<tr><td>First true</td><td>Minimum feasible value (capacity, divisor, time)</td><td class="complexity">O(n log range)</td></tr>
+<tr><td>Last true</td><td>Maximize the minimum (aggressive cows)</td><td class="complexity">O(n log range)</td></tr>
+<tr><td>Count &lt;= mid</td><td>k-th smallest of an implicit set</td><td class="complexity">O(n log range)</td></tr>
+<tr><td>Real valued</td><td>Fixed iteration count</td><td class="complexity">O(n x 100)</td></tr>
+<tr><td>Two-phase</td><td>Find the peak, then search each side</td><td class="complexity">O(log n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Compute mid as lo + (hi - lo) / 2 to avoid overflow.</li>
+<li>Search-on-answer needs a monotone predicate: if feasible(x) does not imply feasible(x + 1) you cannot binary search.</li>
+<li>With duplicates in a rotated array, equal ends force a linear shrink (worst case O(n)).</li>
+<li>Maximize-the-minimum searches the last true: use mid = lo + (hi - lo + 1) / 2.</li>
+<li>Real-valued search: iterate a fixed count instead of testing hi - lo &gt; eps.</li>
+<li>Check the feasibility function is monotone before building on it.</li>
+</ul>
+<h3 class="group-title">Backtracking</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>All subsets / combinations?</td><td>Start-index recursion</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-subsets">Backtracking#subsets</a></td></tr>
+<tr class="sig-row"><td>All orderings?</td><td>used[] array</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-permute">Backtracking#permute</a></td></tr>
+<tr class="sig-row"><td>Inputs contain duplicates?</td><td>Sort + skip equal siblings</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-subsetsWithDup">Backtracking#subsetsWithDup</a></td></tr>
+<tr class="sig-row"><td>Reusable candidates summing to a target?</td><td>Recurse with the same index</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-combinationSum">Backtracking#combinationSum</a></td></tr>
+<tr class="sig-row"><td>Generate valid strings?</td><td>Track counts, only add legal characters</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-generateParenthesis">Backtracking#generateParenthesis</a></td></tr>
+<tr class="sig-row"><td>Place items under conflict constraints?</td><td>Occupancy sets / bitmasks for O(1) validity</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-solveNQueens">Backtracking#solveNQueens</a></td></tr>
+<tr class="sig-row"><td>Find a path of letters in a grid?</td><td>Mark visited in place, restore on exit</td><td><a class="tpl" data-goto="backtracking" data-anchor="m-Backtracking-exist">Backtracking#exist</a></td></tr>
+<tr class="sig-row"><td>k-th permutation, not all of them?</td><td>Factorial number system, no search</td><td><a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-getPermutation">BacktrackingVariants#getPermutation</a></td></tr>
+<tr class="sig-row"><td>Fill buckets equally (square, k subsets)?</td><td>Sort descending, skip equal-load buckets</td><td><a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-makesquare">BacktrackingVariants#makesquare</a></td></tr>
+<tr class="sig-row"><td>Minimum removals to make a string valid?</td><td>BFS by number of removals</td><td><a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-removeInvalidParentheses">BacktrackingVariants#removeInvalidParentheses</a></td></tr>
+<tr class="sig-row"><td>Symmetry cuts the search?</td><td>Search one representative per orbit, multiply</td><td><a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-numberOfPatterns">BacktrackingVariants#numberOfPatterns</a></td></tr>
+<tr class="sig-row"><td>Settle debts with the fewest transfers?</td><td>Net balances, backtrack on the first non-zero</td><td><a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-minTransfers">BacktrackingVariants#minTransfers</a></td></tr>
+<tr class="sig-row"><td>Every way to parenthesize an expression?</td><td>Split at each operator, memoize</td><td><a class="tpl" data-goto="backtracking-variants" data-anchor="m-BacktrackingVariants-diffWaysToCompute">BacktrackingVariants#diffWaysToCompute</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Subsets / combinations</td><td>Start index moves forward</td><td class="complexity">O(2^n)</td></tr>
+<tr><td>Permutations</td><td>used[] array, with duplicate skip rule</td><td class="complexity">O(n!)</td></tr>
+<tr><td>Constraint search</td><td>N-Queens, sudoku with occupancy sets or bitmasks</td><td class="complexity">exp</td></tr>
+<tr><td>Strings</td><td>Parentheses, partitions, IP addresses, operators</td><td class="complexity">exp</td></tr>
+<tr><td>Sort + symmetry skip</td><td>Bucket filling (matchsticks, k subsets)</td><td class="complexity">Exponential, pruned</td></tr>
+<tr><td>Visit-all paths</td><td>Unique paths III</td><td class="complexity">O(4^cells)</td></tr>
+<tr><td>BFS by removals</td><td>Minimum removals to be valid</td><td class="complexity">O(2^n)</td></tr>
+<tr><td>No search needed</td><td>k-th permutation via factorials</td><td class="complexity">O(n^2)</td></tr>
+<tr><td>Debt settling</td><td>Net balances, backtrack on first non-zero</td><td class="complexity">Exponential, pruned</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Add a COPY of the current path to the result, not the live list.</li>
+<li>Duplicates: i &gt; start &amp;&amp; a[i] == a[i-1] for combinations; used[i-1] check for permutations.</li>
+<li>Prune before recursing (remaining sum &lt; 0, not enough elements left) instead of after.</li>
+<li>Equal-state siblings explore the same subtree: skip a bucket with the same load as an earlier one.</li>
+<li>Undo exactly what you did (restore cells, pop path entries, reset lengths).</li>
+<li>If the question asks for the k-th item, do not enumerate.</li>
+</ul>
+<h3 class="group-title">Greedy</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Can you reach the end / minimum jumps?</td><td>Furthest-reach frontier</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-jump">Greedy#jump</a></td></tr>
+<tr class="sig-row"><td>Circular route, find the start?</td><td>Restart after any negative prefix</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-canCompleteCircuit">Greedy#canCompleteCircuit</a></td></tr>
+<tr class="sig-row"><td>Neighbor-dependent minimum assignment?</td><td>Left pass and right pass</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-candy">Greedy#candy</a></td></tr>
+<tr class="sig-row"><td>Split into the most self-contained segments?</td><td>Extend to the last occurrence</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-partitionLabels">Greedy#partitionLabels</a></td></tr>
+<tr class="sig-row"><td>Custom ordering decides the answer?</td><td>Comparator from an exchange argument</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-largestNumber">Greedy#largestNumber</a></td></tr>
+<tr class="sig-row"><td>Pair heaviest with lightest?</td><td>Sort + two pointers</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-numRescueBoats">Greedy#numRescueBoats</a></td></tr>
+<tr class="sig-row"><td>Need the best past option when stuck?</td><td>Heap of passed options</td><td><a class="tpl" data-goto="greedy" data-anchor="m-Greedy-minRefuelStops">Greedy#minRefuelStops</a></td></tr>
+<tr class="sig-row"><td>Smallest lexicographic subsequence using each letter once?</td><td>Monotone stack with last occurrence</td><td><a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-removeDuplicateLetters">GreedyVariants#removeDuplicateLetters</a></td></tr>
+<tr class="sig-row"><td>Assign people to two groups minimizing total cost?</td><td>Sort by cost difference</td><td><a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-twoCitySchedCost">GreedyVariants#twoCitySchedCost</a></td></tr>
+<tr class="sig-row"><td>Forward moves branch a lot, reverse moves are forced?</td><td>Work backwards from the target</td><td><a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-brokenCalc">GreedyVariants#brokenCalc</a></td></tr>
+<tr class="sig-row"><td>Largest number from one swap?</td><td>Last-occurrence table, swap with the best later digit</td><td><a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-maximumSwap">GreedyVariants#maximumSwap</a></td></tr>
+<tr class="sig-row"><td>Order to beat opponent elements?</td><td>Sort and match greedily</td><td><a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-advantageCount">GreedyVariants#advantageCount</a></td></tr>
+<tr class="sig-row"><td>Merge two digit sequences into the maximum number?</td><td>Best subsequence per length, merge by suffix comparison</td><td><a class="tpl" data-goto="greedy-variants" data-anchor="m-GreedyVariants-maxNumber">GreedyVariants#maxNumber</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Reach / jumps</td><td>Track the furthest frontier</td><td class="complexity">O(n)</td></tr>
+<tr><td>Two-pass</td><td>Candy, gas station style prefix logic</td><td class="complexity">O(n)</td></tr>
+<tr><td>Sort then sweep</td><td>Assign cookies, boats, largest number</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Greedy + heap</td><td>Refueling stops, scheduling with choices</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Sort by derived key</td><td>Difference, ratio, end time</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Monotone stack construction</td><td>Lexicographically smallest subsequence</td><td class="complexity">O(n)</td></tr>
+<tr><td>Work backwards</td><td>Operations that are easier to undo than to do</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Digit construction</td><td>Largest number by one swap / merge</td><td class="complexity">O(n)</td></tr>
+<tr><td>Local repair</td><td>Make array non-decreasing with one change</td><td class="complexity">O(n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Without a proof sketch, test the greedy against brute force on small inputs.</li>
+<li>Largest Number: compare a+b with b+a, and special-case an all-zero result.</li>
+<li>Valid Parenthesis String: carry a range [lo, hi] of possible open counts, not a single count.</li>
+<li>Greedy without a proof fails on a counterexample; test the rule on 3-4 element inputs.</li>
+<li>Work-backwards problems: divide or subtract from the target instead of multiplying from the start.</li>
+<li>Sort stability and ties matter when the derived key can be equal.</li>
+</ul>
+<h3 class="group-title">Linked Lists</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Reverse all, a segment, or in groups?</td><td>Iterative pointer flip; pull-to-front for ranges</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-reverse">LinkedLists#reverse</a></td></tr>
+<tr class="sig-row"><td>Middle, or nth from the end?</td><td>Slow / fast, or a gap of n</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-removeNthFromEnd">LinkedLists#removeNthFromEnd</a></td></tr>
+<tr class="sig-row"><td>Cycle present, and where does it start?</td><td>Floyd</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-detectCycle">LinkedLists#detectCycle</a></td></tr>
+<tr class="sig-row"><td>Merge sorted lists?</td><td>Dummy head merge; divide and conquer for K</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-mergeKLists">LinkedLists#mergeKLists</a></td></tr>
+<tr class="sig-row"><td>Sort a list in O(n log n), O(1) extra?</td><td>Merge sort with slow/fast split</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-sortList">LinkedLists#sortList</a></td></tr>
+<tr class="sig-row"><td>Palindrome or reorder using the second half?</td><td>Find middle, reverse second half</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-reorderList">LinkedLists#reorderList</a></td></tr>
+<tr class="sig-row"><td>Clone with arbitrary pointers in O(1) space?</td><td>Interleave copies, set randoms, split</td><td><a class="tpl" data-goto="linked-lists" data-anchor="m-LinkedLists-copyRandomList">LinkedLists#copyRandomList</a></td></tr>
+<tr class="sig-row"><td>Remove runs that sum to zero?</td><td>Prefix sums, jump to the last node with the same sum</td><td><a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-removeZeroSumSublists">LinkedListsVariants#removeZeroSumSublists</a></td></tr>
+<tr class="sig-row"><td>Add one to a number stored as a list?</td><td>Rightmost non-9 trick</td><td><a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-plusOne">LinkedListsVariants#plusOne</a></td></tr>
+<tr class="sig-row"><td>Kth node from the end?</td><td>Two pointers with a gap of k</td><td><a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-swapNodes">LinkedListsVariants#swapNodes</a></td></tr>
+<tr class="sig-row"><td>Reverse groups conditionally?</td><td>Count the group first, then reverse in place</td><td><a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-reverseEvenLengthGroups">LinkedListsVariants#reverseEvenLengthGroups</a></td></tr>
+<tr class="sig-row"><td>Child pointers / multilevel list?</td><td>Stack of saved next pointers</td><td><a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-flatten">LinkedListsVariants#flatten</a></td></tr>
+<tr class="sig-row"><td>Insert into a sorted circular list?</td><td>Walk to the insertion or wrap point</td><td><a class="tpl" data-goto="linked-lists-variants" data-anchor="m-LinkedListsVariants-insertCircular">LinkedListsVariants#insertCircular</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>Reverse</td><td>Whole list, a range, k-groups</td><td class="complexity">O(n)</td></tr>
+<tr><td>Slow / fast</td><td>Middle, cycle entry, nth from end</td><td class="complexity">O(n)</td></tr>
+<tr><td>Merge</td><td>Two lists, K lists by divide and conquer, sort list</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Pointer surgery</td><td>Reorder, partition, rotate, copy with random pointer</td><td class="complexity">O(n)</td></tr>
+<tr><td>Prefix sum map</td><td>Remove zero-sum runs</td><td class="complexity">O(n)</td></tr>
+<tr><td>Gap pointers</td><td>Kth from the end, swap nodes</td><td class="complexity">O(n)</td></tr>
+<tr><td>Count then reverse</td><td>Reverse groups only if even length</td><td class="complexity">O(n)</td></tr>
+<tr><td>Stack of next pointers</td><td>Flatten multilevel lists</td><td class="complexity">O(n)</td></tr>
+<tr><td>Wrap-point walk</td><td>Insert into sorted circular list</td><td class="complexity">O(n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Dummy head removes every "is it the head?" special case.</li>
+<li>Save next BEFORE overwriting it when reversing.</li>
+<li>Cycle entry: after slow meets fast, restart one pointer at the head and move both one step.</li>
+<li>Use a dummy head whenever the head can be removed or replaced.</li>
+<li>Circular list insert: handle all-equal values and the wrap point (max then min).</li>
+<li>After reversing a group, its old head becomes the tail: reconnect to the next group.</li>
+</ul>
+<h3 class="group-title">String Algorithms</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Find a pattern in linear time?</td><td>KMP prefix function</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-kmpSearch">StringAlgorithms#kmpSearch</a></td></tr>
+<tr class="sig-row"><td>Does the string repeat a smaller unit?</td><td>n % (n - pi[n-1]) == 0</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-repeatedSubstringPattern">StringAlgorithms#repeatedSubstringPattern</a></td></tr>
+<tr class="sig-row"><td>All occurrences / prefix-match lengths?</td><td>Z-function on pattern#text</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-findAllZ">StringAlgorithms#findAllZ</a></td></tr>
+<tr class="sig-row"><td>Substring equality or duplicates at scale?</td><td>Rolling hash</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-rabinKarp">StringAlgorithms#rabinKarp</a></td></tr>
+<tr class="sig-row"><td>Longest palindromic substring in O(n)?</td><td>Manacher</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-manacher">StringAlgorithms#manacher</a></td></tr>
+<tr class="sig-row"><td>Arithmetic on huge numbers as strings?</td><td>Digit arrays with carry</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-multiply">StringAlgorithms#multiply</a></td></tr>
+<tr class="sig-row"><td>Parse with signs, spaces, overflow?</td><td>Single pass with long accumulator and clamping</td><td><a class="tpl" data-goto="string-algorithms" data-anchor="m-StringAlgorithms-myAtoi">StringAlgorithms#myAtoi</a></td></tr>
+<tr class="sig-row"><td>Count distinct substrings / longest repeated substring?</td><td>Suffix array + LCP</td><td><a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-countDistinctSubstrings">StringsVariants#countDistinctSubstrings</a></td></tr>
+<tr class="sig-row"><td>Many patterns in one scan?</td><td>Aho-Corasick automaton</td><td><a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-AhoCorasick">StringsVariants#AhoCorasick</a></td></tr>
+<tr class="sig-row"><td>Longest prefix that is also a suffix?</td><td>KMP failure function</td><td><a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-longestHappyPrefix">StringsVariants#longestHappyPrefix</a></td></tr>
+<tr class="sig-row"><td>Canonical form under rotation?</td><td>Minimal rotation</td><td><a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-leastRotation">StringsVariants#leastRotation</a></td></tr>
+<tr class="sig-row"><td>Pairs of words forming a palindrome?</td><td>Hash all words, split each word at every index</td><td><a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-palindromePairs">StringsVariants#palindromePairs</a></td></tr>
+<tr class="sig-row"><td>Validate a number or format string?</td><td>Finite-state flags</td><td><a class="tpl" data-goto="strings-variants" data-anchor="m-StringsVariants-isNumber">StringsVariants#isNumber</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>KMP</td><td>Pattern search, repeated pattern, shortest palindrome</td><td class="complexity">O(n + m)</td></tr>
+<tr><td>Z-function</td><td>All occurrences, prefix matches</td><td class="complexity">O(n + m)</td></tr>
+<tr><td>Rabin-Karp</td><td>Rolling hash, duplicate substring with binary search</td><td class="complexity">O(n) expected</td></tr>
+<tr><td>Manacher</td><td>Longest palindromic substring</td><td class="complexity">O(n)</td></tr>
+<tr><td>Suffix array + LCP</td><td>Distinct substrings, longest repeated substring</td><td class="complexity">O(n log n)</td></tr>
+<tr><td>Aho-Corasick</td><td>Many patterns in one pass</td><td class="complexity">O(n + total + matches)</td></tr>
+<tr><td>KMP failure</td><td>Border / happy prefix, rotation checks</td><td class="complexity">O(n)</td></tr>
+<tr><td>Hash + split</td><td>Palindrome pairs</td><td class="complexity">O(n k²)</td></tr>
+<tr><td>State flags</td><td>Number parsing, text justification</td><td class="complexity">O(n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>KMP failure function: on mismatch fall back with k = pi[k - 1], never reset to 0.</li>
+<li>Rabin-Karp: single mod hashes collide on adversarial inputs; use two moduli and verify with startsWith.</li>
+<li>atoi: clamp as you accumulate, using long, before overflow.</li>
+<li>Suffix array: sort by doubling ranks, then Kasai builds LCP in O(n).</li>
+<li>Aho-Corasick needs fail links built by BFS, and output links to report all matches.</li>
+<li>Parsing problems: write the state machine on paper first; flags beat regex.</li>
+</ul>
+<h3 class="group-title">Bits &amp; Math</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Everything appears twice except one (or two)?</td><td>XOR fold; split by lowest set bit for two uniques</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-singleNumberIII">BitsMath#singleNumberIII</a></td></tr>
+<tr class="sig-row"><td>Count set bits, powers of two?</td><td>n &amp; (n - 1) clears the lowest set bit</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-hammingWeight">BitsMath#hammingWeight</a></td></tr>
+<tr class="sig-row"><td>Small set, enumerate subsets?</td><td>Bitmask loop 0 .. 2^n - 1</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-subsetsMask">BitsMath#subsetsMask</a></td></tr>
+<tr class="sig-row"><td>Large exponent modulo m?</td><td>Fast exponentiation</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-powMod">BitsMath#powMod</a></td></tr>
+<tr class="sig-row"><td>Count primes up to n?</td><td>Sieve of Eratosthenes</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-countPrimes">BitsMath#countPrimes</a></td></tr>
+<tr class="sig-row"><td>nCr modulo a prime, many queries?</td><td>Factorial and inverse-factorial tables</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-modInverse">BitsMath#modInverse</a></td></tr>
+<tr class="sig-row"><td>Repeating decimals?</td><td>Remainder to position map</td><td><a class="tpl" data-goto="bits-math" data-anchor="m-BitsMath-fractionToDecimal">BitsMath#fractionToDecimal</a></td></tr>
+<tr class="sig-row"><td>Sum of bit differences over all pairs?</td><td>Per bit: ones x zeros</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-totalHammingDistance">BitsMathVariants#totalHammingDistance</a></td></tr>
+<tr class="sig-row"><td>Linear recurrence for a huge n?</td><td>Matrix exponentiation</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-matPow">BitsMathVariants#matPow</a></td></tr>
+<tr class="sig-row"><td>Modular inverse with a non-prime modulus?</td><td>Extended Euclid</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-modInverseAny">BitsMathVariants#modInverseAny</a></td></tr>
+<tr class="sig-row"><td>Factorize many numbers?</td><td>Smallest-prime-factor sieve</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-spfSieve">BitsMathVariants#spfSieve</a></td></tr>
+<tr class="sig-row"><td>Pick uniformly from a stream?</td><td>Reservoir sampling</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-Reservoir">BitsMathVariants#Reservoir</a></td></tr>
+<tr class="sig-row"><td>Weighted random pick?</td><td>Prefix sums + binary search</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-WeightedPicker">BitsMathVariants#WeightedPicker</a></td></tr>
+<tr class="sig-row"><td>Josephus-style elimination?</td><td>f(n) = (f(n - 1) + k) mod n</td><td><a class="tpl" data-goto="bits-math-variants" data-anchor="m-BitsMathVariants-findTheWinner">BitsMathVariants#findTheWinner</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>XOR tricks</td><td>Single number I/II/III, missing number</td><td class="complexity">O(n)</td></tr>
+<tr><td>Bit counting</td><td>popcount via n &amp; (n - 1), counting bits dp</td><td class="complexity">O(bits)</td></tr>
+<tr><td>Number theory</td><td>gcd/lcm, powMod, sieve, factorization</td><td class="complexity">O(log) / O(n log log n)</td></tr>
+<tr><td>Combinatorics</td><td>nCr mod prime with factorial tables</td><td class="complexity">O(1) per query</td></tr>
+<tr><td>Per-bit counting</td><td>Sum of pairwise XOR / Hamming distances</td><td class="complexity">O(32 n)</td></tr>
+<tr><td>Matrix power</td><td>Linear recurrence for huge n</td><td class="complexity">O(k^3 log n)</td></tr>
+<tr><td>Extended Euclid</td><td>Inverse modulo any coprime modulus</td><td class="complexity">O(log m)</td></tr>
+<tr><td>SPF sieve</td><td>Many factorizations</td><td class="complexity">O(n log log n) setup</td></tr>
+<tr><td>Reservoir / weighted pick</td><td>Uniform or weighted sampling</td><td class="complexity">O(1) / O(log n)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>Use &gt;&gt;&gt; for logical shifts of negatives and 1L &lt;&lt; k once k reaches 31.</li>
+<li>Check overflow BEFORE multiplying or adding (Reverse Integer), or widen to long.</li>
+<li>Fermat inverse needs a PRIME modulus; otherwise use extended Euclid.</li>
+<li>Fermat inverse needs a prime modulus; use extended Euclid otherwise.</li>
+<li>Cast to long before multiplying two ints, and mod after each multiplication.</li>
+<li>Fisher-Yates must pick j in [i, n), not [0, n), to stay uniform.</li>
+</ul>
+<h3 class="group-title">Data-Structure Design</h3>
+<table class="ref-table">
+<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>
+<tr class="sig-row"><td>Evict least recently used?</td><td>Hash map + doubly linked list</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-LRUCache">DesignStructures#LRUCache</a></td></tr>
+<tr class="sig-row"><td>Evict least frequently used, ties by recency?</td><td>freq to LinkedHashSet buckets, track minFreq</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-LFUCache">DesignStructures#LFUCache</a></td></tr>
+<tr class="sig-row"><td>O(1) insert, delete and random element?</td><td>Array + index map with swap-delete</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-RandomizedSet">DesignStructures#RandomizedSet</a></td></tr>
+<tr class="sig-row"><td>Merge per-user streams into a feed?</td><td>Heap over each user's newest tweet</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-Twitter">DesignStructures#Twitter</a></td></tr>
+<tr class="sig-row"><td>Throttle requests per window?</td><td>Deque of timestamps or token bucket</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-RateLimiter">DesignStructures#RateLimiter</a></td></tr>
+<tr class="sig-row"><td>Versioned reads by snapshot id?</td><td>Per-index history + binary search</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-SnapshotArray">DesignStructures#SnapshotArray</a></td></tr>
+<tr class="sig-row"><td>Route keys to nodes with minimal remapping?</td><td>Consistent hashing ring (TreeMap)</td><td><a class="tpl" data-goto="design-structures" data-anchor="m-DesignStructures-ConsistentHash">DesignStructures#ConsistentHash</a></td></tr>
+<tr class="sig-row"><td>Implement a hash map from scratch?</td><td>Array of buckets, chaining, resize at load factor</td><td><a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-MyHashMap">DesignVariants#MyHashMap</a></td></tr>
+<tr class="sig-row"><td>Increment / decrement counters, read max and min in O(1)?</td><td>Doubly linked list of count buckets</td><td><a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-AllOne">DesignVariants#AllOne</a></td></tr>
+<tr class="sig-row"><td>Ordered set without balancing?</td><td>Skip list</td><td><a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-Skiplist">DesignVariants#Skiplist</a></td></tr>
+<tr class="sig-row"><td>Cache with per-key expiry?</td><td>Hash map plus expiry-ordered structure</td><td><a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-TTLCache">DesignVariants#TTLCache</a></td></tr>
+<tr class="sig-row"><td>Membership in tiny memory, false positives acceptable?</td><td>Bloom filter</td><td><a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-BloomFilter">DesignVariants#BloomFilter</a></td></tr>
+<tr class="sig-row"><td>Type-ahead suggestions?</td><td>Trie with per-node ranked list</td><td><a class="tpl" data-goto="design-variants" data-anchor="m-DesignVariants-AutocompleteSystem">DesignVariants#AutocompleteSystem</a></td></tr>
+</table>
+<table class="ref-table">
+<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>
+<tr><td>LRU / LFU</td><td>Map + doubly linked list; frequency buckets with minFreq</td><td class="complexity">O(1)</td></tr>
+<tr><td>Randomized set</td><td>Array + index map, swap with last on delete</td><td class="complexity">O(1)</td></tr>
+<tr><td>Feeds</td><td>Per-user lists merged with a heap</td><td class="complexity">O(k log u)</td></tr>
+<tr><td>Limiters / counters</td><td>Deque of timestamps, token bucket, circular buckets</td><td class="complexity">O(1) amortized</td></tr>
+<tr><td>Hash map</td><td>Buckets with chaining and resize</td><td class="complexity">O(1) average</td></tr>
+<tr><td>Linked buckets</td><td>Max / min counts under inc / dec</td><td class="complexity">O(1)</td></tr>
+<tr><td>Skip list</td><td>Ordered set without rotations</td><td class="complexity">O(log n) expected</td></tr>
+<tr><td>Heap + map / deque</td><td>Expiry, TTL caches</td><td class="complexity">O(log n)</td></tr>
+<tr><td>Bit array + hashes</td><td>Approximate membership</td><td class="complexity">O(k)</td></tr>
+</table>
+<ul class="cs-pitfalls">
+<li>LRU: use sentinel head and tail nodes so no operation needs null checks.</li>
+<li>LFU: when the min-frequency bucket empties during a touch, increment minFreq; on insert, reset it to 1.</li>
+<li>Say aloud which operations are O(1) and which are O(log n) and why.</li>
+<li>State the complexity of every operation before coding; interviewers grade on that.</li>
+<li>Doubly linked lists need dummy head and tail sentinels to avoid null checks.</li>
+<li>A TTL cache must decide when expiry is evaluated: lazily on read, or by an eviction pass.</li>
+</ul>
 </div>
 <div class="view" id="view-coverage">
 <div class="page-kicker">LC &mdash; LEETCODE COVERAGE</div>
@@ -13856,7 +14504,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </div>
 <script>
 (function(){
-  var validViews = ["overview", "coverage", "traversal", "shortest-path", "topo-dag", "dsu", "mst", "scc", "eulerian", "flow", "bipartite-bitmask", "implicit", "dijkstra-variants", "cycles-courses", "dsu-extended", "trees", "matching-coloring", "dp-linear", "dp-knapsack", "dp-sequences", "dp-grid-interval", "dp-bitmask-digit", "dp-combined", "dp-variants", "binary-tree", "bst", "trie", "range-structures", "trees-variants", "arrays-hashing", "arrays-variants", "sliding-window-pointers", "windows-variants", "monotonic-structures", "stacks-variants", "heaps-topk", "heaps-variants", "intervals", "intervals-variants", "binary-search", "binary-search-variants", "backtracking", "backtracking-variants", "greedy", "greedy-variants", "linked-lists", "linked-lists-variants", "string-algorithms", "strings-variants", "bits-math", "bits-math-variants", "design-structures", "design-variants"];
+  var validViews = ["overview", "cheatsheet", "coverage", "traversal", "shortest-path", "topo-dag", "dsu", "mst", "scc", "eulerian", "flow", "bipartite-bitmask", "implicit", "dijkstra-variants", "cycles-courses", "dsu-extended", "trees", "matching-coloring", "dp-linear", "dp-knapsack", "dp-sequences", "dp-grid-interval", "dp-bitmask-digit", "dp-combined", "dp-variants", "binary-tree", "bst", "trie", "range-structures", "trees-variants", "arrays-hashing", "arrays-variants", "sliding-window-pointers", "windows-variants", "monotonic-structures", "stacks-variants", "heaps-topk", "heaps-variants", "intervals", "intervals-variants", "binary-search", "binary-search-variants", "backtracking", "backtracking-variants", "greedy", "greedy-variants", "linked-lists", "linked-lists-variants", "string-algorithms", "strings-variants", "bits-math", "bits-math-variants", "design-structures", "design-variants"];
 
   var shownView = null;
 
@@ -13903,6 +14551,9 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
   });
 
   showView(currentHash());
+
+  var printBtn = document.getElementById("printCheatsheet");
+  if (printBtn) printBtn.addEventListener("click", function(){ window.print(); });
 
   // ---------- Copy buttons ----------
   // Text of a code element without the fold marks, so a copy is always the full file.

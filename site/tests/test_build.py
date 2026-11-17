@@ -159,6 +159,44 @@ class BuildTest(unittest.TestCase):
         for ul in re.findall(r'<ul class="cues">(.*?)</ul>', self.page, re.S):
             self.assertLessEqual(len(re.findall(r"<li>", ul.split("<details>")[0])), 6)
 
+    def _cheatsheet(self):
+        m = re.search(r'<div class="view" id="view-cheatsheet">(.*?)\n</div>\n', self.page, re.S)
+        self.assertTrue(m)
+        return m.group(1)
+
+    def test_cheatsheet_has_every_decision(self):
+        topics = build.load_topics()
+        want = sum(len(t["decisions"]) for t in topics)
+        cs = self._cheatsheet()
+        rows = re.findall(r'<tr class="sig-row">', cs)
+        self.assertEqual(len(rows), want)
+
+    def test_cheatsheet_topic_order(self):
+        topics = build.load_topics()
+        cs = self._cheatsheet()
+        titles = re.findall(r'<h3 class="group-title">(.*?)</h3>', cs)
+        self.assertEqual(titles, [html.escape(t["title"], quote=False) for t in topics])
+
+    def test_cheatsheet_links_resolve(self):
+        cs = self._cheatsheet()
+        anchors = re.findall(r'data-anchor="([^"]+)"', cs)
+        self.assertTrue(anchors)
+        ids = set(re.findall(r'\bid="([^"]+)"', self.page))
+        for a in anchors:
+            self.assertIn(a, ids)
+
+    def test_nav_has_cheatsheet_after_overview(self):
+        ov = self.page.index('data-view="overview"><span class="fname">00</span>')
+        cs = self.page.index('<div class="nav-item" data-view="cheatsheet"><span class="fname">CS</span>Cheat Sheet</div>')
+        lc = self.page.index('<span class="fname">LC</span>')
+        self.assertLess(ov, cs)
+        self.assertLess(cs, lc)
+
+    def test_cheatsheet_print_button_and_css(self):
+        self.assertIn('id="printCheatsheet"', self.page)
+        self.assertIn("@media print", self.page)
+        self.assertIn("window.print()", self.page)
+
 
 if __name__ == "__main__":
     unittest.main()

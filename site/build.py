@@ -518,6 +518,42 @@ def build_overview(topics, counts, problems=None):
     return '<div class="view" id="view-overview">\n%s\n</div>' % "\n".join(p)
 
 
+def build_cheatsheet_view(topics, problems=None):
+    """One printable page: per topic, signals, merged pattern tables and pitfalls."""
+    esc = lambda t: html.escape(t, quote=False)
+    p = ['<div class="page-kicker">CS &mdash; CHEAT SHEET</div>',
+         '<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1>'
+         '<button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div>',
+         '<p class="page-intro">Every signal, pattern and pitfall on one page. Print it, or save it as a PDF.</p>']
+    for t in topics:
+        vmap = view_of_file(t)
+        p.append('<h3 class="group-title">%s</h3>' % esc(t["title"]))
+        rows = ['<tr><th>Signal</th><th>Approach</th><th>Template</th></tr>']
+        for d in t["decisions"]:
+            file_stem, member = d["template"].split("#", 1)
+            link = '<a class="tpl" data-goto="%s" data-anchor="%s">%s</a>' % (
+                html.escape(vmap[file_stem]), html.escape(anchor_id(file_stem, member)), html.escape(d["template"]))
+            rows.append('<tr class="sig-row"><td>%s</td><td>%s</td><td>%s</td></tr>' % (
+                esc(_plain(d["q"])), esc(_plain(d["a"])), link))
+        p.append('<table class="ref-table">\n%s\n</table>' % "\n".join(rows))
+        merged, seen = [], set()
+        for v in t["views"]:
+            for row in v.get("table") or []:
+                if tuple(row) not in seen:
+                    seen.add(tuple(row))
+                    merged.append(row)
+        if merged:
+            rows = ['<tr><th>Pattern</th><th>Use case</th><th>Complexity</th></tr>']
+            for a, b, c in merged:
+                rows.append('<tr><td>%s</td><td>%s</td><td class="complexity">%s</td></tr>' % (esc(a), esc(b), esc(c)))
+            p.append('<table class="ref-table">\n%s\n</table>' % "\n".join(rows))
+        pits = [x for v in t["views"] for x in v.get("pitfalls") or []]
+        if pits:
+            p.append('<ul class="cs-pitfalls">\n%s\n</ul>' % "\n".join(
+                "<li>%s</li>" % esc(x).replace("`", "") for x in pits))
+    return '<div class="view" id="view-cheatsheet">\n%s\n</div>' % "\n".join(p)
+
+
 def render_page(topics=None, problems=None):
     """Returns the whole page as a string; writes nothing."""
     topics = topics if topics is not None else load_topics()
@@ -529,6 +565,8 @@ def render_page(topics=None, problems=None):
     nav, views, view_ids, number = [], [], ["overview"], 0
     nav.append('<div class="sidebar-label">Reference</div>')
     nav.append('<div class="nav-item" data-view="overview"><span class="fname">00</span>Overview &amp; Decision Tree</div>')
+    nav.append('<div class="nav-item" data-view="cheatsheet"><span class="fname">CS</span>Cheat Sheet</div>')
+    view_ids.append("cheatsheet")
     cov = coverage_data(topics, problems)
     if cov:
         nav.append('<div class="nav-item" data-view="coverage" data-kw="leetcode coverage problems all tiers gaps">'
@@ -611,6 +649,7 @@ document.addEventListener("click", function(e){
       <div class="content">
 
 {overview}
+{build_cheatsheet_view(topics, problems)}
 {build_coverage_view(cov) if cov else ""}
 {chr(10).join(views)}
         <footer class="app-footer">Coding review &mdash; {len(topics)} topics, {n_files} tested Java template files, {n_dec} decision-tree entries, each linked to a template; {n_lc:,} LeetCode problems mapped to templates.</footer>

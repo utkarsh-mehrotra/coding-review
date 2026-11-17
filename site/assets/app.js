@@ -47,6 +47,9 @@
 
   showView(currentHash());
 
+  var printBtn = document.getElementById("printCheatsheet");
+  if (printBtn) printBtn.addEventListener("click", function(){ window.print(); });
+
   // ---------- Copy buttons ----------
   // Text of a code element without the fold marks, so a copy is always the full file.
   function copyText(codeEl) {
