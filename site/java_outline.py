@@ -13,6 +13,7 @@ DECL = re.compile(
     r"(?:(?P<kind>class|interface|record|enum)\s+(?P<cname>\w+)"
     r"|[\w<>\[\],.? ]+?\s+(?P<mname>\w+)\s*\()"
 )
+ANNOTATION_LINE = re.compile(r"^@\w+(?:\(.*\))?$")
 NOT_NAMES = {"if", "for", "while", "switch", "return", "new", "catch", "else", "do", "try", "throw", "synchronized"}
 
 
@@ -74,8 +75,12 @@ def outline(src):
 def _member(lines, cur, end):
     name, kind, start, private = cur[:4]
     doc = start
-    while doc > 1 and lines[doc - 2].strip().startswith("//"):
-        doc -= 1
+    while doc > 1:
+        prev = lines[doc - 2].strip()
+        if prev.startswith("//") or ANNOTATION_LINE.match(prev):
+            doc -= 1
+        else:
+            break
     return Member(name, kind, start, end, private, doc)
 
 

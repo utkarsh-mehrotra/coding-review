@@ -48,11 +48,18 @@
   showView(currentHash());
 
   // ---------- Copy buttons ----------
+  // Text of a code element without the fold marks, so a copy is always the full file.
+  function copyText(codeEl) {
+    var clone = codeEl.cloneNode(true);
+    clone.querySelectorAll(".fold-mark").forEach(function(m){ m.parentNode.removeChild(m); });
+    return clone.textContent;
+  }
+
   document.querySelectorAll(".copy-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
       var card = btn.closest(".code-card");
       var codeEl = card.querySelector("pre.code-block code");
-      var text = codeEl.textContent;
+      var text = copyText(codeEl);
       function markCopied(){
         var original = btn.innerHTML;
         btn.classList.add("copied");
@@ -107,6 +114,22 @@
     themeState = themeState === "auto" ? "light" : (themeState === "light" ? "dark" : "auto");
     applyTheme();
     try { localStorage.setItem("coding-review-theme", themeState); } catch(e) {}
+  });
+
+  // ---------- Essentials toggle (hides imports and private helpers) ----------
+  var essBtn = document.getElementById("essentialsToggle");
+  function applyEssentials(on){
+    root.classList.toggle("essentials", on);
+    essBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    essBtn.textContent = on ? "Show full code" : "Show essentials";
+  }
+  var essOn = false;
+  try { essOn = localStorage.getItem("coding-review-essentials") === "1"; } catch(e) {}
+  applyEssentials(essOn);
+  essBtn.addEventListener("click", function(){
+    essOn = !essOn;
+    applyEssentials(essOn);
+    try { localStorage.setItem("coding-review-essentials", essOn ? "1" : "0"); } catch(e) {}
   });
 
   // ---------- Mobile sidebar ----------

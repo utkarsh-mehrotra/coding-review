@@ -207,6 +207,14 @@ body::before {
   flex-shrink: 0;
 }
 .theme-toggle:hover { border-color: var(--accent); }
+.ess-toggle { margin-left: auto; }
+.ess-toggle + .theme-toggle { margin-left: 0; }
+.ess-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Essentials view ---------- */
+.fold-mark { display: none; }
+.essentials .fold { display: none; }
+.essentials .fold-mark { display: inline; color: var(--com); font-style: italic; }
 
 /* ---------- Body layout ---------- */
 .body-row {

@@ -284,17 +284,61 @@ def problems_section(topic, view, problems):
     return "\n".join(out)
 
 
+def fold_segments(src):
+    """Split src's lines into (first, last, kind) runs (0-based, half-open) covering every line.
+
+    kind is "import" for the leading import block, "helper" for each private member (comment block
+    and annotations included) and None for everything else.
+    """
+    n = len(src.split("\n")) - 1          # src ends with a newline
+    lines = src.split("\n")
+    folds = []
+    imports = [i for i, l in enumerate(lines[:n]) if l.startswith("import ")]
+    if imports:
+        folds.append((imports[0], imports[-1] + 1, "import", ""))
+    for m in outline(src):
+        if m.private:
+            folds.append((m.doc_start - 1, m.end, "helper", m.name))
+    folds.sort()
+    segs, pos = [], 0
+    for a, b, kind, name in folds:
+        if a > pos:
+            segs.append((pos, a, None, ""))
+        segs.append((a, b, kind, name))
+        pos = b
+    if pos < n:
+        segs.append((pos, n, None, ""))
+    return segs
+
+
 def highlight_with_anchors(src, stem):
-    """highlight() once, then put an empty anchor span at the start of each member's doc_start line."""
-    lines = highlight(src).split("\n")
-    seen = set()
+    """Highlight each fold segment on its own, so fold spans never cross token spans.
+
+    Puts an empty anchor span at the start of each member's doc_start line, and wraps imports and
+    private helpers in <span class="fold"> preceded by a <span class="fold-mark"> that the copy button drops.
+    """
+    lines = src.split("\n")
+    anchors, seen = {}, set()
     for m in outline(src):
         if m.name in seen:      # overloads: keep ids unique, first one wins
             continue
         seen.add(m.name)
-        i = m.doc_start - 1
-        lines[i] = '<span class="m-anchor" id="%s"></span>%s' % (html.escape(anchor_id(stem, m.name)), lines[i])
-    return "\n".join(lines)
+        anchors[m.doc_start - 1] = '<span class="m-anchor" id="%s"></span>' % html.escape(anchor_id(stem, m.name))
+    out = []
+    for a, b, kind, name in fold_segments(src):
+        seg = highlight("\n".join(lines[a:b]) + "\n").split("\n")
+        for i in range(b - a):
+            if a + i in anchors:
+                seg[i] = anchors[a + i] + seg[i]
+        body = "\n".join(seg)
+        if kind is None:
+            out.append(body)
+            continue
+        indent = lines[a][:len(lines[a]) - len(lines[a].lstrip())]
+        text = "// \u2026 imports hidden" if kind == "import" else "// \u2026 %s(): helper hidden" % name
+        out.append('<span class="fold-mark">%s%s\n</span><span class="fold" data-fold="%s">%s</span>'
+                   % (indent, html.escape(text, quote=False), kind, body))
+    return "".join(out)
 
 
 def code_card(topic, fname, desc, badge):
@@ -472,6 +516,7 @@ document.addEventListener("click", function(e){
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="searchInput" type="text" placeholder="Filter: topic, algorithm, method&hellip;" autocomplete="off">
     </div>
+    <button class="theme-toggle ess-toggle" id="essentialsToggle" aria-pressed="false">Show essentials</button>
     <button class="theme-toggle" id="themeToggle"><span id="themeIcon">&#9680;</span><span id="themeLabel">Auto</span></button>
   </div>
 

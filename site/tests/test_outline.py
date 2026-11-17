@@ -49,6 +49,19 @@ class OutlineTest(unittest.TestCase):
         ms = outline(TRICKY)
         self.assertEqual([(m.name, m.start, m.end) for m in ms], [("f", 2, 7), ("g", 8, 8)])
 
+    def test_doc_start_steps_over_annotation_lines(self):
+        src = (
+            "public class A {\n"
+            "    // note\n"
+            "    @SuppressWarnings(\"unchecked\")\n"
+            "    // more\n"
+            "    @Deprecated\n"
+            "    private static void h() { }\n"
+            "}\n"
+        )
+        ms = outline(src)
+        self.assertEqual([(m.name, m.doc_start, m.start, m.end) for m in ms], [("h", 2, 6, 6)])
+
     def test_ids(self):
         self.assertEqual(anchor_id("DSU", "union"), "m-DSU-union")
         self.assertEqual(group_id("DSU", "union"), "lc-DSU-union")
