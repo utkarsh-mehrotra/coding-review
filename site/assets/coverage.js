@@ -193,7 +193,7 @@ function initCoverage(DATA) {
     : "Every decision-tree template has at least one LeetCode problem or is marked as having no equivalent.";
   $("cov-zero").innerHTML = tplLinks(DATA.zero);
   $("cov-nolc-note").textContent = DATA.noLc.length
-    ? DATA.noLc.length + " templates are design or theory topics that LeetCode has no problem for (Bloom filter, 2-SAT, consistent hashing)."
+    ? DATA.noLc.length + " templates are design or theory topics that LeetCode has no problem for (" + DATA.noLc.slice(0, 3).map(function (t) { return t.split("#")[1]; }).join(", ") + (DATA.noLc.length > 3 ? ", and more" : "") + ")."
     : "No templates are marked as lacking a LeetCode equivalent.";
   $("cov-nolc").innerHTML = tplLinks(DATA.noLc);
   $("cov-utags").innerHTML = DATA.utags.map(function (p) { return '<span class="cov-tag">' + esc(p[0]) + ' <span class="cov-muted">' + p[1] + "</span></span>"; }).join("");

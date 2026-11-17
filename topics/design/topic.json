@@ -144,8 +144,7 @@
     {
       "q": "<strong>Cache with per-key expiry?</strong>",
       "a": "Hash map plus expiry-ordered structure",
-      "template": "DesignVariants#TTLCache",
-      "noLeetCode": true
+      "template": "DesignVariants#TTLCache"
     },
     {
       "q": "<strong>Membership in tiny memory, false positives acceptable?</strong>",
