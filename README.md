@@ -38,6 +38,8 @@ The site is hosted on Vercel at https://coding-review-iota.vercel.app. `site/ind
 npx vercel --prod   # deploy site/ to production
 ```
 
+GitHub Actions runs the tests, the template check, the site tests and a stale-generated-files check on every push and pull request. Vercel deploys `main` on every push, and a red CI run does not block that deploy, so check the Actions tab before relying on a push.
+
 ## Topics (15)
 Graphs, Dynamic Programming, Trees & Range Structures, Arrays & Hashing, Sliding Window & Two Pointers,
 Monotonic Stack & Deque, Heaps & Top-K, Intervals & Sweep, Binary Search, Backtracking, Greedy, Linked Lists,
