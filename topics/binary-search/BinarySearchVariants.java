@@ -169,6 +169,7 @@ public class BinarySearchVariants {
         return best;
     }
 
+    // LC 852 / 1095
     // ---------- Search in a Bitonic / Mountain array: find the peak, then search each side ----------
     static int searchMountain(int[] a, int target) {
         int lo = 0, hi = a.length - 1;

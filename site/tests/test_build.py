@@ -311,6 +311,38 @@ class BuildTest(unittest.TestCase):
         js = (SITE / "assets" / "app.js").read_text()
         self.assertNotIn("jumpBackdrop.addEventListener(\"keydown\"", js)
 
+    def test_verified_problem_under_all_cited_templates(self):
+        probs = build.load_problems()
+        for key in ("Backtracking#subsets", "BitsMath#subsetsMask"):
+            self.assertIn(78, [r["id"] for r in probs[key]], key)
+
+    def test_totals_count_each_problem_once(self):
+        probs = build.load_problems()
+        n = len({r["id"] for rows in probs.values() for r in rows})
+        self.assertLess(n, sum(map(len, probs.values())))  # some problems sit under two templates
+        self.assertEqual(build.count_problems(probs), n)
+        self.assertIn("%s LeetCode problems mapped" % format(n, ","), self.page)
+        self.assertIn("<strong>LeetCode coverage:</strong> %s problems map" % format(n, ","), self.page)
+
+    def test_no_zero_templates(self):
+        topics = build.load_topics()
+        cov = build.coverage_data(topics, build.load_problems())
+        self.assertEqual(cov["zero"], [])
+        self.assertTrue(cov["noLc"])
+        self.assertIn("BinarySearch#sqrt", cov["noLc"])
+
+    def test_noleetcode_conflict_is_error(self):
+        topics = build.load_topics()
+        probs = build.load_problems()
+        key = "Backtracking#subsets"
+        dec = next(d for t in topics for d in t["decisions"] if d["template"] == key)
+        dec["noLeetCode"] = True
+        try:
+            errs = build.check(topics, probs)
+        finally:
+            del dec["noLeetCode"]
+        self.assertTrue(any("remove noLeetCode" in e and key in e for e in errs), errs)
+
 
 if __name__ == "__main__":
     unittest.main()

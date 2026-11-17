@@ -128,7 +128,8 @@
     {
       "q": "<strong>Real-valued answer?</strong>",
       "a": "Fixed iteration count, not an epsilon test",
-      "template": "BinarySearch#sqrt"
+      "template": "BinarySearch#sqrt",
+      "noLeetCode": true
     },
     {
       "q": "<strong>Maximize the minimum (or minimize the maximum)?</strong>",

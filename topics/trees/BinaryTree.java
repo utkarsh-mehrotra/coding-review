@@ -103,6 +103,7 @@ public class BinaryTree {
 
     private static int diam;
 
+    // LC 543
     static int diameter(TreeNode root) {
         diam = 0;
         depthForDiameter(root);

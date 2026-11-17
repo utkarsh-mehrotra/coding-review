@@ -80,16 +80,23 @@ def java_members(path: Path):
 
 
 def load_problems():
-    """A/B problems that name a template, grouped by template key File#member."""
+    """A/B problems that name a template, grouped by template key File#member.
+    A verified (tier A) problem is listed under every template that cites it; a tag match (B) under its first."""
     if not PROBLEMS.exists():
         return {}
     by = {}
     for r in json.loads(PROBLEMS.read_text())["problems"]:
         if r["tier"] in SHOWN_TIERS and r["templates"]:
-            by.setdefault(r["templates"][0], []).append(r)
+            for key in (r["templates"] if r["tier"] == "A" else r["templates"][:1]):
+                by.setdefault(key, []).append(r)
     for rows in by.values():
         rows.sort(key=lambda r: (r["tier"], r["paid"], r["id"]))
     return by
+
+
+def count_problems(problems):
+    """Number of distinct LeetCode problems in a {template: [problem]} map."""
+    return len({r["id"] for rows in problems.values() for r in rows})
 
 
 def coverage_data(topics, problems):
@@ -111,11 +118,12 @@ def coverage_data(topics, problems):
     for t in topics:
         view_of.update(view_of_file(t))
     decision_tpls = sorted({d["template"] for t in topics for d in t["decisions"]})
-    main = collections.Counter(k for r in rows_in for k in r["templates"])
+    flagged = {d["template"] for t in topics for d in t["decisions"] if d.get("noLeetCode")}
     utags = collections.Counter(tag for r in rows_in if r["tier"] == "U" for tag in r["tags"])
     return {"topics": [[t, names[t]] for t in topic_ids], "templates": tmpl, "rows": rows, "excluded": raw["excluded"],
             "templateView": {f: v for f, v in view_of.items()}, "decisionCount": len(decision_tpls),
-            "zero": [k for k in decision_tpls if main[k] == 0], "utags": utags.most_common(10)}
+            "zero": [k for k in decision_tpls if not problems.get(k) and k not in flagged],
+            "noLc": [k for k in decision_tpls if k in flagged], "utags": utags.most_common(10)}
 
 
 def build_coverage_view(data):
@@ -177,6 +185,9 @@ def build_coverage_view(data):
     <div class="cov-eyebrow">Templates with no problem assigned</div>
     <p class="cov-note" id="cov-zero-note"></p>
     <div class="cov-taglist" id="cov-zero"></div>
+    <div class="cov-eyebrow">No LeetCode equivalent</div>
+    <p class="cov-note" id="cov-nolc-note"></p>
+    <div class="cov-taglist" id="cov-nolc"></div>
   </div>
   <div class="cov-panel">
     <div class="cov-eyebrow">What the uncovered problems are</div>
@@ -225,6 +236,8 @@ def check(topics, problems=None):
                 errors.append("%s: decision without File#member template: %s" % (t["id"], re.sub("<.*?>", "", dec["q"])[:60]))
                 continue
             fname, member = tpl.split("#", 1)
+            if dec.get("noLeetCode") and (problems or {}).get(tpl):
+                errors.append("%s: %s is flagged noLeetCode but %d problems point at it; remove noLeetCode" % (t["id"], tpl, len(problems[tpl])))
             if fname + ".java" not in java:
                 errors.append("%s: template file %s.java not found (%s)" % (t["id"], fname, tpl))
             elif member not in members[fname + ".java"]:
@@ -267,8 +280,9 @@ def problems_section(topic, view, problems):
         groups += keys
     if not groups:
         return ""
-    total = sum(len(problems[k]) for k in groups)
-    n_a = sum(1 for k in groups for r in problems[k] if r["tier"] == "A")
+    uniq = {r["id"]: r for k in groups for r in problems[k]}
+    total = len(uniq)
+    n_a = sum(1 for r in uniq.values() if r["tier"] == "A")
     out = ['<h2 class="section-title">LeetCode problems <span class="lc-count">%d</span></h2>' % total,
            '<p class="lc-legend"><span class="lc-key lc-a">solid</span> %d named in the template &nbsp; '
            '<span class="lc-key lc-b">dashed</span> %d matched by LeetCode tag &nbsp; '
@@ -525,7 +539,7 @@ def build_overview(topics, counts, problems=None):
              'The page is generated from the same files that the test suite compiles and runs, so what you copy is what passed the tests.</div>')
     problems = problems or {}
     if problems:
-        rows = [r for v in problems.values() for r in v]
+        rows = list({r["id"]: r for v in problems.values() for r in v}.values())
         n_a = sum(1 for r in rows if r["tier"] == "A")
         p.append('<div class="calib-block"><strong>LeetCode coverage:</strong> %s problems map to a template here: %s named in the template code or practice map, '
                  '%s matched by a specific LeetCode tag. Each template view lists its problems under the code. '
@@ -606,7 +620,7 @@ def render_page(topics=None, problems=None):
     n_dec = sum(len(t["decisions"]) for t in topics)
     n_files = sum(len(list(t["_dir"].glob("*.java"))) for t in topics)
     counts = {t["id"]: len(list(t["_dir"].glob("*.java"))) for t in topics}
-    n_lc = sum(map(len, problems.values()))
+    n_lc = count_problems(problems)
     nav, views, view_ids, number = [], [], ["overview"], 0
     nav.append('<div class="sidebar-label">Reference</div>')
     nav.append('<div class="nav-item" data-view="overview"><span class="fname">00</span>Overview &amp; Decision Tree</div>')
@@ -733,7 +747,7 @@ def main():
     if "--check" in sys.argv:
         print("check ok: %d topics, %d template files, %d decision entries all link to real members; "
               "%d LeetCode problems link to %d real template members" % (
-                  len(topics), n_files, n_dec, sum(map(len, problems.values())), len(problems)))
+                  len(topics), n_files, n_dec, count_problems(problems), len(problems)))
         have, total, missing = cue_report(topics)
         print("cues: %d of %d non-private members have a cue" % (have, total))
         if missing:

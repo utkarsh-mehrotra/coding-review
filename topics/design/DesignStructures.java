@@ -168,6 +168,7 @@ public class DesignStructures {
         void unfollow(int a, int b) { Set<Integer> s = follows.get(a); if (s != null) s.remove(b); }
     }
 
+    // LC 359
     // ---------- Sliding-window rate limiter (log-based): O(1) amortized with a deque of timestamps ----------
     static class RateLimiter {
         private final int limit;

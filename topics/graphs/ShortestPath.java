@@ -26,6 +26,7 @@ public class ShortestPath {
         return dist;
     }
 
+    // LC 743
     // ---------- Bellman-Ford ----------
     // edges[i] = {u, v, weight}. Handles negative weights, detects negative cycles.
     static int[] bellmanFord(int n, int start, int[][] edges) {
@@ -50,6 +51,7 @@ public class ShortestPath {
         return dist;
     }
 
+    // LC 1334
     // ---------- Floyd-Warshall (All-Pairs Shortest Path) ----------
     // dist[i][j] = direct edge weight or Integer.MAX_VALUE/INF if none; dist[i][i] = 0
     static int[][] floydWarshall(int[][] dist) {

@@ -154,11 +154,19 @@
   render(true);
 
   // ---- gaps
-  $("cov-zero-note").textContent = DATA.zero.length + " of " + DATA.decisionCount + " decision-tree templates are not the main match for any problem. " +
-    "Some only need a problem number in their comments (Floyd-Warshall, copy random list); others are design or theory templates with no LeetCode equivalent (rate limiter, Bloom filter, 2-SAT).";
-  $("cov-zero").innerHTML = DATA.zero.map(function (t) {
-    var v = VIEW[t.split("#")[0]];
-    return v ? '<a class="tpl" data-goto="' + v + '">' + esc(t) + "</a>" : '<span class="tpl">' + esc(t) + "</span>";
-  }).join("");
+  function tplLinks(list) {
+    return list.map(function (t) {
+      var v = VIEW[t.split("#")[0]];
+      return v ? '<a class="tpl" data-goto="' + v + '">' + esc(t) + "</a>" : '<span class="tpl">' + esc(t) + "</span>";
+    }).join("");
+  }
+  $("cov-zero-note").textContent = DATA.zero.length
+    ? DATA.zero.length + " of " + DATA.decisionCount + " decision-tree templates have no LeetCode problem listed under them yet."
+    : "Every decision-tree template has at least one LeetCode problem or is marked as having no equivalent.";
+  $("cov-zero").innerHTML = tplLinks(DATA.zero);
+  $("cov-nolc-note").textContent = DATA.noLc.length
+    ? DATA.noLc.length + " templates are design or theory topics that LeetCode has no problem for (Bloom filter, 2-SAT, consistent hashing)."
+    : "No templates are marked as lacking a LeetCode equivalent.";
+  $("cov-nolc").innerHTML = tplLinks(DATA.noLc);
   $("cov-utags").innerHTML = DATA.utags.map(function (p) { return '<span class="cov-tag">' + esc(p[0]) + ' <span class="cov-muted">' + p[1] + "</span></span>"; }).join("");
 })();
