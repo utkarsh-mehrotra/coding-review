@@ -14,8 +14,9 @@ make test        # compile all templates, run all test suites
 make check       # template-first rule: every decision links to a real template member
 make site        # regenerate site/index.html from topics/*/topic.json + the Java files
 make problems    # remap LeetCode problems to templates (offline)
-make all         # all of the above
-make serve       # open http://localhost:8000 (the LeetCode Coverage view needs this, not file://)
+make test-site   # site tests: Python (build) and Node (search, coverage)
+make serve       # open http://localhost:8000 (the LeetCode Coverage view needs this, not file://); separate from make all
+make all         # test, problems, check, site and test-site
 ```
 
 ## Layout
@@ -30,7 +31,7 @@ make serve       # open http://localhost:8000 (the LeetCode Coverage view needs 
 | `site/index.html` | generated single-page reference (do not edit by hand) |
 | `docs/PLAN.md` | scope, conventions, roadmap |
 | `tools/lc-coverage/` | maps every LeetCode problem to a template; see its README |
-| `vercel.json` | Vercel config: serves `site/` as static files, no build step |
+| `vercel.json` | Vercel config: serves `site/` as static files, no build step (`.vercelignore` keeps tests and build scripts out of the deploy) |
 
 ## Deploy
 The site is hosted on Vercel at https://coding-review-iota.vercel.app. `site/index.html` is generated, so run `make site` and commit the result before deploying.

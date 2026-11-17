@@ -31,4 +31,8 @@ jobs:
       - name: Generated files are up to date
         run: |
           make problems site
-          git diff --exit-code
+          if ! git diff --exit-code || test -n "$(git status --porcelain)"; then
+            echo "::error::Generated files are out of date or untracked. Run 'make problems site' and commit the result."
+            git status --short
+            exit 1
+          fi
