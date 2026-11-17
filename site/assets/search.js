@@ -63,6 +63,18 @@ var CRSearch = (function(){
     return scored.slice(0, limit).map(function(x){ return x.e; });
   }
 
-  return { matchesSidebar: matchesSidebar, rank: rank };
+  // Rebuilds [label, sub, view, anchor, kind] entries from the compact form the page embeds:
+  // {e: entries, t: [[template, view, anchor]], p: [[id, title, template index]]}. A plain array passes through.
+  function expand(data) {
+    if (!data || data.length !== undefined) return data || [];
+    var out = (data.e || []).slice(), t = data.t || [], p = data.p || [];
+    for (var i = 0; i < p.length; i++) {
+      var tp = t[p[i][2]];
+      out.push([p[i][0] + " " + p[i][1], tp[0], tp[1], tp[2], "problem"]);
+    }
+    return out;
+  }
+
+  return { matchesSidebar: matchesSidebar, rank: rank, expand: expand };
 })();
 if (typeof module !== "undefined" && module.exports) module.exports = CRSearch; else window.CRSearch = CRSearch;

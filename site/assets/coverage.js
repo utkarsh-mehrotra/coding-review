@@ -5,7 +5,8 @@ var coverageLoad = null;
 
 // Fetches coverage.json and calls onData once. A successful load is kept, so later calls return the
 // same promise and the view never renders twice. A failed fetch is forgotten, so the next call retries.
-// An error thrown by onData goes to onError and is not retried (the same data would fail again).
+// onError receives fetch and HTTP failures (and is retried on the next call). showCoverage handles
+// render errors itself, so they never reach onError; if onData does throw, onError gets it and it is not retried.
 function loadCoverage(fetchFn, onData, onError, version) {
   if (coverageLoad) return coverageLoad;
   var url = "coverage.json" + (version ? "?v=" + version : "");

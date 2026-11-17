@@ -69,3 +69,19 @@ test("rank equal scores order by kind then label", () => {
   ];
   assert.deepEqual(rank(idx, "graph").map((e) => e[0]), ["Graph view", "Graph A", "Graph B", "Graph problem"]);
 });
+
+test("expand rebuilds problem entries from the compact form", () => {
+  const { expand } = require("../assets/search.js");
+  const data = {
+    e: [["Union-Find", "Graphs", "v", "", "view"]],
+    t: [["DSU#find", "v", "g-DSU-find"]],
+    p: [[684, "Redundant Connection", 0], [547, "Provinces", 0]],
+  };
+  assert.deepEqual(expand(data), [
+    ["Union-Find", "Graphs", "v", "", "view"],
+    ["684 Redundant Connection", "DSU#find", "v", "g-DSU-find", "problem"],
+    ["547 Provinces", "DSU#find", "v", "g-DSU-find", "problem"],
+  ]);
+  assert.deepEqual(expand([["a", "", "v", "", "view"]]), [["a", "", "v", "", "view"]]);
+  assert.equal(rank(expand(data), "684")[0][0], "684 Redundant Connection");
+});

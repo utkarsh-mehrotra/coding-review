@@ -253,7 +253,7 @@ class BuildTest(unittest.TestCase):
         import json
         m = re.search(r'<script type="application/json" id="jump-index">(.*?)</script>', self.page, re.S)
         self.assertTrue(m)
-        idx = json.loads(m.group(1))
+        idx = build.expand_jump(json.loads(m.group(1)))
         kinds = {e[4] for e in idx}
         self.assertEqual(kinds, {"view", "template", "problem"})
         ids = [e[0].split(" ", 1)[0] for e in idx if e[4] == "problem"]
@@ -263,7 +263,7 @@ class BuildTest(unittest.TestCase):
     def test_jump_index_targets_exist(self):
         import json
         m = re.search(r'<script type="application/json" id="jump-index">(.*?)</script>', self.page, re.S)
-        for label, sub, view, anchor, kind in json.loads(m.group(1)):
+        for label, sub, view, anchor, kind in build.expand_jump(json.loads(m.group(1))):
             self.assertIn('id="view-%s"' % view, self.page, label)
             if anchor:
                 self.assertIn('id="%s"' % anchor, self.page, label)
@@ -293,6 +293,20 @@ class BuildTest(unittest.TestCase):
         probs = [e for e in idx if e[4] == "problem"]
         self.assertEqual(len(probs), 1)
         self.assertEqual(probs[0][2:4], ["v2", build.group_id("B", "b")])
+
+    def test_jump_index_compact_roundtrip(self):
+        import json
+        t = {"id": "t", "title": "T", "_dir": None, "decisions": [],
+             "views": [{"id": "v1", "title": "V1", "files": [{"file": "A.java"}]},
+                       {"id": "v2", "title": "V2", "files": [{"file": "B.java"}]}]}
+        rows = [{"id": 7, "title": "Seven </script>", "templates": ["B#b"]},
+                {"id": 8, "title": "Eight", "templates": ["B#b"]},
+                {"id": 9, "title": "Nine", "templates": ["A#a"]}]
+        full = build.build_jump_index([t], {"B#b": rows[:2], "A#a": rows[2:]}, [("v1", "V1", "T")])
+        compact = build.compact_jump_index(full)
+        self.assertEqual(len(compact["t"]), 2)
+        self.assertEqual(build.expand_jump(json.loads(build.jump_json(compact))), full)
+        self.assertNotIn("<", build.jump_json(compact))
 
     def test_jump_json_cannot_close_script(self):
         out = build.jump_json([["1 </script><b>x", "", "v", "", "problem"]])

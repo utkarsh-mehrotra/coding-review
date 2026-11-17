@@ -138,7 +138,7 @@
 
   // ---------- Jump box ----------
   var jumpIndex = [];
-  try { jumpIndex = JSON.parse(document.getElementById("jump-index").textContent); } catch(e) {}
+  try { jumpIndex = CRSearch.expand(JSON.parse(document.getElementById("jump-index").textContent)); } catch(e) {}
   var jumpBackdrop = document.getElementById("jumpBackdrop");
   var jumpInput = document.getElementById("jumpInput");
   var jumpList = document.getElementById("jumpList");

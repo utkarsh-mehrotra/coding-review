@@ -550,6 +550,31 @@ def build_jump_index(topics, problems, view_ids_titles):
     return idx
 
 
+def compact_jump_index(index):
+    """Shrinks the jump index for embedding: {"e": views and templates, "t": [[template, view, anchor]],
+    "p": [[id, title, template index]]}. expand_jump (and CRSearch.expand in JS) reverse it exactly."""
+    entries, tpls, tpl_idx, probs = [], [], {}, []
+    for e in index:
+        if e[4] != "problem":
+            entries.append(e)
+            continue
+        key = (e[1], e[2], e[3])
+        if key not in tpl_idx:
+            tpl_idx[key] = len(tpls)
+            tpls.append(list(key))
+        pid, title = e[0].split(" ", 1)
+        probs.append([int(pid), title, tpl_idx[key]])
+    return {"e": entries, "t": tpls, "p": probs}
+
+
+def expand_jump(data):
+    out = list(data["e"])
+    for pid, title, i in data["p"]:
+        t = data["t"][i]
+        out.append(["%d %s" % (pid, title), t[0], t[1], t[2], "problem"])
+    return out
+
+
 def jump_json(index):
     """JSON safe to embed in a script element."""
     return json.dumps(index, separators=(",", ":")).replace("<", "\\u003c")
@@ -696,7 +721,7 @@ def render_page(topics=None, problems=None):
     if cov:
         ref_views.append(("coverage", "LeetCode Coverage", "Reference"))
     topic_views = [(v["id"], v["title"], t["title"]) for t in topics for v in t["views"]]
-    jump_data = jump_json(build_jump_index(topics, problems, ref_views + topic_views))
+    jump_data = jump_json(compact_jump_index(build_jump_index(topics, problems, ref_views + topic_views)))
 
     css = (ASSETS / "style.css").read_text()
     js = (ASSETS / "search.js").read_text() + "\n" + (ASSETS / "app.js").read_text().replace("/*VIEWS*/[]", json.dumps(view_ids))
