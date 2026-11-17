@@ -17,6 +17,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from java_outline import outline, anchor_id, group_id  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 TOPICS = ROOT / "topics"
 ASSETS = ROOT / "site" / "assets"
@@ -276,9 +279,22 @@ def problems_section(topic, view, problems):
         if rest:
             pills += '<details class="lc-more"><summary>show %d more</summary><div class="lc-list">%s</div></details>' % (
                 len(rest), "".join(problem_pill(r) for r in rest))
-        out.append('<div class="lc-group"><div class="lc-head"><span class="tpl">%s</span><span class="lc-n">%d</span></div>'
-                   '<div class="lc-list">%s</div></div>' % (html.escape(k), len(rows), pills))
+        out.append('<div class="lc-group" id="%s"><div class="lc-head"><span class="tpl">%s</span><span class="lc-n">%d</span></div>'
+                   '<div class="lc-list">%s</div></div>' % (html.escape(group_id(*k.split("#", 1))), html.escape(k), len(rows), pills))
     return "\n".join(out)
+
+
+def highlight_with_anchors(src, stem):
+    """highlight() once, then put an empty anchor span at the start of each member's doc_start line."""
+    lines = highlight(src).split("\n")
+    seen = set()
+    for m in outline(src):
+        if m.name in seen:      # overloads: keep ids unique, first one wins
+            continue
+        seen.add(m.name)
+        i = m.doc_start - 1
+        lines[i] = '<span class="m-anchor" id="%s"></span>%s' % (html.escape(anchor_id(stem, m.name)), lines[i])
+    return "\n".join(lines)
 
 
 def code_card(topic, fname, desc, badge):
@@ -289,7 +305,7 @@ def code_card(topic, fname, desc, badge):
         '    <div class="cc-meta">\n      <span class="cc-badge">%s</span>\n'
         '      <button class="copy-btn">&#10697; Copy</button>\n    </div>\n  </div>\n'
         '  <pre class="code-block"><code>%s</code></pre>\n</div>'
-    ) % (fname, html.escape(desc, quote=False) if "<" not in desc else desc, badge, highlight(src))
+    ) % (fname, html.escape(desc, quote=False) if "<" not in desc else desc, badge, highlight_with_anchors(src, fname[:-5]))
 
 
 def build_view(topic, view, number, problems=None):
@@ -381,23 +397,12 @@ def build_overview(topics, counts, problems=None):
     return '<div class="view" id="view-overview">\n%s\n</div>' % "\n".join(p)
 
 
-def main():
-    topics = load_topics()
-    problems = load_problems()
-    errors = check(topics, problems)
-    if errors:
-        print("CHECK FAILED (%d):" % len(errors))
-        for e in errors:
-            print("  -", e)
-        sys.exit(1)
+def render_page(topics=None, problems=None):
+    """Returns the whole page as a string; writes nothing."""
+    topics = topics if topics is not None else load_topics()
+    problems = problems if problems is not None else load_problems()
     n_dec = sum(len(t["decisions"]) for t in topics)
     n_files = sum(len(list(t["_dir"].glob("*.java"))) for t in topics)
-    if "--check" in sys.argv:
-        print("check ok: %d topics, %d template files, %d decision entries all link to real members; "
-              "%d LeetCode problems link to %d real template members" % (
-                  len(topics), n_files, n_dec, sum(map(len, problems.values())), len(problems)))
-        return
-
     counts = {t["id"]: len(list(t["_dir"].glob("*.java"))) for t in topics}
     n_lc = sum(map(len, problems.values()))
     nav, views, view_ids, number = [], [], ["overview"], 0
@@ -495,8 +500,28 @@ document.addEventListener("click", function(e){
 </body>
 </html>
 """
+    return page
+
+
+def main():
+    topics = load_topics()
+    problems = load_problems()
+    errors = check(topics, problems)
+    if errors:
+        print("CHECK FAILED (%d):" % len(errors))
+        for e in errors:
+            print("  -", e)
+        sys.exit(1)
+    n_dec = sum(len(t["decisions"]) for t in topics)
+    n_files = sum(len(list(t["_dir"].glob("*.java"))) for t in topics)
+    if "--check" in sys.argv:
+        print("check ok: %d topics, %d template files, %d decision entries all link to real members; "
+              "%d LeetCode problems link to %d real template members" % (
+                  len(topics), n_files, n_dec, sum(map(len, problems.values())), len(problems)))
+        return
+    page = render_page(topics, problems)
     OUT.write_text(page)
-    print("wrote %s (%d KB): %d views, %d templates, %d decisions" % (OUT.relative_to(ROOT), len(page) // 1024, len(view_ids), n_files, n_dec))
+    print("wrote %s (%d KB): %d topics, %d templates, %d decisions" % (OUT.relative_to(ROOT), len(page) // 1024, len(topics), n_files, n_dec))
 
 
 if __name__ == "__main__":

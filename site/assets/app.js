@@ -1,8 +1,11 @@
 (function(){
   var validViews = /*VIEWS*/[];
 
+  var shownView = null;
+
   function showView(name) {
     if (validViews.indexOf(name) === -1) name = "overview";
+    shownView = name;
     document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("active"); });
     var target = document.getElementById("view-" + name);
     if (target) target.classList.add("active");
@@ -12,13 +15,27 @@
     document.getElementById("crumb").textContent = name;
     var mainEl = document.querySelector(".main"); if (mainEl) mainEl.scrollTop = 0; window.scrollTo(0, 0);
     closeSidebarMobile();
+    var ev = document.createEvent("CustomEvent");
+    ev.initCustomEvent("cr:view", false, false, { name: name });
+    document.dispatchEvent(ev);
   }
+
+  // Jump to a view, then to an anchor inside it (e.g. crGoto("union-find", "m-DSU-union")).
+  window.crGoto = function(view, anchorId) {
+    location.hash = view;
+    showView(view);
+    var el = anchorId ? document.getElementById(anchorId) : null;
+    if (el && el.scrollIntoView) el.scrollIntoView();
+  };
 
   function currentHash() {
     return (location.hash || "").replace("#", "");
   }
 
-  window.addEventListener("hashchange", function(){ showView(currentHash()); });
+  window.addEventListener("hashchange", function(){
+    var name = currentHash();
+    if (name !== shownView) showView(name);   // crGoto already showed this view and scrolled
+  });
 
   document.querySelectorAll(".nav-item").forEach(function(item){
     item.addEventListener("click", function(){

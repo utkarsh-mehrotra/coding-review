@@ -2,8 +2,8 @@
 SRC := common/Check.java $(wildcard topics/*/*.java) $(wildcard topics/*/tests/*.java)
 TESTS := GraphCoreTest GraphVariantsTest GraphExtrasTest GraphRandomTest DPTest TreesTest PatternsTest StructuresTest Deepen1Test Deepen2Test Deepen3Test
 
-.PHONY: test check site all clean problems fetch-lc
-all: test problems check site
+.PHONY: test check site test-site all clean problems fetch-lc
+all: test problems check site test-site
 
 test:
 	rm -rf build && mkdir -p build
@@ -16,6 +16,9 @@ check:
 
 site:
 	python3 site/build.py
+
+test-site:
+	python3 -m unittest discover -s site/tests
 
 # LeetCode coverage: map every problem to a template (offline, uses the cached list in tools/lc-coverage/data)
 LC := tools/lc-coverage
