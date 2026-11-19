@@ -120,6 +120,31 @@ public class DPTest {
         // critique regressions
         Check.eq("numTilings0", DPVariants.numTilings(0) + "," + DPVariants.numTilings(1) + "," + DPVariants.numTilings(3), "1,1,5");
         Check.eq("maxProdLC152", DPLinear.maxProduct(new int[]{-2, 3, -4}), 24);
+        // known-input: subset sum (LC 416 style)
+        Check.eq("subsetSum yes", DPKnapsack.subsetSum(new int[]{3, 34, 4, 12, 5, 2}, 9), true);
+        Check.eq("subsetSum no", DPKnapsack.subsetSum(new int[]{3, 34, 4, 12, 5, 2}, 30), false);
+        Check.eq("subsetSum zero", DPKnapsack.subsetSum(new int[]{7}, 0), true);
+        Check.eq("subsetSum single", DPKnapsack.subsetSum(new int[]{7}, 7) + "," + DPKnapsack.subsetSum(new int[]{7}, 8), "true,false");
+        // LC-limit depth: top-down memo recursion at constraint maxima, run inside this big-stack thread
+        Check.eq("depth coinChange amount 1e4", DPKnapsack.coinChangeMin(new int[]{1}, 10000), 10000);
+        Check.eq("depth coinChange 1,2,5", DPKnapsack.coinChangeMin(new int[]{1, 2, 5}, 10000), 2000);
+        Check.eq("depth numSquares 1e4", DPKnapsack.numSquares(10000), 1);
+        // 9999 % 8 == 7, so Legendre says four squares are needed
+        Check.eq("depth numSquares 9999", DPKnapsack.numSquares(9999), 4);
+        Random lr = new Random(100000);
+        int N = 100000;
+        int[] big = new int[N], prices = new int[N];
+        for (int i = 0; i < N; i++) { big[i] = lr.nextInt(201) - 100; prices[i] = lr.nextInt(10001); }
+        int cur = big[0], best = big[0];
+        for (int i = 1; i < N; i++) { cur = Math.max(big[i], cur + big[i]); best = Math.max(best, cur); }
+        Check.eq("depth maxSubArray 1e5", DPLinear.maxSubArray(big), best);
+        int lo = prices[0], prof = 0;
+        for (int i = 1; i < N; i++) { lo = Math.min(lo, prices[i]); prof = Math.max(prof, prices[i] - lo); }
+        Check.eq("depth maxProfitOne 1e5", DPLinear.maxProfitOne(prices), prof);
+        Check.eq("depth checkRecord 1e5", DPVariants.checkRecord(100000), recordIter(100000));
+        Check.eq("depth checkRecord small", DPVariants.checkRecord(10101), recordIter(10101));
+        double p21 = DPCombined.new21Game(10000, 10000, 10000);
+        Check.eq("depth new21Game in [0,1]", p21 >= 0 && p21 <= 1, true);
         Check.done("DPTest");
     }
 
@@ -165,5 +190,26 @@ public class DPTest {
             if (ok) best = Math.max(best, len);
         }
         return best;
+    }
+
+    // iterative recurrence for LC 552 over states (absences 0..1, trailing lates 0..2), mod 1e9+7
+    static int recordIter(int n) {
+        final long M = 1_000_000_007L;
+        long[][] dp = new long[2][3];
+        dp[0][0] = 1;
+        for (int i = 0; i < n; i++) {
+            long[][] nx = new long[2][3];
+            for (int a = 0; a < 2; a++) for (int l = 0; l < 3; l++) {
+                long v = dp[a][l];
+                if (v == 0) continue;
+                nx[a][0] = (nx[a][0] + v) % M;                         // P
+                if (a == 0) nx[1][0] = (nx[1][0] + v) % M;             // A
+                if (l < 2) nx[a][l + 1] = (nx[a][l + 1] + v) % M;      // L
+            }
+            dp = nx;
+        }
+        long t = 0;
+        for (long[] row : dp) for (long v : row) t += v;
+        return (int) (t % M);
     }
 }

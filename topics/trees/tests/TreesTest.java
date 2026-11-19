@@ -149,6 +149,11 @@ public class TreesTest {
         Check.eq("lbstBoth", BST.largestBSTSubtree(T(0, Integer.MIN_VALUE, Integer.MAX_VALUE)), 3);
         Check.eq("lbstSingleMin", BST.largestBSTSubtree(T(Integer.MIN_VALUE)), 1);
         }
+        Check.eq("isSameTree equal", BinaryTree.isSameTree(T(1, 2, 3), T(1, 2, 3)), true);
+        Check.eq("isSameTree shape", BinaryTree.isSameTree(T(1, 2), T(1, null, 2)), false);
+        Check.eq("isSameTree values", BinaryTree.isSameTree(T(1, 2, 1), T(1, 1, 2)), false);
+        Check.eq("isSameTree both null", BinaryTree.isSameTree(null, null), true);
+        Check.eq("isSameTree one null", BinaryTree.isSameTree(T(1), null), false);
         Check.done("TreesTest");
     }
 }

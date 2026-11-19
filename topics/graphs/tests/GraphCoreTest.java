@@ -1,11 +1,6 @@
 import java.util.*;
 
 public class GraphCoreTest {
-    static int pass = 0, fail = 0;
-    static void check(String name, Object got, Object want) {
-        boolean ok = Objects.equals(String.valueOf(got), String.valueOf(want));
-        if (ok) pass++; else { fail++; System.out.println("FAIL " + name + ": got " + got + " want " + want); }
-    }
     @SuppressWarnings("unchecked")
     static List<int[]>[] wadj(int n, int[][] e) {
         List<int[]>[] a = new List[n];
@@ -21,70 +16,92 @@ public class GraphCoreTest {
     }
     public static void main(String[] args) {
         // Traversal
-        check("bfs", Arrays.toString(Traversal.bfs(0, adj(4, new int[][]{{0,1},{1,2},{2,3}}, false))), "[0, 1, 2, 3]");
-        check("01bfs", Traversal.zeroOneBFS(0, wadj(3, new int[][]{{0,1,1},{0,2,0},{2,1,0}}))[1], 0);
-        check("dial", Traversal.dial(0, wadj(3, new int[][]{{0,1,2},{0,2,1},{2,1,1}}), 2)[1], 2);
+        Check.eq("bfs", Arrays.toString(Traversal.bfs(0, adj(4, new int[][]{{0,1},{1,2},{2,3}}, false))), "[0, 1, 2, 3]");
+        Check.eq("01bfs", Traversal.zeroOneBFS(0, wadj(3, new int[][]{{0,1,1},{0,2,0},{2,1,0}}))[1], 0);
+        Check.eq("dial", Traversal.dial(0, wadj(3, new int[][]{{0,1,2},{0,2,1},{2,1,1}}), 2)[1], 2);
         // Shortest path
         int[][] se = {{0,1,4},{0,2,1},{2,1,2},{1,3,1}};
-        check("dijkstra", ShortestPath.dijkstra(0, wadj(4, se))[3], 4);
-        check("bellman", ShortestPath.bellmanFord(3, 0, new int[][]{{0,1,3},{1,2,-2},{0,2,2}})[2], 1);
+        Check.eq("dijkstra", ShortestPath.dijkstra(0, wadj(4, se))[3], 4);
+        Check.eq("bellman", ShortestPath.bellmanFord(3, 0, new int[][]{{0,1,3},{1,2,-2},{0,2,2}})[2], 1);
         int INF = Integer.MAX_VALUE;
         int[][] fw = {{0,3,INF},{INF,0,-2},{INF,INF,0}};
-        check("floyd", ShortestPath.floydWarshall(fw)[0][2], 1);
+        Check.eq("floyd", ShortestPath.floydWarshall(fw)[0][2], 1);
         int[][] je = {{0,1,3},{1,2,-2},{0,2,2}};
         int[][] jr = ShortestPath.johnsons(3, je, wadj(3, je));
-        check("johnson", jr[0][2], 1);
-        check("johnson-unreach", jr[2][0], INF);
-        check("astar", ShortestPath.aStar(0, 3, wadj(4, se), x -> 0), 4);
+        Check.eq("johnson", jr[0][2], 1);
+        Check.eq("johnson-unreach", jr[2][0], INF);
+        Check.eq("astar", ShortestPath.aStar(0, 3, wadj(4, se), x -> 0), 4);
         // Topo
-        check("kahn", TopoSortDAG.kahnsTopoSort(3, adj(3, new int[][]{{0,1},{1,2}}, false)), "[0, 1, 2]");
-        check("dfstopo", TopoSortDAG.dfsTopoSort(3, adj(3, new int[][]{{0,1},{1,2}}, false)), "[0, 1, 2]");
-        check("countpaths", Arrays.toString(TopoSortDAG.countPathsDAG(4, adj(4, new int[][]{{0,1},{0,2},{1,3},{2,3}}, false), 0)), "[1, 1, 1, 2]");
+        Check.eq("kahn", TopoSortDAG.kahnsTopoSort(3, adj(3, new int[][]{{0,1},{1,2}}, false)), "[0, 1, 2]");
+        Check.eq("dfstopo", TopoSortDAG.dfsTopoSort(3, adj(3, new int[][]{{0,1},{1,2}}, false)), "[0, 1, 2]");
+        Check.eq("countpaths", Arrays.toString(TopoSortDAG.countPathsDAG(4, adj(4, new int[][]{{0,1},{0,2},{1,3},{2,3}}, false), 0)), "[1, 1, 1, 2]");
         // DSU
-        check("dsu-cycle", DSU.hasCycle(3, new int[][]{{0,1},{1,2},{2,0}}), true);
-        check("dsu-comp", DSU.countComponents(5, new int[][]{{0,1},{2,3}}), 3);
+        Check.eq("dsu-cycle", DSU.hasCycle(3, new int[][]{{0,1},{1,2},{2,0}}), true);
+        Check.eq("dsu-comp", DSU.countComponents(5, new int[][]{{0,1},{2,3}}), 3);
         // MST
         int[][] me = {{0,1,1},{1,2,2},{0,2,3},{2,3,4}};
-        check("kruskal", MST.kruskalsMST(4, me.clone()), 7);
+        Check.eq("kruskal", MST.kruskalsMST(4, me.clone()), 7);
         List<int[]>[] pa = wadj(4, new int[][]{{0,1,1},{1,0,1},{1,2,2},{2,1,2},{0,2,3},{2,0,3},{2,3,4},{3,2,4}});
-        check("prim", MST.primsMST(4, pa), 7);
+        Check.eq("prim", MST.primsMST(4, pa), 7);
         // SCC
         List<List<Integer>> g = adj(4, new int[][]{{0,1},{1,2},{2,0},{2,3}}, false);
-        check("tarjan-count", SCC_Bridges_2SAT.tarjanSCC(4, g).size(), 2);
-        check("kosaraju-count", SCC_Bridges_2SAT.kosarajuSCC(4, g).size(), 2);
+        Check.eq("tarjan-count", SCC_Bridges_2SAT.tarjanSCC(4, g).size(), 2);
+        Check.eq("kosaraju-count", SCC_Bridges_2SAT.kosarajuSCC(4, g).size(), 2);
         List<List<Integer>> sccs = SCC_Bridges_2SAT.kosarajuSCC(4, g);
-        check("condense-nodes", SCC_Bridges_2SAT.condenseSCC(4, g, sccs).size(), 2);
+        Check.eq("condense-nodes", SCC_Bridges_2SAT.condenseSCC(4, g, sccs).size(), 2);
         SCC_Bridges_2SAT.findBridgesAndArticulation(4, adj(4, new int[][]{{0,1},{1,2},{2,0},{2,3}}, true));
-        check("bridges", SCC_Bridges_2SAT.bridges.size(), 1);
-        check("artic", SCC_Bridges_2SAT.articulationPoints, "[2]");
+        Check.eq("bridges", SCC_Bridges_2SAT.bridges.size(), 1);
+        Check.eq("artic", SCC_Bridges_2SAT.articulationPoints, "[2]");
         List<int[]> unsat = Arrays.asList(new int[]{0,0,1,0}, new int[]{0,1,1,0}, new int[]{0,0,1,1}, new int[]{0,1,1,1});
-        check("2sat-unsat", SCC_Bridges_2SAT.solve2SAT(2, unsat), false);
-        check("2sat-sat", SCC_Bridges_2SAT.solve2SAT(2, Arrays.asList(new int[]{0,0,1,0})), true);
+        Check.eq("2sat-unsat", SCC_Bridges_2SAT.solve2SAT(2, unsat), false);
+        Check.eq("2sat-sat", SCC_Bridges_2SAT.solve2SAT(2, Arrays.asList(new int[]{0,0,1,0})), true);
         // Eulerian
         List<List<String>> tix = Arrays.asList(Arrays.asList("MUC","LHR"), Arrays.asList("JFK","MUC"), Arrays.asList("SFO","SJC"), Arrays.asList("LHR","SFO"));
-        check("itinerary", EulerianPath.findItinerary(tix), "[JFK, MUC, LHR, SFO, SJC]");
+        Check.eq("itinerary", EulerianPath.findItinerary(tix), "[JFK, MUC, LHR, SFO, SJC]");
         Map<Integer, Deque<Integer>> em = new HashMap<>();
         em.computeIfAbsent(0, k -> new ArrayDeque<>()).add(1);
         em.computeIfAbsent(1, k -> new ArrayDeque<>()).add(2);
         em.computeIfAbsent(2, k -> new ArrayDeque<>()).add(0);
-        check("hierholzer", EulerianPath.hierholzer(3, em, 0), "[0, 1, 2, 0]");
+        Check.eq("hierholzer", EulerianPath.hierholzer(3, em, 0), "[0, 1, 2, 0]");
         // Flow
         int[][] cap = new int[4][4];
         cap[0][1] = 3; cap[0][2] = 2; cap[1][2] = 1; cap[1][3] = 2; cap[2][3] = 3;
-        check("edmonds", NetworkFlow.edmondsKarp(4, cap, 0, 3), 5);
+        Check.eq("edmonds", NetworkFlow.edmondsKarp(4, cap, 0, 3), 5);
         NetworkFlow.Dinic d = new NetworkFlow.Dinic(4);
         d.addEdge(0,1,3); d.addEdge(0,2,2); d.addEdge(1,2,1); d.addEdge(1,3,2); d.addEdge(2,3,3);
-        check("dinic", d.maxFlow(0, 3), 5);
+        Check.eq("dinic", d.maxFlow(0, 3), 5);
         NetworkFlow.HopcroftKarp hk = new NetworkFlow.HopcroftKarp(3, 3);
         hk.addEdge(0,0); hk.addEdge(0,1); hk.addEdge(1,0); hk.addEdge(2,1);
-        check("hopcroft", hk.maxMatching(), 2);
+        Check.eq("hopcroft", hk.maxMatching(), 2);
         // Bipartite / bitmask
-        check("bip-odd", BipartiteAndBitmaskDP.isBipartite(3, adj(3, new int[][]{{0,1},{1,2},{2,0}}, true)), false);
-        check("bip-even", BipartiteAndBitmaskDP.isBipartite(4, adj(4, new int[][]{{0,1},{1,2},{2,3},{3,0}}, true)), true);
+        Check.eq("bip-odd", BipartiteAndBitmaskDP.isBipartite(3, adj(3, new int[][]{{0,1},{1,2},{2,0}}, true)), false);
+        Check.eq("bip-even", BipartiteAndBitmaskDP.isBipartite(4, adj(4, new int[][]{{0,1},{1,2},{2,3},{3,0}}, true)), true);
         int[][] tsp = {{0,10,15,20},{10,0,35,25},{15,35,0,30},{20,25,30,0}};
-        check("heldkarp", BipartiteAndBitmaskDP.heldKarpTSP(tsp), 80);
-        check("lc847", BipartiteAndBitmaskDP.shortestPathVisitingAllNodes(adj(4, new int[][]{{0,1},{0,2},{0,3}}, true)), 4);
-        System.out.println("pass=" + pass + " fail=" + fail);
-        if (fail > 0) System.exit(1);
+        Check.eq("heldkarp", BipartiteAndBitmaskDP.heldKarpTSP(tsp), 80);
+        Check.eq("lc847", BipartiteAndBitmaskDP.shortestPathVisitingAllNodes(adj(4, new int[][]{{0,1},{0,2},{0,3}}, true)), 4);
+        // never-tested before: DSU, DSUExtended, Traversal dfs/dfsRec/multiSourceBFS, TreeGraphs.bfsDist
+        DSU dsu0 = new DSU(5);
+        Check.eq("dsu union new", dsu0.union(0, 1) + "," + dsu0.union(1, 2), "true,true");
+        Check.eq("dsu union cycle", dsu0.union(0, 2), false);
+        Check.eq("dsu find same", dsu0.find(0) == dsu0.find(2), true);
+        Check.eq("dsu find apart", dsu0.find(3) == dsu0.find(0), false);
+        Check.eq("dsu components", dsu0.components, 3);
+        DSUExtended.DSUSize ds = new DSUExtended.DSUSize(6);
+        Check.eq("dsuSize union", ds.union(0, 1) + "," + ds.union(2, 3) + "," + ds.union(1, 3) + "," + ds.union(0, 2), "true,true,true,false");
+        Check.eq("dsuSize sizeOf", ds.sizeOf(3) + "," + ds.sizeOf(4), "4,1");
+        Check.eq("dsuSize find", ds.find(0) == ds.find(3) && ds.find(4) != ds.find(0), true);
+        DSUExtended.WeightedDSU wd = new DSUExtended.WeightedDSU(4);
+        wd.union(0, 1, 2.0);
+        wd.union(1, 2, 3.0);
+        Check.eq("weightedDSU query", wd.query(0, 2) + "," + wd.query(2, 0) + "," + wd.query(0, 3), "6.0,0.16666666666666666,-1.0");
+        List<List<Integer>> g5 = adj(4, new int[][]{{0, 1}, {1, 2}}, true);
+        boolean[] seen = new boolean[4];
+        Traversal.dfsRec(0, g5, seen);
+        Check.eq("dfsRec visited", Arrays.toString(seen), "[true, true, true, false]");
+        Traversal.dfs(0, adj(3, new int[][]{{0, 1}, {1, 2}, {2, 0}}, true)); // terminates on a cycle
+        Check.eq("dfs cycle terminates", true, true);
+        Check.eq("multiSourceBFS", Arrays.toString(Traversal.multiSourceBFS(Arrays.asList(0, 3), adj(5, new int[][]{{0, 1}, {1, 2}, {2, 3}, {3, 4}}, true), 5)), "[0, 1, 1, 0, 1]");
+        Check.eq("bfsDist", Arrays.toString(TreeGraphs.bfsDist(0, adj(6, new int[][]{{0, 1}, {1, 2}, {2, 3}, {1, 4}}, true))), "[0, 1, 2, 3, 2, -1]");
+        Check.done("GraphCoreTest");
     }
 }

@@ -275,6 +275,15 @@ public class PatternsTest {
         Check.eq("powMod ok", BitsMath.powMod(2, 10, 1000) + "," + BitsMathVariants.powMod(3, 0, 7), "24,1");
         Check.eq("minRemoveKeepsStar", StacksVariants.minRemoveToMakeValid("a*b(c"), "a*bc");
         Check.eq("minRemoveBasic", StacksVariants.minRemoveToMakeValid("lee(t(c)o)de)") + "," + StacksVariants.minRemoveToMakeValid("))(("), "lee(t(c)o)de,");
+        // reservoirPick: fixed seed, near-uniform over a 5-element stream
+        int[] resCount = new int[5];
+        Random resRnd = new Random(42);
+        for (int t = 0; t < 50000; t++) resCount[ArraysHashing.reservoirPick(new int[]{0, 1, 2, 3, 4}, resRnd)]++;
+        boolean resOk = true;
+        for (int c : resCount) if (c < 9500 || c > 10500) resOk = false;
+        Check.eq("reservoirPick uniform " + Arrays.toString(resCount), resOk, true);
+        Check.eq("reservoirPick single", ArraysHashing.reservoirPick(new int[]{7}, new Random(1)), 7);
+        Check.eq("reservoirPick empty", ArraysHashing.reservoirPick(new int[0], new Random(1)), -1);
         Check.done("PatternsTest");
     }
 

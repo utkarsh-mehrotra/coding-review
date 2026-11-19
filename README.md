@@ -47,15 +47,16 @@ Monotonic Stack & Deque, Heaps & Top-K, Intervals & Sweep, Binary Search, Backtr
 String Algorithms, Bits & Math, Data-Structure Design. 51 template files, 232 decision-tree entries, 52 page views.
 
 ## LeetCode coverage
-2,196 of LeetCode's 3,696 algorithm problems map to a template: 522 named in template comments or practice maps,
-1,674 matched by a specific LeetCode tag. Each template view lists its problems under the code, the filter box
+2,189 of LeetCode's 3,696 algorithm problems map to a template: 536 named in template comments or practice maps,
+1,653 matched by a specific LeetCode tag (a tag match means "nearest template", not "solves it"). Each template view lists its problems under the code, the filter box
 finds a template by problem number or title, and the **LeetCode Coverage** view (`#coverage`) has the full
 searchable list with gaps. `make check` fails if a listed problem points at a missing method.
 Details and tiers: [`tools/lc-coverage/README.md`](tools/lc-coverage/README.md).
 
 ## Tests
-`make test` runs 11 suites (about 132,000 checks): LeetCode examples for every template, plus seeded randomized
-cross-checks where a brute force exists (LIS, knapsack, coin change, edit distance, Fenwick / segment / lazy tree /
+`make test` runs 25 suites (about 134,600 checks), each named for the templates it covers and kept in that
+topic's `tests/` folder: LeetCode examples for every template, LeetCode-limit inputs for deep DP, plus seeded randomized
+cross-checks where a brute force exists (bridges on multigraphs, 2-SAT, skyline, LIS, knapsack, coin change, edit distance, Fenwick / segment / lazy tree /
 sparse table, KMP / Z / Rabin-Karp / Manacher, quickselect, binary search bounds, sliding window max, histogram,
 interval merge, LRU vs LinkedHashMap, and more).
 
