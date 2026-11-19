@@ -23,7 +23,7 @@ public class EulerianPath {
             }
         }
         Collections.reverse(circuit);
-        return circuit; // if size != totalEdges+1, graph didn't have a valid Eulerian path
+        return circuit; // caller checks: if size != (total edge count)+1, the graph had no valid Eulerian path. `n` is unused (kept for the signature).
     }
 
     // ---------- Example: Reconstruct Itinerary (LeetCode 332) shape ----------

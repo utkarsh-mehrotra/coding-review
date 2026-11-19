@@ -51,7 +51,7 @@ public class StringAlgorithms {
         return z;
     }
 
-    // LC 2223
+    // LC 2223 (partial: the core of LC 2223, which sums Z-values of every suffix; this lists all occurrences of p in s via Z)
     // All occurrences of p in s using Z on p + '#' + s
     static List<Integer> findAllZ(String s, String p) {
         String t = p + "\u0001" + s;
@@ -188,7 +188,7 @@ public class StringAlgorithms {
         return (int) (v * sign);
     }
 
-    // Integer to Roman (LC 12) / Roman to Integer (LC 13)
+    // Roman to Integer (LC 13)
     static int romanToInt(String s) {
         Map<Character, Integer> m = Map.of('I', 1, 'V', 5, 'X', 10, 'L', 50, 'C', 100, 'D', 500, 'M', 1000);
         int res = 0;

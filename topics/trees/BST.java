@@ -64,6 +64,7 @@ public class BST {
     }
 
     // ---------- Sorted array -> height-balanced BST (LC 108) ----------
+    // Same as TreesVariants.sortedArrayToBST; kept in both so each file compiles alone.
     static BinaryTree.TreeNode sortedArrayToBST(int[] a) { return arr(a, 0, a.length - 1); }
 
     private static BinaryTree.TreeNode arr(int[] a, int lo, int hi) {
@@ -101,21 +102,23 @@ public class BST {
         boolean hasNext() { return !st.isEmpty(); }
     }
 
-    // ---------- Largest BST subtree (LC 333): post-order returns {isBST, size, min, max} ----------
-    static int largestBSTSubtree(BinaryTree.TreeNode root) { return lb(root)[3]; }
+    // ---------- Largest BST subtree (LC 333): post-order returns {min, max, isBST, size} ----------
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
+    static int largestBSTSubtree(BinaryTree.TreeNode root) { return (int) lb(root)[3]; }
 
-    // returns {min, max, isBST(1/0), bestSize / size}
-    private static int[] lb(BinaryTree.TreeNode n) {
-        if (n == null) return new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE, 1, 0};
-        int[] l = lb(n.left), r = lb(n.right);
+    // returns {min, max, isBST(1/0), bestSize / size}; long so node values Integer.MIN_VALUE / MAX_VALUE
+    // compare correctly against the empty-subtree sentinels.
+    private static long[] lb(BinaryTree.TreeNode n) {
+        if (n == null) return new long[]{Long.MAX_VALUE, Long.MIN_VALUE, 1, 0};
+        long[] l = lb(n.left), r = lb(n.right);
         if (l[2] == 1 && r[2] == 1 && l[1] < n.val && n.val < r[0]) {
-            int size = l[3] + r[3] + 1;
-            return new int[]{Math.min(l[0], n.val), Math.max(r[1], n.val), 1, size};
+            long size = l[3] + r[3] + 1;
+            return new long[]{Math.min(l[0], n.val), Math.max(r[1], n.val), 1, size};
         }
-        return new int[]{0, 0, 0, Math.max(l[3], r[3])};
+        return new long[]{0, 0, 0, Math.max(l[3], r[3])};
     }
 
-    // ---------- Floor / ceiling ----------
+    // ---------- Floor (largest value <= x); ceiling is symmetric ----------
     static Integer floor(BinaryTree.TreeNode n, int x) {
         Integer best = null;
         while (n != null) {
@@ -126,6 +129,7 @@ public class BST {
     }
 
     // ---------- Unique BSTs count (LC 96): Catalan ----------
+    // int fits up to n = 19 (LC 96).
     static int numTrees(int n) {
         return trees(n, new Integer[n + 1]);
     }

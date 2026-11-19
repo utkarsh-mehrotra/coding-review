@@ -14,7 +14,7 @@ public class HeapsTopK {
     static int quickselectKthLargest(int[] a, int k) {
         int[] b = a.clone();
         int target = b.length - k, lo = 0, hi = b.length - 1;
-        Random rnd = new Random(1);
+        Random rnd = new Random();
         while (lo < hi) {
             int p = b[lo + rnd.nextInt(hi - lo + 1)], i = lo, j = hi;
             while (i <= j) { // Hoare-style three-way-safe partition
@@ -40,7 +40,7 @@ public class HeapsTopK {
     static List<String> topKFrequentWords(String[] words, int k) {
         Map<String, Integer> f = new HashMap<>();
         for (String w : words) f.merge(w, 1, Integer::sum);
-        PriorityQueue<String> pq = new PriorityQueue<>((a, b) -> f.get(a).equals(f.get(b)) ? b.compareTo(a) : f.get(a) - f.get(b));
+        PriorityQueue<String> pq = new PriorityQueue<>((a, b) -> f.get(a).equals(f.get(b)) ? b.compareTo(a) : Integer.compare(f.get(a), f.get(b)));
         for (String w : f.keySet()) { pq.add(w); if (pq.size() > k) pq.poll(); }
         LinkedList<String> res = new LinkedList<>();
         while (!pq.isEmpty()) res.addFirst(pq.poll());
@@ -60,7 +60,7 @@ public class HeapsTopK {
     }
 
     // Sliding Window Median (LC 480): TreeMap-free version with two multiset heaps + lazy delete is long;
-    // this simple O(n k) insertion version is the safe interview baseline.
+    // this simple O(n k) insertion version is the safe interview baseline (the O(n*k) baseline; HeapsVariants.medianSlidingWindowTwoSets is the faster one).
     static double[] medianSlidingWindow(int[] a, int k) {
         double[] res = new double[a.length - k + 1];
         List<Integer> win = new ArrayList<>();
@@ -76,7 +76,7 @@ public class HeapsTopK {
 
     // ---------- Merge K sorted lists / arrays (LC 23): heap of (value, list, index) ----------
     static List<Integer> mergeKSorted(List<int[]> lists) {
-        PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> x[0] - y[0]); // {value, listIdx, elemIdx}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> Integer.compare(x[0], y[0])); // {value, listIdx, elemIdx}
         for (int i = 0; i < lists.size(); i++) if (lists.get(i).length > 0) pq.add(new int[]{lists.get(i)[0], i, 0});
         List<Integer> out = new ArrayList<>();
         while (!pq.isEmpty()) {
@@ -91,7 +91,7 @@ public class HeapsTopK {
     // Kth Smallest in Sorted Matrix (LC 378)
     static int kthSmallest(int[][] m, int k) {
         int n = m.length;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
         for (int i = 0; i < Math.min(n, k); i++) pq.add(new int[]{m[i][0], i, 0});
         int v = 0;
         while (k-- > 0) {
@@ -104,7 +104,7 @@ public class HeapsTopK {
 
     // Smallest Range Covering Elements from K Lists (LC 632)
     static int[] smallestRange(List<List<Integer>> nums) {
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
         int max = Integer.MIN_VALUE;
         for (int i = 0; i < nums.size(); i++) { pq.add(new int[]{nums.get(i).get(0), i, 0}); max = Math.max(max, nums.get(i).get(0)); }
         int[] best = {pq.peek()[0], max};
@@ -133,7 +133,7 @@ public class HeapsTopK {
     static String reorganizeString(String s) {
         int[] c = new int[26];
         for (char ch : s.toCharArray()) c[ch - 'a']++;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[1] - a[1]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
         for (int i = 0; i < 26; i++) if (c[i] > 0) pq.add(new int[]{i, c[i]});
         StringBuilder sb = new StringBuilder();
         int[] prev = null;
@@ -149,7 +149,7 @@ public class HeapsTopK {
 
     // Meeting Rooms II (LC 253): min-heap of end times
     static int minMeetingRooms(int[][] iv) {
-        Arrays.sort(iv, (a, b) -> a[0] - b[0]);
+        Arrays.sort(iv, (a, b) -> Integer.compare(a[0], b[0]));
         PriorityQueue<Integer> ends = new PriorityQueue<>();
         for (int[] i : iv) {
             if (!ends.isEmpty() && ends.peek() <= i[0]) ends.poll();
@@ -201,7 +201,4 @@ public class HeapsTopK {
         }
         return u[n - 1];
     }
-
-    // Lazy-deletion heap pattern: remember what is deleted in a map, discard stale tops when peeking.
-    // (see Dijkstra "if (d > dist[u]) continue" in the graphs topic -- same idea)
 }

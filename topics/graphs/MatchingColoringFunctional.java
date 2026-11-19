@@ -4,7 +4,7 @@ public class MatchingColoringFunctional {
 
     // LC 1820
     // ---------- Kuhn's algorithm: bipartite matching by repeated augmenting DFS ----------
-    // O(V*E). Short enough to write live; reach for Hopcroft-Karp (08_NetworkFlow) only on large inputs.
+    // O(V*E). Short enough to write live; reach for Hopcroft-Karp / Dinic (NetworkFlow.java) only on large inputs.
     // adj.get(u) = right-side nodes that left node u can match.
     static int kuhnMatching(int left, int right, List<List<Integer>> adj) {
         int[] matchRight = new int[right];

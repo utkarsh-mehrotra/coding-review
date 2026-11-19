@@ -96,6 +96,7 @@ public class DSUExtended {
 
     // ---------- Weighted DSU: Evaluate Division (LC 399) ----------
     // w[x] = value(x) / value(parent[x]); after path compression w[x] = value(x) / value(root).
+    // Note: contradictory ratios (a/b = 2 then a/b = 3) are not detected; LC 399 guarantees none.
     static class WeightedDSU {
         int[] parent;
         double[] w;
@@ -156,7 +157,7 @@ public class DSUExtended {
                 if (i + 1 < m) edges.add(new int[]{Math.abs(h[i][j] - h[i + 1][j]), i * n + j, (i + 1) * n + j});
                 if (j + 1 < n) edges.add(new int[]{Math.abs(h[i][j] - h[i][j + 1]), i * n + j, i * n + j + 1});
             }
-        edges.sort((a, b) -> a[0] - b[0]);
+        edges.sort((a, b) -> Integer.compare(a[0], b[0]));
         int[] parent = new int[m * n];
         for (int i = 0; i < parent.length; i++) parent[i] = i;
         for (int[] e : edges) {

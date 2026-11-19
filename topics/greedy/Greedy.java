@@ -64,7 +64,7 @@ public class Greedy {
 
     // Queue Reconstruction by Height (LC 406): tallest first, insert at index k
     static int[][] reconstructQueue(int[][] people) {
-        Arrays.sort(people, (a, b) -> a[0] != b[0] ? b[0] - a[0] : a[1] - b[1]);
+        Arrays.sort(people, (a, b) -> a[0] != b[0] ? Integer.compare(b[0], a[0]) : Integer.compare(a[1], b[1]));
         List<int[]> out = new ArrayList<>();
         for (int[] p : people) out.add(p[1], p);
         return out.toArray(new int[0][]);
@@ -91,7 +91,7 @@ public class Greedy {
     // Task order minimizing lateness / weighted completion: sort by ratio (exchange argument)
     // Example: Minimum Cost to Hire Workers style ratios live in HeapsTopK; here: Maximum units on a truck (LC 1710)
     static int maximumUnits(int[][] boxes, int truckSize) {
-        Arrays.sort(boxes, (a, b) -> b[1] - a[1]);
+        Arrays.sort(boxes, (a, b) -> Integer.compare(b[1], a[1]));
         int units = 0;
         for (int[] b : boxes) {
             int take = Math.min(b[0], truckSize);

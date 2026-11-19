@@ -104,6 +104,7 @@ public class BinaryTree {
     private static int diam;
 
     // LC 543
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int diameter(TreeNode root) {
         diam = 0;
         depthForDiameter(root);
@@ -130,6 +131,7 @@ public class BinaryTree {
     }
 
     // Max path sum (LC 124): return the best DOWNWARD gain, update answer with the bent path through node
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     private static int bestPath;
 
     static int maxPathSum(TreeNode root) {
@@ -197,6 +199,8 @@ public class BinaryTree {
     }
 
     // ---------- LCA (binary tree) (LC 236) ----------
+    // Both p and q must exist in the tree (LC 236 guarantees it); otherwise it can return the one that is present.
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null || root == p || root == q) return root;
         TreeNode l = lowestCommonAncestor(root.left, p, q), r = lowestCommonAncestor(root.right, p, q);
@@ -221,6 +225,7 @@ public class BinaryTree {
     }
 
     // ---------- Serialize / deserialize (LC 297): preorder with null markers ----------
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static String serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
         ser(root, sb);
@@ -311,6 +316,7 @@ public class BinaryTree {
     }
 
     // ---------- Tree DP: House Robber III (LC 337) -> {rob this, skip this} ----------
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int robTree(TreeNode root) {
         int[] r = robDfs(root);
         return Math.max(r[0], r[1]);

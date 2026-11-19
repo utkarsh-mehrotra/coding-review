@@ -282,7 +282,7 @@
     {
       "q": "<strong>Point updates plus prefix sums, or counting inversions?</strong>",
       "a": "Fenwick tree",
-      "template": "RangeStructures#countInversions"
+      "template": "RangeStructures#Fenwick"
     },
     {
       "q": "<strong>Range updates and range queries?</strong>",

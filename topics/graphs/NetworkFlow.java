@@ -51,9 +51,8 @@ public class NetworkFlow {
     // ---------- Dinic's Algorithm (faster max flow: level graph + blocking flow) ----------
     static class Dinic {
         int n;
-        List<int[]> edgeList = new ArrayList<>(); // {to, capIndex}
+        List<int[]> edgeList = new ArrayList<>(); // {to}; the capacity of edge i lives in capList.get(i)
         List<Integer>[] graph;
-        int[] cap;
         int[] level, it;
 
         Dinic(int n) {

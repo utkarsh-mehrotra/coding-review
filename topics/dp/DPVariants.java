@@ -92,6 +92,7 @@ public class DPVariants {
 
     // ---------- Paint House II (LC 265): paint(i, prev) = min cost for houses i.. when house i-1 used color prev ----------
     // Faster: keep the two smallest previous costs so each row is O(k), O(nk) — not DP-memo; mention as a follow-up.
+    // LC 265 has k >= 2 (with k = 1 and n >= 2 no valid painting exists and the sentinel overflows).
     static int minCostII(int[][] costs) {
         int n = costs.length, k = costs[0].length;
         return paint(0, k, costs, new Integer[n][k + 1]);
@@ -146,6 +147,7 @@ public class DPVariants {
 
     // ---------- Domino and Tromino Tiling (LC 790): f(n) = 2 f(n-1) + f(n-3) ----------
     static int numTilings(int n) {
+        if (n == 0) return 1; // f(0) = 1, matches the recurrence base
         if (n <= 2) return n;
         return tilings(n, new Integer[n + 1]);
     }
@@ -228,7 +230,7 @@ public class DPVariants {
         int n = scores.length;
         Integer[] idx = new Integer[n];
         for (int i = 0; i < n; i++) idx[i] = i;
-        Arrays.sort(idx, (a, b) -> ages[a] != ages[b] ? ages[a] - ages[b] : scores[a] - scores[b]);
+        Arrays.sort(idx, (a, b) -> ages[a] != ages[b] ? Integer.compare(ages[a], ages[b]) : Integer.compare(scores[a], scores[b]));
         int[] sorted = new int[n];
         for (int i = 0; i < n; i++) sorted[i] = scores[idx[i]];
         Integer[] memo = new Integer[n];
@@ -399,6 +401,7 @@ public class DPVariants {
     }
 
     // ---------- Largest Divisible Subset (LC 368): sort, LIS with the divisibility relation, rebuild by walking the memo ----------
+    // Note: sorts the input array in place (LC allows it).
     static List<Integer> largestDivisibleSubset(int[] a) {
         Arrays.sort(a);
         int n = a.length, bestEnd = 0;
@@ -447,6 +450,7 @@ public class DPVariants {
     }
 
     // ---------- Count Vowels Permutation (LC 1220) ----------
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int countVowelPermutation(int n) {
         final long MOD = 1_000_000_007L;
         Integer[][] memo = new Integer[n][5];
@@ -467,6 +471,7 @@ public class DPVariants {
     }
 
     // ---------- Student Attendance Record II (LC 552): state = (days left, absences 0..1, trailing lates 0..2) ----------
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int checkRecord(int n) {
         return records(n, 0, 0, new Integer[n + 1][2][3]);
     }

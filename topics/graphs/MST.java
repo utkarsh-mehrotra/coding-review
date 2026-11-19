@@ -4,8 +4,9 @@ public class MST {
 
     // ---------- Kruskal's Algorithm ----------
     // edges[i] = {u, v, weight}. Best for sparse graphs / edge-list input.
+    // Note: sorts the caller's `edges` array in place (mutates input).
     static int kruskalsMST(int n, int[][] edges) {
-        Arrays.sort(edges, (a, b) -> a[2] - b[2]); // sort by weight
+        Arrays.sort(edges, (a, b) -> Integer.compare(a[2], b[2])); // sort by weight
         DSU dsu = new DSU(n);
         int totalWeight = 0, edgesUsed = 0;
 
@@ -25,7 +26,7 @@ public class MST {
     // adj[u] = list of {v, weight}. Best for dense graphs / adjacency-list input.
     static int primsMST(int n, List<int[]>[] adj) {
         boolean[] inMST = new boolean[n];
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]); // {node, weight}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1])); // {node, weight}
         pq.add(new int[]{0, 0}); // start from node 0
         int totalWeight = 0, nodesAdded = 0;
 
@@ -45,7 +46,7 @@ public class MST {
         return totalWeight;
     }
 
-    // minimal DSU inline dependency (see 04_DSU.java for full version with cycle/component helpers)
+    // Same as DSU.java, kept inline so this file compiles alone (see DSU.java for the full version with cycle/component helpers).
     static class DSU {
         int[] parent, rank_;
         DSU(int n) {

@@ -145,7 +145,7 @@ public class DesignStructures {
         void postTweet(int u, int id) { tweets.computeIfAbsent(u, k -> new ArrayList<>()).add(new int[]{time++, id}); }
 
         List<Integer> getNewsFeed(int u) {
-            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]); // {time, id, user, idxInUserList}
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(b[0], a[0])); // {time, id, user, idxInUserList}
             Set<Integer> users = new HashSet<>(follows.getOrDefault(u, Set.of()));
             users.add(u);
             for (int v : users) {

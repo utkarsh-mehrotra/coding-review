@@ -3,7 +3,7 @@ import java.util.*;
 public class TopoSortDAG {
 
     // ---------- Kahn's Algorithm (BFS, in-degree based) ----------
-    // Also detects cycles: if result.size() < n, graph has a cycle
+    // Also detects cycles: if fewer than n nodes get emitted the graph has a cycle, and this throws IllegalStateException.
     static List<Integer> kahnsTopoSort(int n, List<List<Integer>> adj) {
         int[] inDegree = new int[n];
         for (List<Integer> neighbors : adj) {

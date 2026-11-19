@@ -7,6 +7,7 @@ public class ImplicitGraphs {
 
     // ---------- Flood fill / Number of Islands (LC 200) ----------
     // Iterative DFS: no recursion-depth risk on big grids. Marks visited in place.
+    // Note: overwrites the input grid (visited cells become '0').
     static int numIslands(char[][] grid) {
         int m = grid.length, n = grid[0].length, count = 0;
         for (int r = 0; r < m; r++) {
@@ -32,6 +33,7 @@ public class ImplicitGraphs {
     }
 
     // ---------- Max Area of Island (LC 695): same traversal, count cells ----------
+    // Note: overwrites the input grid (visited cells become 0).
     static int maxAreaOfIsland(int[][] grid) {
         int m = grid.length, n = grid[0].length, best = 0;
         for (int r = 0; r < m; r++) {
@@ -81,6 +83,7 @@ public class ImplicitGraphs {
     }
 
     // ---------- Multi-source BFS on grid: Rotting Oranges (LC 994) ----------
+    // Note: overwrites the input grid (rotted cells become 2).
     static int orangesRotting(int[][] grid) {
         int m = grid.length, n = grid[0].length, fresh = 0;
         Queue<int[]> q = new ArrayDeque<>();

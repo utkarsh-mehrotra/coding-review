@@ -47,7 +47,7 @@ public class GreedyVariants {
 
     // Two City Scheduling (LC 1029): send everyone to A, then move the n people with the smallest (costB - costA)
     static int twoCitySchedCost(int[][] costs) {
-        Arrays.sort(costs, (x, y) -> (x[1] - x[0]) - (y[1] - y[0]));
+        Arrays.sort(costs, (x, y) -> Integer.compare(x[1] - x[0], y[1] - y[0]));
         int n = costs.length / 2, total = 0;
         for (int i = 0; i < costs.length; i++) total += i < n ? costs[i][1] : costs[i][0];
         return total;
@@ -133,7 +133,7 @@ public class GreedyVariants {
         Arrays.sort(sa);
         Integer[] idx = new Integer[n];
         for (int i = 0; i < n; i++) idx[i] = i;
-        Arrays.sort(idx, (x, y) -> b[x] - b[y]);
+        Arrays.sort(idx, (x, y) -> Integer.compare(b[x], b[y]));
         int[] res = new int[n];
         int lo = 0, hi = n - 1;
         for (int i = n - 1; i >= 0; i--) { // largest B first: use the largest A if it wins, else sacrifice the smallest A
@@ -225,7 +225,7 @@ public class GreedyVariants {
 
     // Maximum Length of Pair Chain (LC 646): sort by END, take whenever compatible
     static int findLongestChain(int[][] pairs) {
-        Arrays.sort(pairs, (x, y) -> x[1] - y[1]);
+        Arrays.sort(pairs, (x, y) -> Integer.compare(x[1], y[1]));
         int count = 0;
         long end = Long.MIN_VALUE;
         for (int[] p : pairs) if (p[0] > end) { count++; end = p[1]; }

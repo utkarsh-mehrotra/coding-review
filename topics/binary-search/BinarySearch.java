@@ -176,6 +176,7 @@ public class BinarySearch {
     }
 
     // Integer sqrt (LC 69): last x with x*x <= n
+    // Same idea as BitsMathVariants.mySqrt.
     static int mySqrt(int n) {
         int lo = 0, hi = 46341; // 46341^2 overflows int, so it is the first "too big"
         while (lo < hi) {

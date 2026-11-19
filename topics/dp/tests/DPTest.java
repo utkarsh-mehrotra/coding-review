@@ -117,6 +117,9 @@ public class DPTest {
             Check.eq("editRand", DPSequences.minDistance(s1, s2), editBrute(s1, s2, s1.length(), s2.length()));
             Check.eq("palRand", DPSequences.countSubstrings(s1), palBrute(s1));
         }
+        // critique regressions
+        Check.eq("numTilings0", DPVariants.numTilings(0) + "," + DPVariants.numTilings(1) + "," + DPVariants.numTilings(3), "1,1,5");
+        Check.eq("maxProdLC152", DPLinear.maxProduct(new int[]{-2, 3, -4}), 24);
         Check.done("DPTest");
     }
 

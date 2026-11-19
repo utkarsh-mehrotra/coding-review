@@ -86,6 +86,7 @@ public class CycleAndCourseGraphs {
     }
 
     // ---------- Alien Dictionary (LC 269): build the graph from adjacent words, then Kahn's ----------
+    // Returns "" for invalid input (cycle / prefix violation, per LC 269) and also for a valid empty order (no letters).
     static String alienOrder(String[] words) {
         Map<Character, Set<Character>> adj = new HashMap<>();
         Map<Character, Integer> indeg = new HashMap<>();

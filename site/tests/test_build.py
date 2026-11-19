@@ -170,7 +170,7 @@ class BuildTest(unittest.TestCase):
         topics = build.load_topics()
         want = sum(len(t["decisions"]) for t in topics)
         cs = self._cheatsheet()
-        rows = re.findall(r'<tr class="sig-row">', cs)
+        rows = re.findall(r'<tr class="sig-row[" ]', cs)
         self.assertEqual(len(rows), want)
 
     def test_cheatsheet_topic_order(self):
@@ -247,7 +247,7 @@ class BuildTest(unittest.TestCase):
         out = build.build_cheatsheet_view([self._fixture([{"id": "v1", "files": [{"file": "F.java"}]}])])
         self.assertNotIn("<th>Pattern</th>", out)
         self.assertNotIn("cs-pitfalls", out)
-        self.assertEqual(out.count('class="sig-row"'), 1)
+        self.assertEqual(len(re.findall(r'class="sig-row[" ]', out)), 1)
 
     def test_jump_index_embedded_and_unique(self):
         import json
@@ -369,6 +369,23 @@ class BuildTest(unittest.TestCase):
         for png in ("favicon-32.png", "apple-touch-icon.png"):
             data = (SITE / png).read_bytes()
             self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n", png)
+
+    def test_niche_rows_and_toggle(self):
+        niche = build.load_niche()
+        self.assertGreater(len(niche), 0)
+        cs = self._cheatsheet()
+        self.assertEqual(cs.count('class="sig-row niche"'), len(niche))
+        self.assertIn('id="hideNiche"', cs)
+        self.assertIn(".hide-niche .niche { display: none; }", (SITE / "assets" / "style.css").read_text())
+
+    def test_niche_names_must_be_decisions(self):
+        topics = build.load_topics()
+        orig = build.load_niche
+        try:
+            build.load_niche = lambda: {"Nope#missing"}
+            self.assertTrue(any("niche.json" in e for e in build.check(topics, {})))
+        finally:
+            build.load_niche = orig
 
     def test_jump_keys_handled_on_document(self):
         js = (SITE / "assets" / "app.js").read_text()

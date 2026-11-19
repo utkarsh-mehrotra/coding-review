@@ -311,7 +311,7 @@ public class Backtracking {
         }
     }
 
-    // Gray Code (LC 89): i ^ (i >> 1)
+    // Gray Code (LC 89): i ^ (i >> 1). Same as BitsMathVariants.grayCode.
     static List<Integer> grayCode(int n) {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < 1 << n; i++) res.add(i ^ (i >> 1));

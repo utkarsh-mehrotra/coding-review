@@ -26,6 +26,14 @@ ASSETS = ROOT / "site" / "assets"
 OUT = ROOT / "site" / "index.html"
 COVERAGE_OUT = ROOT / "site" / "coverage.json"
 FAVICON_OUT = ROOT / "site" / "favicon.svg"
+NICHE_FILE = TOPICS / "niche.json"
+
+
+def load_niche():
+    """Decision templates marked niche for an SDE2/SDE3 round (topics/niche.json); hidden by the Hide niche toggle."""
+    if not NICHE_FILE.exists():
+        return set()
+    return set(json.loads(NICHE_FILE.read_text())["templates"])
 LISTS_FILE = ROOT / "tools" / "lc-coverage" / "data" / "lists.json"
 PROBLEMS = ROOT / "tools" / "lc-coverage" / "data" / "problems.json"
 SHOWN_TIERS = ("A", "B")     # A: named in a template or practice map, B: specific tag match
@@ -250,7 +258,7 @@ def build_coverage_view(data):
 <h2 class="section-title">How matches were made</h2>
 <dl class="cov-method">
   <dt>A &middot; Verified</dt><dd>The problem number appears in a template comment (<code>// LC 215</code>) or in a topic's practice map. Every one of these numbers was checked against LeetCode's title.</dd>
-  <dt>B &middot; Tag match</dt><dd>A specific LeetCode tag or title keyword points at one template, for example <code>union-find</code> &rarr; DSU, <code>monotonic-stack</code> &rarr; nextGreater. Rules run from most specific to least. Spot checks found about 9 in 10 correct.</dd>
+  <dt>B &middot; Tag match</dt><dd>A specific LeetCode tag or title keyword points at one template, for example <code>union-find</code> &rarr; DSU, <code>monotonic-stack</code> &rarr; nextGreater. Rules run from most specific to least. It means "nearest template", not "solves it": in an 80-problem sample, 53 fit the technique, 24 were loose and 3 were wrong.</dd>
   <dt>C &middot; Likely</dt><dd>Only broad tags matched (dynamic programming, greedy, hash table, sorting). The technique family is covered, but the specific trick may not be. Not listed under the templates.</dd>
   <dt>Not covered</dt><dd>No rule matched. Mostly simulation, string formatting and one-off math.</dd>
   <dt>Source</dt><dd>LeetCode's public problem list, cached in <code>tools/lc-coverage/data</code>. Database, shell, concurrency, pandas and JavaScript problems are excluded. Rebuild with <code>make problems</code>; refresh the list with <code>make fetch-lc</code>.</dd>
@@ -304,6 +312,9 @@ def check(topics, problems=None):
             errors.append("problems.json: %d problems point at missing file %s.java (e.g. LC %s)" % (len(rows), fname, rows[0]["id"]))
         elif member not in all_members[fname]:
             errors.append("problems.json: %d problems point at missing member %s (e.g. LC %s)" % (len(rows), key, rows[0]["id"]))
+    decision_templates = {d["template"] for t in topics for d in t["decisions"]}
+    for tpl in sorted(load_niche() - decision_templates):
+        errors.append("niche.json: %s is not a decision-tree template" % tpl)
     return errors
 
 
@@ -637,13 +648,15 @@ def build_overview(topics, counts, problems=None):
             first, first, html.escape(t["title"]), len(t["views"]), "view" if len(t["views"]) == 1 else "views",
             counts[t["id"]], "template file" if counts[t["id"]] == 1 else "template files", len(t["decisions"])))
     p.append('</div>')
+    niche = load_niche()
     p.append('<h2 class="section-title">Decision Tree &mdash; &ldquo;which pattern do I reach for?&rdquo;</h2>')
     for t in topics:
         vf = view_of_file(t)
         p.append('<h3 class="group-title">%s</h3>\n<ol class="decision-list">' % html.escape(t["title"]))
         for dec in t["decisions"]:
             fname, member = dec["template"].split("#", 1)
-            p.append('<li><strong>%s</strong> <span class="arrow">&rarr;</span> %s<a class="tpl" href="#%s" data-goto="%s">%s</a></li>' % (
+            p.append('<li%s><strong>%s</strong> <span class="arrow">&rarr;</span> %s<a class="tpl" href="#%s" data-goto="%s">%s</a></li>' % (
+                ' class="niche"' if dec["template"] in niche else "",
                 re.sub(r"^<strong>|</strong>$", "", dec["q"]).replace("<strong>", "").replace("</strong>", ""),
                 dec["a"], vf[fname], vf[fname], html.escape(dec["template"])))
         p.append('</ol>')
@@ -664,9 +677,11 @@ def build_overview(topics, counts, problems=None):
 def build_cheatsheet_view(topics, problems=None):
     """One printable page: per topic, signals, merged pattern tables and pitfalls."""
     esc = lambda t: html.escape(t, quote=False)
+    niche = load_niche()
     p = ['<div class="page-kicker">CS &mdash; CHEAT SHEET</div>',
          '<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1>'
-         '<button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div>',
+         '<div class="cs-actions"><button type="button" class="theme-toggle" id="hideNiche" aria-pressed="false">Hide niche</button>'
+         '<button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div></div>',
          '<p class="page-intro">Every signal, pattern and pitfall in one place. Print it, or save it as a PDF.</p>']
     for t in topics:
         vmap = view_of_file(t)
@@ -676,8 +691,10 @@ def build_cheatsheet_view(topics, problems=None):
             file_stem, member = d["template"].split("#", 1)
             link = '<a class="tpl" href="#%s" data-goto="%s" data-anchor="%s">%s</a>' % (
                 html.escape(vmap[file_stem]), html.escape(vmap[file_stem]), html.escape(anchor_id(file_stem, member)), html.escape(d["template"]))
-            rows.append('<tr class="sig-row"><td>%s</td><td>%s</td><td>%s</td></tr>' % (
-                esc(_plain(d["q"])), esc(_plain(d["a"])), link))
+            is_niche = d["template"] in niche
+            rows.append('<tr class="sig-row%s"><td>%s%s</td><td>%s</td><td>%s</td></tr>' % (
+                " niche" if is_niche else "", esc(_plain(d["q"])),
+                ' <span class="niche-tag">niche</span>' if is_niche else "", esc(_plain(d["a"])), link))
         p.append('<table class="ref-table">\n%s\n</table>' % "\n".join(rows))
         merged, seen = [], set()
         for v in t["views"]:

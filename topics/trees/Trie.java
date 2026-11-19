@@ -43,7 +43,7 @@ public class Trie {
         return false;
     }
 
-    // ---------- Word Search II (LC 212): trie + grid DFS, prune finished branches ----------
+    // ---------- Word Search II (LC 212): trie + grid DFS, dedupe: a found word is cleared from its trie node so it is reported once ----------
     static List<String> findWords(char[][] board, String[] words) {
         Node root = new Node();
         for (String w : words) {
@@ -77,6 +77,8 @@ public class Trie {
     }
 
     // ---------- Binary trie: Maximum XOR of two numbers (LC 421) ----------
+    // Assumes non-negative ints (bits 30..0 only; a sign bit would need bit 31).
+    // Memory: allocates (n * 32 + 2) x 2 ints up front, about 256 bytes per number.
     static int findMaximumXOR(int[] nums) {
         int[][] ch = new int[nums.length * 32 + 2][2];
         int cnt = 1, best = 0;

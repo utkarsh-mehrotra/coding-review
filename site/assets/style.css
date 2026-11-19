@@ -791,3 +791,10 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 
 .ess-short { display: none; }
 @media (max-width: 520px) { .ess-short { display: inline; } }
+
+/* ---------- Niche tag and Hide niche toggle ---------- */
+.cs-actions { display: flex; gap: 8px; align-items: center; }
+.niche-tag { display: inline-block; margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px;
+  font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.03em; vertical-align: 1px; }
+.hide-niche .niche { display: none; }
+@media print { .niche-tag { border: 0; padding: 0; } }

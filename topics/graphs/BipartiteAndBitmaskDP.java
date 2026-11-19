@@ -27,12 +27,12 @@ public class BipartiteAndBitmaskDP {
         return true;
     }
 
-    // LC 943
+    // LC 943 (Shortest Superstring reduces to this TSP over overlap costs)
     // ---------- Held-Karp (Bitmask DP for TSP) ----------
     // dist[i][j] = cost from i to j. Returns min cost to visit all nodes starting at 0.
     static int heldKarpTSP(int[][] dist) {
         int n = dist.length;
-        if (n == 1) return Integer.MAX_VALUE; // no tour back to start through another node
+        if (n == 1) return 0; // single node: already at the start, nothing to visit
         return tourFrom(1, 0, dist, new Integer[1 << n][n]); // O(2^n * n^2)
     }
 

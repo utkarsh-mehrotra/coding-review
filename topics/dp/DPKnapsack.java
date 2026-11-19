@@ -115,6 +115,7 @@ public class DPKnapsack {
 
     // ---------- Coin Change (LC 322): fewest coins, unbounded ----------
     // COST: O(amount * coins) time, O(amount) memo.
+    // DEPTH: recursion amount deep; at amount >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int coinChangeMin(int[] coins, int amount) {
         int r = fewestCoins(amount, coins, new Integer[amount + 1]);
         return r >= Integer.MAX_VALUE / 2 ? -1 : r;
@@ -163,6 +164,7 @@ public class DPKnapsack {
 
     // Perfect Squares (LC 279): unbounded, min count
     // COST: O(n * sqrt(n)) time, O(n) memo.
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int numSquares(int n) { return fewestSquares(n, new Integer[n + 1]); }
 
     // state: rem = value left | choice: which square s*s to subtract | base: rem == 0 -> 0

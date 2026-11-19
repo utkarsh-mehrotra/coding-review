@@ -4,6 +4,7 @@ public class DPCombined {
 
     // ---------- DP + binary search: Maximum Profit in Job Scheduling (LC 1235) ----------
     // memo over job index (jobs sorted by start); binary-search the first job starting at or after this one ends. O(n log n)
+    // DEPTH: recursion jobs deep; at jobs >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int jobScheduling(int[] start, int[] end, int[] profit) {
         int n = start.length;
         Integer[] idx = new Integer[n];
@@ -29,7 +30,8 @@ public class DPCombined {
 
     // ---------- Window-max DP: memo over index, scan the next k ----------
     // Constrained Subset Sum (LC 1425): pick a subsequence, adjacent picks at most k apart
-    // Faster: monotonic deque for the window max, O(n) — not DP-memo; mention as a follow-up.
+    // Faster: O(n*k) memo times out at LC limits; passing needs a monotonic deque, O(n) — not DP-memo.
+    // DEPTH: recursion nums.length deep; at nums.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int constrainedSubsetSum(int[] nums, int k) {
         Integer[] memo = new Integer[nums.length];
         int best = Integer.MIN_VALUE;
@@ -46,7 +48,8 @@ public class DPCombined {
     }
 
     // Jump Game VI (LC 1696): max score path with jumps of 1..k
-    // Faster: monotonic deque for the window max, O(n) — not DP-memo; mention as a follow-up.
+    // Faster: O(n*k) memo times out at LC limits; passing needs a monotonic deque, O(n) — not DP-memo.
+    // DEPTH: recursion nums.length deep; at nums.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxResult(int[] nums, int k) {
         return scoreFrom(0, nums, k, new Integer[nums.length]);
     }
@@ -80,6 +83,7 @@ public class DPCombined {
     // New 21 Game (LC 837): memo over current points, each draw 1..maxPts equally likely. O(k)
     // f(pts) = average of f(pts+1..pts+W); neighbouring states share all but one term, so
     // f(pts) = f(pts+1) + (f(pts+1) - f(pts+1+W)) / W  — still top-down, no inner loop.
+    // DEPTH: recursion k deep; at k >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static double new21Game(int n, int k, int maxPts) {
         if (k == 0 || n >= k + maxPts) return 1.0;
         return ending(0, n, k, maxPts, new Double[k]);

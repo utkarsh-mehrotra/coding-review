@@ -6,7 +6,7 @@ public class MonotonicStructures {
     // Question it answers: "for each i, where is the nearest element to the left/right that is bigger/smaller?"
     // Keep indices on the stack in monotone order; pop while the new element breaks the order -- the pop IS the answer.
 
-    // Next Greater Element (LC 496 / 503 circular via 2n pass)
+    // Next Greater Element (LC 496 / 503 circular via 2n pass) (partial: the core of LC 496, a stack pass over one array; LC 496 itself also maps nums1 into nums2, and the circular variant is nextGreaterCircular)
     static int[] nextGreater(int[] a) {
         int n = a.length;
         int[] res = new int[n];
@@ -71,7 +71,7 @@ public class MonotonicStructures {
         return best;
     }
 
-    // Sum of Subarray Minimums (LC 907): contribution = a[i] * (i - prevLess) * (nextLessOrEqual - i)
+    // Sum of Subarray Minimums (LC 907): contribution = a[i] * (i - prevLessOrEqual) * (nextLess - i)
     static int sumSubarrayMins(int[] a) {
         int n = a.length;
         long MOD = 1_000_000_007L, res = 0;

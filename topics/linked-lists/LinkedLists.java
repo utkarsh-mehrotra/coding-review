@@ -112,7 +112,7 @@ public class LinkedLists {
         return dummy.next;
     }
 
-    // Merge K Lists (LC 23): divide and conquer, O(N log k), no heap needed
+    // Merge K Lists (LC 23): divide and conquer, O(N log k), no heap needed. Note: overwrites entries of the input lists[] array.
     static ListNode mergeKLists(ListNode[] lists) {
         if (lists.length == 0) return null;
         for (int step = 1; step < lists.length; step *= 2)
@@ -130,7 +130,7 @@ public class LinkedLists {
         return mergeTwo(sortList(head), sortList(right));
     }
 
-    // Reorder List (LC 143): middle -> reverse second half -> interleave
+    // Reorder List (LC 143): middle -> reverse second half -> interleave (rewires the list in place, as LC requires)
     static void reorderList(ListNode head) {
         if (head == null || head.next == null) return;
         ListNode mid = middle(head), second = reverse(mid.next);
@@ -145,7 +145,7 @@ public class LinkedLists {
         }
     }
 
-    // Palindrome List (LC 234)
+    // Palindrome List (LC 234). Note: reverses the second half in place and does not restore it.
     static boolean isPalindrome(ListNode head) {
         ListNode mid = middle(head), second = reverse(mid), first = head;
         while (second != null) {

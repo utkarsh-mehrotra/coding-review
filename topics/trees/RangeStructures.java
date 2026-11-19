@@ -57,7 +57,6 @@ public class RangeStructures {
         return Arrays.asList(res);
     }
 
-    // LC 493
     // Count inversions with Fenwick
     static long countInversions(int[] a) {
         int[] sorted = Arrays.stream(a).distinct().sorted().toArray();
@@ -163,7 +162,7 @@ public class RangeStructures {
     static List<List<Integer>> getSkyline(int[][] b) {
         List<int[]> ev = new ArrayList<>();
         for (int[] x : b) { ev.add(new int[]{x[0], -x[2]}); ev.add(new int[]{x[1], x[2]}); }
-        ev.sort((p, q) -> p[0] != q[0] ? p[0] - q[0] : p[1] - q[1]); // starts (negative) before ends at equal x, taller start first
+        ev.sort((p, q) -> p[0] != q[0] ? Integer.compare(p[0], q[0]) : Integer.compare(p[1], q[1])); // starts (negative) before ends at equal x, taller start first
         TreeMap<Integer, Integer> heights = new TreeMap<>();
         heights.put(0, 1);
         int prev = 0;

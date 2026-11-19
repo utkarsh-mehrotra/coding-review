@@ -41,7 +41,7 @@ public class HeapsVariants {
     static int maxPerformance(int n, int[] speed, int[] eff, int k) {
         Integer[] idx = new Integer[n];
         for (int i = 0; i < n; i++) idx[i] = i;
-        Arrays.sort(idx, (a, b) -> eff[b] - eff[a]);
+        Arrays.sort(idx, (a, b) -> Integer.compare(eff[b], eff[a]));
         PriorityQueue<Integer> pq = new PriorityQueue<>();
         long sum = 0, best = 0;
         for (int i : idx) {
@@ -83,7 +83,7 @@ public class HeapsVariants {
     // ---------- Course Schedule III (LC 630): sort by deadline; if over time, drop the LONGEST course taken ----------
     // Exchange argument: swapping the longest taken course for a shorter new one never hurts.
     static int scheduleCourse(int[][] courses) {
-        Arrays.sort(courses, (a, b) -> a[1] - b[1]);
+        Arrays.sort(courses, (a, b) -> Integer.compare(a[1], b[1]));
         PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
         int time = 0;
         for (int[] c : courses) {
@@ -112,7 +112,7 @@ public class HeapsVariants {
         int m = h.length, n = h[0].length;
         if (m < 3 || n < 3) return 0;
         boolean[][] seen = new boolean[m][n];
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]); // {height, r, c}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0])); // {height, r, c}
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
                 if (i == 0 || j == 0 || i == m - 1 || j == n - 1) { pq.add(new int[]{h[i][j], i, j}); seen[i][j] = true; }
@@ -136,8 +136,8 @@ public class HeapsVariants {
         int n = tasks.length;
         Integer[] byStart = new Integer[n];
         for (int i = 0; i < n; i++) byStart[i] = i;
-        Arrays.sort(byStart, (a, b) -> tasks[a][0] - tasks[b][0]);
-        PriorityQueue<Integer> ready = new PriorityQueue<>((a, b) -> tasks[a][1] != tasks[b][1] ? tasks[a][1] - tasks[b][1] : a - b);
+        Arrays.sort(byStart, (a, b) -> Integer.compare(tasks[a][0], tasks[b][0]));
+        PriorityQueue<Integer> ready = new PriorityQueue<>((a, b) -> tasks[a][1] != tasks[b][1] ? Integer.compare(tasks[a][1], tasks[b][1]) : Integer.compare(a, b));
         int[] order = new int[n];
         long time = 0;
         int p = 0, o = 0;

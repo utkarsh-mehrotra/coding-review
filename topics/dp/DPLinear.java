@@ -13,6 +13,7 @@ public class DPLinear {
     // ---------- Climbing Stairs (LC 70): top-down memo ----------
     // RECOGNIZE: count ways / min cost where step i depends on a few earlier steps.
     // COST: O(n) time, O(n) memo + recursion stack.
+    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int climbStairsMemo(int n) { return ways(n, new Integer[n + 1]); }
 
     // state: n = steps left | choice: take 1 or 2 steps | base: n <= 1 -> 1 way
@@ -24,6 +25,7 @@ public class DPLinear {
 
     // ---------- House Robber (LC 198): take / skip state ----------
     // COST: O(n) time, O(n) memo.
+    // DEPTH: recursion nums.length deep; at nums.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int rob(int[] nums) { return robFrom(0, nums.length - 1, nums, new Integer[nums.length]); }
 
     // state: i = first house still available | choice: rob it (jump to i+2) or skip it | base: past hi -> 0
@@ -42,6 +44,7 @@ public class DPLinear {
 
     // ---------- Decode Ways (LC 91): state = suffix start, 1- and 2-digit choices ----------
     // COST: O(n) time, O(n) memo.
+    // DEPTH: recursion s.length() deep; at s.length() >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int numDecodings(String s) { return decodeFrom(0, s, new Integer[s.length() + 1]); }
 
     // state: i = start of undecoded suffix | choice: decode 1 digit or 2 digits | base: i == n -> 1 way
@@ -57,6 +60,7 @@ public class DPLinear {
 
     // ---------- Kadane (LC 53): best subarray STARTING here (extend right only if the rest is positive) ----------
     // Faster: Kadane's running max, O(n) time O(1) space — not DP-memo; mention as a follow-up.
+    // DEPTH: recursion nums.length deep; at nums.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxSubArray(int[] nums) {
         Integer[] memo = new Integer[nums.length];
         int best = Integer.MIN_VALUE;
@@ -73,6 +77,8 @@ public class DPLinear {
 
     // ---------- Maximum Product Subarray (LC 152): track max AND min (negatives flip them) ----------
     // COST: O(n) time, O(n) memo.
+    // Int products are safe: LC 152 guarantees every product fits in a 32-bit integer.
+    // DEPTH: recursion nums.length deep; at nums.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxProduct(int[] nums) {
         int n = nums.length;
         Integer[] hi = new Integer[n], lo = new Integer[n];
@@ -99,6 +105,7 @@ public class DPLinear {
 
     // ---------- Stock family: state machine (holding / not holding, transactions used) ----------
     // I (LC 121): one transaction. COST: O(n) time, O(n) memo.
+    // DEPTH: recursion prices.length deep; at prices.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxProfitOne(int[] p) { return oneFrom(0, 0, p, new Integer[p.length][2]); }
 
     // state: (day i, hold 0/1) | choice: buy / sell (sell ends the only transaction) / rest | base: i == n -> 0
@@ -111,6 +118,7 @@ public class DPLinear {
     }
 
     // II (LC 122): unlimited transactions. COST: O(n) time, O(n) memo.
+    // DEPTH: recursion prices.length deep; at prices.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxProfitUnlimited(int[] p) { return unlimFrom(0, 0, p, new Integer[p.length][2]); }
 
     // state: (day i, hold 0/1) | choice: buy / sell / rest | base: i == n -> 0
@@ -123,6 +131,7 @@ public class DPLinear {
     }
 
     // IV (LC 188): at most k transactions. COST: O(n*k) time and memo.
+    // DEPTH: recursion prices.length deep; at prices.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxProfitK(int k, int[] p) {
         int n = p.length;
         if (n < 2 || k == 0) return 0;
@@ -141,6 +150,7 @@ public class DPLinear {
     }
 
     // with cooldown (LC 309): selling forces a one-day rest. COST: O(n) time, O(n) memo.
+    // DEPTH: recursion prices.length deep; at prices.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxProfitCooldown(int[] p) { return coolFrom(0, 0, p, new Integer[p.length][2]); }
 
     // state: (day i, hold 0/1) | choice: buy / sell (then jump to i+2) / rest | base: i >= n -> 0
@@ -153,6 +163,7 @@ public class DPLinear {
     }
 
     // with fee (LC 714): fee paid on each sale. COST: O(n) time, O(n) memo.
+    // DEPTH: recursion prices.length deep; at prices.length >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int maxProfitFee(int[] p, int fee) { return feeFrom(0, 0, p, fee, new Integer[p.length][2]); }
 
     // state: (day i, hold 0/1) | choice: buy / sell (pay fee) / rest | base: i == n -> 0

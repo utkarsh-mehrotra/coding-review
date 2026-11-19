@@ -105,6 +105,7 @@ public class ArraysHashing {
     }
 
     // ---------- Cyclic sort / index-as-hash: First Missing Positive (LC 41), values in 1..n go to index v-1 ----------
+    // Note: permutes the input array in place (LC allows it).
     static int firstMissingPositive(int[] a) {
         int n = a.length;
         for (int i = 0; i < n; i++)
@@ -200,13 +201,14 @@ public class ArraysHashing {
     }
 
     // ---------- Reservoir sampling (uniform pick from a stream of unknown length) ----------
+    // Same as BitsMathVariants.Reservoir.
     static int reservoirPick(int[] stream, Random rnd) {
         int pick = -1;
         for (int i = 0; i < stream.length; i++) if (rnd.nextInt(i + 1) == 0) pick = stream[i];
         return pick;
     }
 
-    // Fisher-Yates shuffle
+    // Fisher-Yates shuffle. Same as BitsMathVariants.shuffle.
     static void shuffle(int[] a, Random rnd) {
         for (int i = a.length - 1; i > 0; i--) swap(a, i, rnd.nextInt(i + 1));
     }

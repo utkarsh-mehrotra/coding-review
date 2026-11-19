@@ -5,12 +5,12 @@ public class IntervalsVariants {
     // ---------- Minimum Interval to Include Each Query (LC 1851): offline, sort queries, heap by (size, end) ----------
     // RECOGNIZE: many point queries against many intervals, answers need not be online -> sort both and sweep.
     static int[] minInterval(int[][] intervals, int[] queries) {
-        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
         int q = queries.length;
         Integer[] order = new Integer[q];
         for (int i = 0; i < q; i++) order[i] = i;
-        Arrays.sort(order, (a, b) -> queries[a] - queries[b]);
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]); // {size, end}
+        Arrays.sort(order, (a, b) -> Integer.compare(queries[a], queries[b]));
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(a[1], b[1])); // {size, end}
         int[] ans = new int[q];
         int p = 0;
         for (int qi : order) {
@@ -24,7 +24,7 @@ public class IntervalsVariants {
 
     // ---------- Maximum Number of Events You Can Attend (LC 1353): each day attend the event that ends soonest ----------
     static int maxEvents(int[][] events) {
-        Arrays.sort(events, (a, b) -> a[0] - b[0]);
+        Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
         PriorityQueue<Integer> ends = new PriorityQueue<>();
         int i = 0, day = 0, count = 0, n = events.length;
         while (i < n || !ends.isEmpty()) {
@@ -39,7 +39,7 @@ public class IntervalsVariants {
 
     // ---------- Meeting Rooms III (LC 2402): free-room heap + busy heap (end, room) ----------
     static int mostBooked(int n, int[][] meetings) {
-        Arrays.sort(meetings, (a, b) -> a[0] - b[0]);
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
         PriorityQueue<Integer> free = new PriorityQueue<>();
         for (int i = 0; i < n; i++) free.add(i);
         PriorityQueue<long[]> busy = new PriorityQueue<>((a, b) -> a[0] != b[0] ? Long.compare(a[0], b[0]) : Long.compare(a[1], b[1]));
@@ -63,7 +63,7 @@ public class IntervalsVariants {
 
     // ---------- Divide Intervals Into Minimum Number of Groups (LC 2406) ----------
     static int minGroups(int[][] intervals) {
-        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
         PriorityQueue<Integer> ends = new PriorityQueue<>();
         for (int[] iv : intervals) {
             if (!ends.isEmpty() && ends.peek() < iv[0]) ends.poll(); // closed intervals: touching at a point conflicts
@@ -167,7 +167,7 @@ public class IntervalsVariants {
             ev.add(new int[]{r[0], 1, r[1], r[3]});
             ev.add(new int[]{r[2], -1, r[1], r[3]});
         }
-        ev.sort((a, b) -> a[0] - b[0]);
+        ev.sort((a, b) -> Integer.compare(a[0], b[0]));
         Integer[] yv = ys.toArray(new Integer[0]);
         Map<Integer, Integer> id = new HashMap<>();
         for (int i = 0; i < yv.length; i++) id.put(yv[i], i);

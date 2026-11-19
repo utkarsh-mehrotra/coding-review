@@ -4,7 +4,7 @@ public class Intervals {
 
     // ALWAYS first decide: sort by START (merge, insert, overlaps) or by END (max non-overlapping, min arrows).
 
-    // Merge Intervals (LC 56)
+    // Merge Intervals (LC 56). Note: sorts the input array in place (LC allows it).
     static int[][] merge(int[][] iv) {
         Arrays.sort(iv, (a, b) -> Integer.compare(a[0], b[0]));
         List<int[]> out = new ArrayList<>();
@@ -60,7 +60,7 @@ public class Intervals {
 
     // Meeting Rooms (LC 252): any overlap?
     static boolean canAttendMeetings(int[][] iv) {
-        Arrays.sort(iv, (a, b) -> a[0] - b[0]);
+        Arrays.sort(iv, (a, b) -> Integer.compare(a[0], b[0]));
         for (int i = 1; i < iv.length; i++) if (iv[i][0] < iv[i - 1][1]) return false;
         return true;
     }
@@ -73,8 +73,10 @@ public class Intervals {
         Arrays.sort(starts);
         Arrays.sort(ends);
         int e = 0, cur = 0, best = 0;
-        for (int s : starts) {
-            while (ends[e] <= s) { e++; cur--; }
+        for (int i = 0; i < starts.length; i++) {
+            int s = starts[i];
+            // e < i: only pop ends of intervals already started (a zero-length [5,5] never goes negative); e < n guards the scan
+            while (e < ends.length && e < i && ends[e] <= s) { e++; cur--; }
             cur++;
             best = Math.max(best, cur);
         }
@@ -102,6 +104,7 @@ public class Intervals {
     }
 
     // My Calendar III (LC 732): max k-booking via TreeMap of +1 / -1 deltas
+    // COST: O(n) per book (rescans all deltas): fine at LC 732's 400 calls; a lazy segment tree is the O(log n) follow-up.
     static class MyCalendarThree {
         private final TreeMap<Integer, Integer> delta = new TreeMap<>();
         int book(int s, int e) {
@@ -117,7 +120,7 @@ public class Intervals {
     static List<int[]> employeeFreeTime(List<List<int[]>> schedule) {
         List<int[]> all = new ArrayList<>();
         for (List<int[]> s : schedule) all.addAll(s);
-        all.sort((a, b) -> a[0] - b[0]);
+        all.sort((a, b) -> Integer.compare(a[0], b[0]));
         List<int[]> free = new ArrayList<>();
         int end = all.get(0)[1];
         for (int[] x : all) {
@@ -129,7 +132,7 @@ public class Intervals {
 
     // Remove Covered Intervals (LC 1288)
     static int removeCoveredIntervals(int[][] iv) {
-        Arrays.sort(iv, (a, b) -> a[0] != b[0] ? a[0] - b[0] : b[1] - a[1]);
+        Arrays.sort(iv, (a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(b[1], a[1]));
         int count = 0, maxEnd = 0;
         for (int[] x : iv) if (x[1] > maxEnd) { count++; maxEnd = x[1]; }
         return count;

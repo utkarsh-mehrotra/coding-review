@@ -103,9 +103,9 @@ public class BitsMath {
     static long gcd(long a, long b) { return b == 0 ? a : gcd(b, a % b); }
     static long lcm(long a, long b) { return a / gcd(a, b) * b; }
 
-    // Fast power mod (LC 50 for doubles, here modular)
+    // Fast power mod (LC 50 for doubles, here modular). Same as BitsMathVariants.powMod.
     static long powMod(long b, long e, long m) {
-        long r = 1;
+        long r = 1 % m; // m == 1 -> everything is 0
         b %= m;
         while (e > 0) { if ((e & 1) == 1) r = r * b % m; b = b * b % m; e >>= 1; }
         return r;

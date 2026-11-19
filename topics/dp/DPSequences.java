@@ -54,7 +54,7 @@ public class DPSequences {
     }
 
     // Russian Doll Envelopes (LC 354): sort width asc, height DESC, then LIS on heights
-    // Faster (REQUIRED at LC 354 limits, n = 1e5): the O(n^2) memo times out; use patience sorting on heights, O(n log n).
+    // Faster: This memo version is O(n^2) and times out at LC 354's limits (n = 1e5); passing needs patience sorting on heights, O(n log n) — not DP-memo.
     static int maxEnvelopes(int[][] env) {
         Arrays.sort(env, (a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(b[1], a[1]));
         int[] h = new int[env.length];
@@ -120,7 +120,7 @@ public class DPSequences {
     }
 
     // Longest Palindromic Substring (LC 5): memo isPal(i, j), scan every (i, j), O(n^2) time and memo
-    // Faster: expand around each center, O(n^2) time, O(1) space — not DP-memo; mention as a follow-up.
+    // This is the memo isPal version; expand-around-center (O(n^2) time, O(1) space) is the follow-up, not DP-memo.
     static String longestPalindrome(String s) {
         int n = s.length(), bs = 0, be = 0;
         Boolean[][] memo = new Boolean[n][n];

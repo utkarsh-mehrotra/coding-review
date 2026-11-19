@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class TreesVariants {
+    // Static counters below are reset at the start of each public entry method, so a failed or repeated call cannot leak state.
     // Uses BinaryTree.TreeNode; build test trees with BinaryTree.fromLevel(...).
     // Two shapes cover most of these: (1) post-order returns one value to the parent while a global tracks the answer,
     // (2) pre-order carries state down (a path sum, a bound, a depth) as parameters.
@@ -191,7 +192,8 @@ public class TreesVariants {
 
     static int amountOfTime(BinaryTree.TreeNode root, int start) { infected = 0; infect(root, start); return infected; }
 
-    // returns depth of the subtree if `start` is not inside; otherwise a negative number -(distance from this node to start)
+    // returns the subtree height in NODES (null = 0, leaf = 1) if `start` is not inside; otherwise -(edges from this node to start + 1):
+    // start returns -1, its parent -2, ... so a caller recovers the edge distance to start as |value|.
     private static int infect(BinaryTree.TreeNode n, int start) {
         if (n == null) return 0;
         int l = infect(n.left, start), r = infect(n.right, start);
@@ -323,6 +325,7 @@ public class TreesVariants {
         return n;
     }
 
+    // Same as BST.sortedArrayToBST; kept in both so each file compiles alone.
     static BinaryTree.TreeNode sortedArrayToBST(int[] a) { return sortedBuild(a, 0, a.length - 1); }
 
     private static BinaryTree.TreeNode sortedBuild(int[] a, int lo, int hi) {

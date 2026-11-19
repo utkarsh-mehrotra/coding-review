@@ -80,6 +80,7 @@ public class LinkedListsVariants {
     }
 
     // ---------- Maximum Twin Sum (LC 2130): reverse the second half, then walk both halves ----------
+    // Note: reverses the second half in place and does not restore it.
     static int pairSum(LinkedLists.ListNode head) {
         LinkedLists.ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) { slow = slow.next; fast = fast.next.next; }

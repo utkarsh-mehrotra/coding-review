@@ -10,7 +10,7 @@ public class ShortestPath {
         int[] dist = new int[n];
         Arrays.fill(dist, Integer.MAX_VALUE);
         dist[start] = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]); // {node, dist}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1])); // {node, dist}
         pq.add(new int[]{start, 0});
         while (!pq.isEmpty()) {
             int[] cur = pq.poll();
@@ -29,7 +29,8 @@ public class ShortestPath {
 
     // LC 743
     // ---------- Bellman-Ford ----------
-    // edges[i] = {u, v, weight}. Handles negative weights, detects negative cycles.
+    // edges[i] = {u, v, weight}. Handles negative weights, detects negative cycles reachable from `start` only
+    // (a negative cycle in a part unreachable from start is not seen).
     static int[] bellmanFord(int n, int start, int[][] edges) {
         int[] dist = new int[n];
         Arrays.fill(dist, Integer.MAX_VALUE);
@@ -73,7 +74,9 @@ public class ShortestPath {
     }
 
     // ---------- Johnson's Algorithm (APSP on sparse graphs) ----------
-    // edges[i] = {u, v, weight}, adj built separately for Dijkstra phase
+    // edges[i] = {u, v, weight}, adj built separately for Dijkstra phase.
+    // Input contract: adj[u] must hold exactly the same edges as `edges`. The virtual source reaches every node,
+    // so any negative cycle anywhere makes bellmanFord throw.
     static int[][] johnsons(int n, int[][] edges, List<int[]>[] adj) {
         // Step 1: add virtual node connected to all with 0-weight edges, run Bellman-Ford
         int[][] extendedEdges = new int[edges.length + n][3];
@@ -111,7 +114,7 @@ public class ShortestPath {
         int[] gScore = new int[n];
         Arrays.fill(gScore, Integer.MAX_VALUE);
         gScore[start] = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]); // {node, fScore}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1])); // {node, fScore}
         pq.add(new int[]{start, h.estimate(start)});
         while (!pq.isEmpty()) {
             int[] cur = pq.poll();

@@ -135,7 +135,7 @@ public class BinarySearchVariants {
         int n = iv.length;
         Integer[] byStart = new Integer[n];
         for (int i = 0; i < n; i++) byStart[i] = i;
-        Arrays.sort(byStart, (a, b) -> iv[a][0] - iv[b][0]);
+        Arrays.sort(byStart, (a, b) -> Integer.compare(iv[a][0], iv[b][0]));
         int[] res = new int[n];
         for (int i = 0; i < n; i++) {
             int lo = 0, hi = n;

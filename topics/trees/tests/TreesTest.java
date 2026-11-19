@@ -121,6 +121,34 @@ public class TreesTest {
             for (int i = l; i <= rr; i++) mn = Math.min(mn, a[i]);
             Check.eq("sparse", sp.min(l, rr), mn);
         }
+        {
+        // 1.2 skyline: overflow regression + randomized brute force incl. heights near Integer.MAX_VALUE
+        Check.eq("skylineMax", RangeStructures.getSkyline(new int[][]{{0, 2, Integer.MAX_VALUE}, {2, 3, Integer.MAX_VALUE}}).toString(), "[[0, 2147483647], [3, 0]]");
+        Random sk = new Random(9);
+        for (int iter = 0; iter < 500; iter++) {
+            int nb = 1 + sk.nextInt(5);
+            int[][] bs = new int[nb][];
+            for (int i = 0; i < nb; i++) {
+                int l = sk.nextInt(8), rr = l + 1 + sk.nextInt(5);
+                int h = sk.nextBoolean() ? Integer.MAX_VALUE - sk.nextInt(3) : 1 + sk.nextInt(5);
+                if (sk.nextInt(5) == 0) h = 1;
+                bs[i] = new int[]{l, rr, h};
+            }
+            List<List<Integer>> want = new ArrayList<>();
+            int prev = 0;
+            for (int x = 0; x <= 14; x++) {
+                int h = 0;
+                for (int[] bb : bs) if (bb[0] <= x && x < bb[1]) h = Math.max(h, bb[2]);
+                if (h != prev) { want.add(List.of(x, h)); prev = h; }
+            }
+            Check.eq("skylineRand", RangeStructures.getSkyline(bs).toString(), want.toString());
+        }
+        // 1.16 largestBSTSubtree with extreme node values
+        Check.eq("lbstMin", BST.largestBSTSubtree(T(Integer.MIN_VALUE, null, 5)), 2);
+        Check.eq("lbstMax", BST.largestBSTSubtree(T(Integer.MAX_VALUE, 3, null)), 2);
+        Check.eq("lbstBoth", BST.largestBSTSubtree(T(0, Integer.MIN_VALUE, Integer.MAX_VALUE)), 3);
+        Check.eq("lbstSingleMin", BST.largestBSTSubtree(T(Integer.MIN_VALUE)), 1);
+        }
         Check.done("TreesTest");
     }
 }

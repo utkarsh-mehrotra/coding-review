@@ -256,6 +256,25 @@ public class PatternsTest {
             while (true) { long need = 0; for (int p : piles) need += (p + lin - 1) / lin; if (need <= hrs) break; lin++; }
             Check.eq("kokoRand", BinarySearch.minEatingSpeed(piles, hrs), lin);
         }
+        // critique regressions
+        Check.eq("maxOverlap[[5,5]]", Intervals.maxOverlap(new int[][]{{5, 5}}), 1);
+        java.util.Random rr = new java.util.Random(7);
+        for (int t = 0; t < 300; t++) {
+            int n = 1 + rr.nextInt(8);
+            int[][] iv = new int[n][2];
+            for (int i = 0; i < n; i++) { int s0 = rr.nextInt(10); iv[i][0] = s0; iv[i][1] = s0 + 1 + rr.nextInt(5); }
+            int want = 0; // brute force over half-open [s, e)
+            for (int at = 0; at <= 15; at++) {
+                int c = 0;
+                for (int[] v : iv) if (v[0] <= at && at < v[1]) c++;
+                want = Math.max(want, c);
+            }
+            Check.eq("maxOverlapRand", Intervals.maxOverlap(iv), want);
+        }
+        Check.eq("powMod m=1", BitsMath.powMod(5, 0, 1) + "," + BitsMath.powMod(5, 3, 1) + "," + BitsMathVariants.powMod(5, 0, 1) + "," + BitsMathVariants.powMod(5, 3, 1), "0,0,0,0");
+        Check.eq("powMod ok", BitsMath.powMod(2, 10, 1000) + "," + BitsMathVariants.powMod(3, 0, 7), "24,1");
+        Check.eq("minRemoveKeepsStar", StacksVariants.minRemoveToMakeValid("a*b(c"), "a*bc");
+        Check.eq("minRemoveBasic", StacksVariants.minRemoveToMakeValid("lee(t(c)o)de)") + "," + StacksVariants.minRemoveToMakeValid("))(("), "lee(t(c)o)de,");
         Check.done("PatternsTest");
     }
 

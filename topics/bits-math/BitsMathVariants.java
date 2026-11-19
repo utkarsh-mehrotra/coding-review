@@ -34,6 +34,7 @@ public class BitsMathVariants {
     }
 
     // ---------- Gray code (LC 89) and its inverse ----------
+    // Same idea as Backtracking.grayCode (this closed form is i ^ (i >> 1)).
     static List<Integer> grayCode(int n) {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < 1 << n; i++) res.add(i ^ (i >> 1));
@@ -82,6 +83,7 @@ public class BitsMathVariants {
     static int swapOddEvenBits(int n) { return ((n & 0x55555555) << 1) | ((n >>> 1) & 0x55555555); }
 
     // ---------- Sqrt(x) (LC 69) and Valid Perfect Square (LC 367): binary search on the answer, long to avoid overflow ----------
+    // Same idea as BinarySearch.mySqrt.
     static int mySqrt(int x) {
         long lo = 0, hi = x;
         while (lo < hi) {
@@ -102,8 +104,9 @@ public class BitsMathVariants {
         return result;
     }
 
+    // Same as BitsMath.powMod.
     static long powMod(long base, long exp, long mod) {
-        long r = 1;
+        long r = 1 % mod; // mod == 1 -> everything is 0
         base %= mod;
         for (; exp > 0; exp >>= 1, base = base * base % mod) if ((exp & 1) == 1) r = r * base % mod;
         return r;
@@ -220,6 +223,7 @@ public class BitsMathVariants {
     }
 
     // ---------- Reservoir sampling (uniform pick from a stream of unknown length) ----------
+    // Same idea as ArraysHashing.reservoirPick.
     static class Reservoir {
         private final Random rnd;
         private int chosen, seen;
@@ -229,6 +233,7 @@ public class BitsMathVariants {
     }
 
     // ---------- Fisher-Yates shuffle (uniform): swap each position with a random one at or after it ----------
+    // Same as ArraysHashing.shuffle (Fisher-Yates).
     static void shuffle(int[] a, Random rnd) {
         for (int i = 0; i < a.length - 1; i++) {
             int j = i + rnd.nextInt(a.length - i);

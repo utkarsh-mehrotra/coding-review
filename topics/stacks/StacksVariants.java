@@ -36,7 +36,7 @@ public class StacksVariants {
         int n = position.length;
         Integer[] idx = new Integer[n];
         for (int i = 0; i < n; i++) idx[i] = i;
-        Arrays.sort(idx, (a, b) -> position[b] - position[a]);
+        Arrays.sort(idx, (a, b) -> Integer.compare(position[b], position[a]));
         int fleets = 0;
         double lastTime = 0;
         for (int i : idx) {
@@ -59,17 +59,20 @@ public class StacksVariants {
 
     // ---------- Minimum Remove to Make Valid Parentheses (LC 1249): mark indices to drop ----------
     static String minRemoveToMakeValid(String s) {
-        StringBuilder sb = new StringBuilder(s);
+        boolean[] drop = new boolean[s.length()];
         Deque<Integer> open = new ArrayDeque<>();
-        for (int i = 0; i < sb.length(); i++) {
-            if (sb.charAt(i) == '(') open.push(i);
-            else if (sb.charAt(i) == ')') { if (open.isEmpty()) sb.setCharAt(i, '*'); else open.pop(); }
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') open.push(i);
+            else if (s.charAt(i) == ')') { if (open.isEmpty()) drop[i] = true; else open.pop(); }
         }
-        while (!open.isEmpty()) sb.setCharAt(open.pop(), '*');
-        return sb.toString().replace("*", "");
+        while (!open.isEmpty()) drop[open.pop()] = true;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) if (!drop[i]) sb.append(s.charAt(i));
+        return sb.toString();
     }
 
     // ---------- Basic Calculator III (LC 772): + - * / and parentheses, recursive descent over one index ----------
+    // Static cursor: reset at each calculate3 entry, but NOT reentrant / thread-safe (one call at a time).
     private static int pos;
 
     static int calculate3(String s) {
