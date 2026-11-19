@@ -271,7 +271,7 @@ public class TreesVariants {
         return false;
     }
 
-    // ---------- Binary Tree Paths (LC 257) and Path Sum II (LC 113): backtracking on a shared path list ----------
+    // ---------- Binary Tree Paths (LC 257) and Path Sum II: backtracking on a shared path list ----------
     static List<String> binaryTreePaths(BinaryTree.TreeNode root) {
         List<String> res = new ArrayList<>();
         paths(root, new StringBuilder(), res);
@@ -287,6 +287,7 @@ public class TreesVariants {
         cur.setLength(len);
     }
 
+    // LC 113
     static List<List<Integer>> pathSumII(BinaryTree.TreeNode root, int target) {
         List<List<Integer>> res = new ArrayList<>();
         pathSum(root, target, new ArrayList<>(), res);
@@ -315,7 +316,7 @@ public class TreesVariants {
         greater(n.left);
     }
 
-    // Trim a BST (LC 669), Sorted Array to BST (LC 108), Minimum Difference in BST (LC 783), Range Sum of BST (LC 938)
+    // LC 669
     static BinaryTree.TreeNode trimBST(BinaryTree.TreeNode n, int lo, int hi) {
         if (n == null) return null;
         if (n.val < lo) return trimBST(n.right, lo, hi);
@@ -325,6 +326,7 @@ public class TreesVariants {
         return n;
     }
 
+    // LC 108
     // Same as BST.sortedArrayToBST; kept in both so each file compiles alone.
     static BinaryTree.TreeNode sortedArrayToBST(int[] a) { return sortedBuild(a, 0, a.length - 1); }
 
@@ -337,6 +339,7 @@ public class TreesVariants {
         return n;
     }
 
+    // LC 783
     static int minDiffInBST(BinaryTree.TreeNode root) {
         int best = Integer.MAX_VALUE;
         Deque<BinaryTree.TreeNode> st = new ArrayDeque<>();
@@ -351,6 +354,7 @@ public class TreesVariants {
         return best;
     }
 
+    // LC 938
     static int rangeSumBST(BinaryTree.TreeNode n, int lo, int hi) {
         if (n == null) return 0;
         if (n.val < lo) return rangeSumBST(n.right, lo, hi);

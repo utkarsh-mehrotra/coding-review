@@ -45,6 +45,7 @@ public class Traversal {
 
     // ---------- Multi-source BFS ----------
     // e.g. rotting oranges / walls-and-gates: seed queue with all sources at dist 0
+    // LC 286, LC 1162
     static int[] multiSourceBFS(List<Integer> sources, List<List<Integer>> adj, int n) {
         int[] dist = new int[n];
         Arrays.fill(dist, -1);

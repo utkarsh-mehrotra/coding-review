@@ -51,6 +51,7 @@ public class BipartiteAndBitmaskDP {
 
     // ---------- Bitmask DP: Shortest Path Visiting All Nodes (LeetCode 847 shape) ----------
     // Unweighted graph, BFS over (node, visitedMask) states instead of pure DP table.
+    // LC 847
     static int shortestPathVisitingAllNodes(List<List<Integer>> adj) {
         int n = adj.size();
         int fullMask = (1 << n) - 1;

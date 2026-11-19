@@ -199,7 +199,7 @@ public class StringAlgorithms {
         return res;
     }
 
-    // Longest Duplicate Substring (LC 1044) idea: binary search on length + rolling hash is the standard answer;
+    // Longest Duplicate Substring: see StringsVariants.longestDupSubstring. Binary search on length + rolling hash is the standard answer;
     // see rabinKarp above for the hash and BinarySearch template for the outer loop.
 
     // Smallest rotation / Lyndon: minimal string rotation via doubling (simple O(n^2) baseline kept short)

@@ -128,6 +128,7 @@ public class SCC_Bridges_2SAT {
         Set<Integer> aps = new HashSet<>();
     }
 
+    // LC 1568 (articulation points on the land-cell graph)
     static void findBridgesAndArticulation(int n, List<List<Integer>> adj) {
         BridgeState st = new BridgeState();
         st.disc = new int[n];

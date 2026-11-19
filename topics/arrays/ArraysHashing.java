@@ -168,13 +168,14 @@ public class ArraysHashing {
 
     private static void rev(int[] a, int l, int r) { while (l < r) swap(a, l++, r--); }
 
-    // ---------- Matrix: rotate 90 clockwise (LC 48), spiral (LC 54), set zeroes O(1) (LC 73) ----------
+    // ---------- Matrix: rotate 90 clockwise (LC 48), spiral, set zeroes O(1) ----------
     static void rotateMatrix(int[][] m) {
         int n = m.length;
         for (int i = 0; i < n; i++) for (int j = i + 1; j < n; j++) { int t = m[i][j]; m[i][j] = m[j][i]; m[j][i] = t; }
         for (int[] row : m) rev(row, 0, n - 1);
     }
 
+    // LC 54
     static List<Integer> spiralOrder(int[][] m) {
         List<Integer> out = new ArrayList<>();
         int top = 0, bot = m.length - 1, left = 0, right = m[0].length - 1;
@@ -189,6 +190,7 @@ public class ArraysHashing {
         return out;
     }
 
+    // LC 73
     static void setZeroes(int[][] m) {
         int R = m.length, C = m[0].length;
         boolean row0 = false, col0 = false;

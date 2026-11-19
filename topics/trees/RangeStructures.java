@@ -71,6 +71,7 @@ public class RangeStructures {
     }
 
     // ---------- Segment tree (iterative, bottom-up): point update, range query (sum; swap combine for min/max) ----------
+    // LC 307
     static class SegTree {
         private final int n;
         private final long[] t;

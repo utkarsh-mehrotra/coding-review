@@ -103,7 +103,7 @@ public class BitsMath {
     static long gcd(long a, long b) { return b == 0 ? a : gcd(b, a % b); }
     static long lcm(long a, long b) { return a / gcd(a, b) * b; }
 
-    // Fast power mod (LC 50 for doubles, here modular). Same as BitsMathVariants.powMod.
+    // Fast power mod (modular; the double version is myPow below). Same as BitsMathVariants.powMod.
     static long powMod(long b, long e, long m) {
         long r = 1 % m; // m == 1 -> everything is 0
         b %= m;
@@ -111,6 +111,7 @@ public class BitsMath {
         return r;
     }
 
+    // LC 50
     static double myPow(double x, long n) {
         if (n < 0) { x = 1 / x; n = -n; }
         double r = 1;

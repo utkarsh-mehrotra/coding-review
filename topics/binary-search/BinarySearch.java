@@ -164,7 +164,7 @@ public class BinarySearch {
         throw new IllegalArgumentException();
     }
 
-    // LC 644
+    // LC 644 (loose fit, deliberate: a real-valued binary search on the answer)
     // Real-valued search: sqrt with fixed iterations (avoids epsilon traps)
     static double sqrt(double x) {
         double lo = 0, hi = Math.max(1, x);

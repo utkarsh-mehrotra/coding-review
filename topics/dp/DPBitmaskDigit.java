@@ -5,6 +5,7 @@ public class DPBitmaskDigit {
     // ---------- Bitmask DP: memo f(mask) over a subset of <= ~20 items ----------
     // RECOGNIZE: n <= 20, "assign / partition / visit every item once".
 
+    // LC 1947 (and related bitmask DP: LC 1349)
     // Minimum Cost Assignment: cost[i][j] = worker i on task j, one each. O(2^n * n) time, O(2^n) memo
     static int minCostAssignment(int[][] cost) {
         int n = cost.length;

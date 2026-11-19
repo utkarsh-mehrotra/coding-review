@@ -14,6 +14,16 @@ T = inv['templates']
 TOPIC_OF = {k: v['topic'] for k, v in T.items()}
 
 
+# Tag rules that over-match these specific problems (not stock trading / circular deque / m-subarray DP);
+# they fall through to the next rule or tier C/U.
+RULE_EXCLUDE = {
+    2291: ('DPLinear#maxProfitK',),
+    641: ('LinkedLists#reverse',),
+    3956: ('MonotonicStructures#maxSlidingWindow',),
+    1568: ('SCC_Bridges_2SAT#tarjanSCC',),  # articulation points, not SCC
+}
+
+
 def has(tags, *xs): return any(x in tags for x in xs)
 
 
@@ -58,7 +68,7 @@ RULES = [
     ('B', 'DPGridInterval#uniquePaths', lambda t, s: has(t, 'dynamic-programming') and has(t, 'matrix')),
     ('B', 'DPSequences#longestPalindromeSubseq', lambda t, s: has(t, 'dynamic-programming') and 'palindrom' in s),
     ('B', 'DPSequences#longestCommonSubsequence', lambda t, s: has(t, 'dynamic-programming') and has(t, 'string') and ('subsequence' in s or 'edit' in s or 'distance' in s or 'common' in s)),
-    ('B', 'DPGridInterval#matrixChainOrder', lambda t, s: has(t, 'dynamic-programming') and re.search(r'burst|merge stones|cut.*stick|triangulation|polygon|strange printer|remove boxes|zuma', s)),
+    ('B', 'DPGridInterval#matrixChainOrder', lambda t, s: has(t, 'dynamic-programming') and re.search(r'burst|merge stones|cut.*stick|triangulation|polygon|strange printer|remove boxes', s)),
     ('B', 'DPVariants#predictTheWinner', lambda t, s: has(t, 'game-theory', 'minimax-algorithm') and has(t, 'dynamic-programming', 'memoization')),
     ('B', 'ArraysHashing#nextPermutation', lambda t, s: 'next permutation' in s or 'next greater element iii' in s or 'next smaller' in s and has(t, 'math')),
     # ---- stacks / queues
@@ -119,7 +129,7 @@ RULES = [
     ('B', 'BitsMath#modInverse', lambda t, s: has(t, 'fermats-little-theorem')),
     ('B', 'BitsMath#Combinatorics', lambda t, s: has(t, 'combinatorics')),
     ('B', 'BitsMath#powMod', lambda t, s: re.search(r'\bpow\b|exponentiation|super pow', s) and has(t, 'math')),
-    ('B', 'BitsMathVariants#Reservoir', lambda t, s: has(t, 'reservoir-sampling', 'randomized')),
+    ('B', 'BitsMathVariants#Reservoir', lambda t, s: has(t, 'reservoir-sampling', 'randomized') and re.search(r'random pick|linked list random|shuffle|reservoir|random index', s)),
     ('B', 'BitsMath#subsetsMask', lambda t, s: has(t, 'bitmask')),
     ('B', 'BitsMath#singleNumber', lambda t, s: has(t, 'bit-manipulation') and re.search(r'xor|bit|single|hamming|power of|binary|complement', s)),
     ('B', 'ArraysHashing#subarraySum', lambda t, s: has(t, 'prefix-sum') and not has(t, 'matrix')),
@@ -167,6 +177,8 @@ for q in lc:
         try:
             ok = pred(tags, title)
         except Exception:
+            ok = False
+        if ok and key in RULE_EXCLUDE.get(pid, ()):
             ok = False
         if ok and key not in [h[1] for h in hits]:
             hits.append((tier, key))
