@@ -327,7 +327,7 @@ public class TreesVariants {
     }
 
     // LC 108
-    // Same as BST.sortedArrayToBST; kept in both so each file compiles alone.
+    // Same as BST.sortedArrayToBST; kept in both so each view shows a complete template.
     static BinaryTree.TreeNode sortedArrayToBST(int[] a) { return sortedBuild(a, 0, a.length - 1); }
 
     private static BinaryTree.TreeNode sortedBuild(int[] a, int lo, int hi) {

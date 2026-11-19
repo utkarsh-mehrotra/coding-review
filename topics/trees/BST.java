@@ -64,7 +64,7 @@ public class BST {
     }
 
     // ---------- Sorted array -> height-balanced BST (LC 108) ----------
-    // Same as TreesVariants.sortedArrayToBST; kept in both so each file compiles alone.
+    // Same as TreesVariants.sortedArrayToBST; kept in both so each view shows a complete template.
     static BinaryTree.TreeNode sortedArrayToBST(int[] a) { return arr(a, 0, a.length - 1); }
 
     private static BinaryTree.TreeNode arr(int[] a, int lo, int hi) {
@@ -103,7 +103,7 @@ public class BST {
     }
 
     // ---------- Largest BST subtree (LC 333): post-order returns {min, max, isBST, size} ----------
-    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
+    // DEPTH: recursion n deep; at n >= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int largestBSTSubtree(BinaryTree.TreeNode root) { return (int) lb(root)[3]; }
 
     // returns {min, max, isBST(1/0), bestSize / size}; long so node values Integer.MIN_VALUE / MAX_VALUE

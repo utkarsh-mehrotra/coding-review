@@ -804,6 +804,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 
 /* ---------- Niche tag and Hide niche toggle ---------- */
 .cs-actions { display: flex; gap: 8px; align-items: center; }
+h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight: 500; }
 .niche-tag { display: inline-block; margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px;
   font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.03em; vertical-align: 1px; }
 .hide-niche .niche { display: none; }
@@ -933,7 +934,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <a class="topic-card" href="#bits-math" data-goto="bits-math"><strong>Bits &amp; Math</strong><div class="tc-meta">2 views &middot; 2 template files &middot; 14 decisions</div></a>
 <a class="topic-card" href="#design-structures" data-goto="design-structures"><strong>Data-Structure Design</strong><div class="tc-meta">2 views &middot; 2 template files &middot; 13 decisions</div></a>
 </div>
-<h2 class="section-title">Decision Tree &mdash; &ldquo;which pattern do I reach for?&rdquo;</h2>
+<h2 class="section-title">Decision Tree &mdash; &ldquo;which pattern do I reach for?&rdquo;<button type="button" class="theme-toggle niche-toggle" aria-pressed="false">Hide niche</button></h2>
 <h3 class="group-title">Graphs</h3>
 <ol class="decision-list">
 <li><strong>Unweighted, shortest path?</strong> <span class="arrow">&rarr;</span> BFS (multi-source if multiple starts; 0-1 BFS if weights are 0/1)<a class="tpl" href="#traversal" data-goto="traversal">Traversal#bfs</a></li>
@@ -1384,7 +1385,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </div>
 <div class="view" id="view-cheatsheet">
 <div class="page-kicker">CS &mdash; CHEAT SHEET</div>
-<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1><div class="cs-actions"><button type="button" class="theme-toggle" id="hideNiche" aria-pressed="false">Hide niche</button><button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div></div>
+<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1><div class="cs-actions"><button type="button" class="theme-toggle niche-toggle" id="hideNiche" aria-pressed="false">Hide niche</button><button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div></div>
 <p class="page-intro">Every signal, pattern and pitfall in one place. Print it, or save it as a PDF.</p>
 <h3 class="group-title">Graphs</h3>
 <table class="ref-table">
@@ -1477,7 +1478,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <tr><td>Reconstruction</td><td>Supersequence, divisible subset: walk the memo</td><td class="complexity">O(nm)</td></tr>
 </table>
 <ul class="cs-pitfalls">
-<li>Recursion depth equals the length of the state chain. Java's default stack holds about 10^4 frames; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, "solve", 1 &lt;&lt; 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).</li>
+<li>Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, "solve", 1 &lt;&lt; 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).</li>
 <li>Max product needs both max AND min: a negative flips them.</li>
 <li>Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.</li>
 <li>Stock with k transactions: if k &gt;= n/2 it degenerates to unlimited.</li>
@@ -2770,7 +2771,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <span class="fold-mark">    // … TarjanState(): helper hidden
 </span><span class="fold" data-fold="helper"><span class="m-anchor" id="m-SCC_Bridges_2SAT-TarjanState"></span>    <span class="tok-com">// ---------- Tarjan's Algorithm (SCC, single-pass) ----------</span>
     <span class="tok-com">// All DFS state lives in a per-call holder, so nothing leaks between calls or between algorithms.</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">private</span> <span class="tok-kw">static</span> <span class="tok-kw">final</span> <span class="tok-kw">class</span> <span class="tok-type">TarjanState</span> {
         <span class="tok-kw">int</span>[] disc, low;
         <span class="tok-kw">boolean</span>[] onStack;
@@ -2875,7 +2876,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     <span class="tok-com">// Multi-edges: the parent is skipped by EDGE id, not by vertex, so a doubled edge is not a bridge.</span>
     <span class="tok-com">// Edge ids are built internally: each undirected edge u-v must appear once in adj[u] and once in adj[v];</span>
     <span class="tok-com">// the k-th occurrence of v in adj[u] is paired with the k-th occurrence of u in adj[v].</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-type">List</span>&lt;<span class="tok-kw">int</span>[]&gt; bridges;
     <span class="tok-kw">static</span> <span class="tok-type">Set</span>&lt;<span class="tok-type">Integer</span>&gt; articulationPoints;
 
@@ -2946,7 +2947,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <span class="m-anchor" id="m-SCC_Bridges_2SAT-solve2SAT"></span>    <span class="tok-com">// ---------- 2-SAT ----------</span>
     <span class="tok-com">// n variables; each clause is {a, negA, b, negB} meaning (lit(a) OR lit(b)), where neg = 1 means the literal is NOT var.</span>
     <span class="tok-com">// Build implication graph: for clause (a OR b): ¬a -&gt; b, ¬b -&gt; a</span>
-    <span class="tok-com">// DEPTH: recursion 2*numVars deep (Tarjan); at &gt;= 1e4 variables run inside a big-stack thread.</span>
+    <span class="tok-com">// DEPTH: recursion 2*numVars deep (Tarjan); at &gt;= 5e3 variables run inside a big-stack thread.</span>
     <span class="tok-kw">static</span> <span class="tok-kw">boolean</span> solve2SAT(<span class="tok-kw">int</span> numVars, <span class="tok-type">List</span>&lt;<span class="tok-kw">int</span>[]&gt; clauses) {
         <span class="tok-kw">return</span> solve2SATAssignment(numVars, clauses) != <span class="tok-kw">null</span>;
     }
@@ -4711,7 +4712,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <span class="m-anchor" id="m-DPLinear-climbStairsMemo"></span>    <span class="tok-com">// ---------- Climbing Stairs (LC 70): top-down memo ----------</span>
     <span class="tok-com">// RECOGNIZE: count ways / min cost where step i depends on a few earlier steps.</span>
     <span class="tok-com">// COST: O(n) time, O(n) memo + recursion stack.</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> climbStairsMemo(<span class="tok-kw">int</span> n) { <span class="tok-kw">return</span> ways(n, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n + 1]); }
 
 <span class="fold-mark">    // … ways(): helper hidden
@@ -4724,7 +4725,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-DPLinear-rob"></span>    <span class="tok-com">// ---------- House Robber (LC 198): take / skip state ----------</span>
     <span class="tok-com">// COST: O(n) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> rob(<span class="tok-kw">int</span>[] nums) { <span class="tok-kw">return</span> robFrom(0, nums.length - 1, nums, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[nums.length]); }
 
 <span class="fold-mark">    // … robFrom(): helper hidden
@@ -4744,7 +4745,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 
 <span class="m-anchor" id="m-DPLinear-numDecodings"></span>    <span class="tok-com">// ---------- Decode Ways (LC 91): state = suffix start, 1- and 2-digit choices ----------</span>
     <span class="tok-com">// COST: O(n) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion s.length() deep; at s.length() &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion s.length() deep; at s.length() &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> numDecodings(<span class="tok-type">String</span> s) { <span class="tok-kw">return</span> decodeFrom(0, s, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[s.length() + 1]); }
 
 <span class="fold-mark">    // … decodeFrom(): helper hidden
@@ -4761,7 +4762,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-DPLinear-maxSubArray"></span>    <span class="tok-com">// ---------- Kadane (LC 53): best subarray STARTING here (extend right only if the rest is positive) ----------</span>
     <span class="tok-com">// Faster: Kadane's running max, O(n) time O(1) space — not DP-memo; mention as a follow-up.</span>
-    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxSubArray(<span class="tok-kw">int</span>[] nums) {
         <span class="tok-type">Integer</span>[] memo = <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[nums.length];
         <span class="tok-kw">int</span> best = <span class="tok-type">Integer</span>.MIN_VALUE;
@@ -4780,7 +4781,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <span class="m-anchor" id="m-DPLinear-maxProduct"></span>    <span class="tok-com">// ---------- Maximum Product Subarray (LC 152): track max AND min (negatives flip them) ----------</span>
     <span class="tok-com">// COST: O(n) time, O(n) memo.</span>
     <span class="tok-com">// Int products are safe: LC 152 guarantees every product fits in a 32-bit integer.</span>
-    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxProduct(<span class="tok-kw">int</span>[] nums) {
         <span class="tok-kw">int</span> n = nums.length;
         <span class="tok-type">Integer</span>[] hi = <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n], lo = <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n];
@@ -4809,7 +4810,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-DPLinear-maxProfitOne"></span>    <span class="tok-com">// ---------- Stock family: state machine (holding / not holding, transactions used) ----------</span>
     <span class="tok-com">// I (LC 121): one transaction. COST: O(n) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxProfitOne(<span class="tok-kw">int</span>[] p) { <span class="tok-kw">return</span> oneFrom(0, 0, p, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[p.length][2]); }
 
 <span class="fold-mark">    // … oneFrom(): helper hidden
@@ -4823,7 +4824,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-DPLinear-maxProfitUnlimited"></span>    <span class="tok-com">// II (LC 122): unlimited transactions. COST: O(n) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxProfitUnlimited(<span class="tok-kw">int</span>[] p) { <span class="tok-kw">return</span> unlimFrom(0, 0, p, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[p.length][2]); }
 
 <span class="fold-mark">    // … unlimFrom(): helper hidden
@@ -4837,7 +4838,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-DPLinear-maxProfitK"></span>    <span class="tok-com">// IV (LC 188): at most k transactions. COST: O(n*k) time and memo.</span>
-    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxProfitK(<span class="tok-kw">int</span> k, <span class="tok-kw">int</span>[] p) {
         <span class="tok-kw">int</span> n = p.length;
         <span class="tok-kw">if</span> (n &lt; 2 || k == 0) <span class="tok-kw">return</span> 0;
@@ -4857,7 +4858,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-DPLinear-maxProfitCooldown"></span>    <span class="tok-com">// with cooldown (LC 309): selling forces a one-day rest. COST: O(n) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxProfitCooldown(<span class="tok-kw">int</span>[] p) { <span class="tok-kw">return</span> coolFrom(0, 0, p, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[p.length][2]); }
 
 <span class="fold-mark">    // … coolFrom(): helper hidden
@@ -4871,7 +4872,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-DPLinear-maxProfitFee"></span>    <span class="tok-com">// with fee (LC 714): fee paid on each sale. COST: O(n) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion prices.length deep; at prices.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxProfitFee(<span class="tok-kw">int</span>[] p, <span class="tok-kw">int</span> fee) { <span class="tok-kw">return</span> feeFrom(0, 0, p, fee, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[p.length][2]); }
 
 <span class="fold-mark">    // … feeFrom(): helper hidden
@@ -4903,7 +4904,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </div>
 <h2 class="section-title">Pitfalls</h2>
 <ol class="decision-list">
-<li>Recursion depth equals the length of the state chain. Java's default stack holds about 10^4 frames; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, "solve", 1 &lt;&lt; 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).</li>
+<li>Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, "solve", 1 &lt;&lt; 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).</li>
 <li>Max product needs both max AND min: a negative flips them.</li>
 <li>Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.</li>
 <li>Stock with k transactions: if k &gt;= n/2 it degenerates to unlimited.</li>
@@ -5070,7 +5071,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-DPKnapsack-coinChangeMin"></span>    <span class="tok-com">// ---------- Coin Change (LC 322): fewest coins, unbounded ----------</span>
     <span class="tok-com">// COST: O(amount * coins) time, O(amount) memo.</span>
-    <span class="tok-com">// DEPTH: recursion amount deep; at amount &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion amount deep; at amount &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> coinChangeMin(<span class="tok-kw">int</span>[] coins, <span class="tok-kw">int</span> amount) {
         <span class="tok-kw">int</span> r = fewestCoins(amount, coins, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[amount + 1]);
         <span class="tok-kw">return</span> r &gt;= <span class="tok-type">Integer</span>.MAX_VALUE / 2 ? -1 : r;
@@ -5122,7 +5123,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-DPKnapsack-numSquares"></span>    <span class="tok-com">// Perfect Squares (LC 279): unbounded, min count</span>
     <span class="tok-com">// COST: O(n * sqrt(n)) time, O(n) memo.</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> numSquares(<span class="tok-kw">int</span> n) { <span class="tok-kw">return</span> fewestSquares(n, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n + 1]); }
 
 <span class="fold-mark">    // … fewestSquares(): helper hidden
@@ -5993,7 +5994,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 
 <span class="m-anchor" id="m-DPCombined-jobScheduling"></span>    <span class="tok-com">// ---------- DP + binary search: Maximum Profit in Job Scheduling (LC 1235) ----------</span>
     <span class="tok-com">// memo over job index (jobs sorted by start); binary-search the first job starting at or after this one ends. O(n log n)</span>
-    <span class="tok-com">// DEPTH: recursion jobs deep; at jobs &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion jobs deep; at jobs &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> jobScheduling(<span class="tok-kw">int</span>[] start, <span class="tok-kw">int</span>[] end, <span class="tok-kw">int</span>[] profit) {
         <span class="tok-kw">int</span> n = start.length;
         <span class="tok-type">Integer</span>[] idx = <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n];
@@ -6021,7 +6022,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <span class="m-anchor" id="m-DPCombined-constrainedSubsetSum"></span>    <span class="tok-com">// ---------- Window-max DP: memo over index, scan the next k ----------</span>
     <span class="tok-com">// Constrained Subset Sum (LC 1425): pick a subsequence, adjacent picks at most k apart</span>
     <span class="tok-com">// Faster: O(n*k) memo times out at LC limits; passing needs a monotonic deque, O(n) — not DP-memo.</span>
-    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> constrainedSubsetSum(<span class="tok-kw">int</span>[] nums, <span class="tok-kw">int</span> k) {
         <span class="tok-type">Integer</span>[] memo = <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[nums.length];
         <span class="tok-kw">int</span> best = <span class="tok-type">Integer</span>.MIN_VALUE;
@@ -6040,7 +6041,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-DPCombined-maxResult"></span>    <span class="tok-com">// Jump Game VI (LC 1696): max score path with jumps of 1..k</span>
     <span class="tok-com">// Faster: O(n*k) memo times out at LC limits; passing needs a monotonic deque, O(n) — not DP-memo.</span>
-    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion nums.length deep; at nums.length &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxResult(<span class="tok-kw">int</span>[] nums, <span class="tok-kw">int</span> k) {
         <span class="tok-kw">return</span> scoreFrom(0, nums, k, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[nums.length]);
     }
@@ -6076,7 +6077,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 <span class="m-anchor" id="m-DPCombined-new21Game"></span>    <span class="tok-com">// New 21 Game (LC 837): memo over current points, each draw 1..maxPts equally likely. O(k)</span>
     <span class="tok-com">// f(pts) = average of f(pts+1..pts+W); neighbouring states share all but one term, so</span>
     <span class="tok-com">// f(pts) = f(pts+1) + (f(pts+1) - f(pts+1+W)) / W  — still top-down, no inner loop.</span>
-    <span class="tok-com">// DEPTH: recursion k deep; at k &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion k deep; at k &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">double</span> new21Game(<span class="tok-kw">int</span> n, <span class="tok-kw">int</span> k, <span class="tok-kw">int</span> maxPts) {
         <span class="tok-kw">if</span> (k == 0 || n &gt;= k + maxPts) <span class="tok-kw">return</span> 1.0;
         <span class="tok-kw">return</span> ending(0, n, k, maxPts, <span class="tok-kw">new</span> <span class="tok-type">Double</span>[k]);
@@ -6664,7 +6665,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-DPVariants-countVowelPermutation"></span>    <span class="tok-com">// ---------- Count Vowels Permutation (LC 1220) ----------</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> countVowelPermutation(<span class="tok-kw">int</span> n) {
         <span class="tok-kw">final</span> <span class="tok-kw">long</span> MOD = 1_000_000_007L;
         <span class="tok-type">Integer</span>[][] memo = <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n][5];
@@ -6686,7 +6687,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-DPVariants-checkRecord"></span>    <span class="tok-com">// ---------- Student Attendance Record II (LC 552): state = (days left, absences 0..1, trailing lates 0..2) ----------</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> checkRecord(<span class="tok-kw">int</span> n) {
         <span class="tok-kw">return</span> records(n, 0, 0, <span class="tok-kw">new</span> <span class="tok-type">Integer</span>[n + 1][2][3]);
     }
@@ -6869,7 +6870,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     <span class="tok-kw">private</span> <span class="tok-kw">static</span> <span class="tok-kw">int</span> diam;
 
 <span class="m-anchor" id="m-BinaryTree-diameter"></span>    <span class="tok-com">// LC 543</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> diameter(<span class="tok-type">TreeNode</span> root) {
         diam = 0;
         depthForDiameter(root);
@@ -6898,7 +6899,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
     <span class="tok-com">// Max path sum (LC 124): return the best DOWNWARD gain, update answer with the bent path through node</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">private</span> <span class="tok-kw">static</span> <span class="tok-kw">int</span> bestPath;
 
 <span class="m-anchor" id="m-BinaryTree-maxPathSum"></span>    <span class="tok-kw">static</span> <span class="tok-kw">int</span> maxPathSum(<span class="tok-type">TreeNode</span> root) {
@@ -6970,7 +6971,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-BinaryTree-lowestCommonAncestor"></span>    <span class="tok-com">// ---------- LCA (binary tree) (LC 236) ----------</span>
     <span class="tok-com">// Both p and q must exist in the tree (LC 236 guarantees it); otherwise it can return the one that is present.</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-type">TreeNode</span> lowestCommonAncestor(<span class="tok-type">TreeNode</span> root, <span class="tok-type">TreeNode</span> p, <span class="tok-type">TreeNode</span> q) {
         <span class="tok-kw">if</span> (root == <span class="tok-kw">null</span> || root == p || root == q) <span class="tok-kw">return</span> root;
         <span class="tok-type">TreeNode</span> l = lowestCommonAncestor(root.left, p, q), r = lowestCommonAncestor(root.right, p, q);
@@ -6996,7 +6997,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 </span>
 <span class="m-anchor" id="m-BinaryTree-serialize"></span>    <span class="tok-com">// ---------- Serialize / deserialize (LC 297): preorder with null markers ----------</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-type">String</span> serialize(<span class="tok-type">TreeNode</span> root) {
         <span class="tok-type">StringBuilder</span> sb = <span class="tok-kw">new</span> <span class="tok-type">StringBuilder</span>();
         ser(root, sb);
@@ -7078,7 +7079,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
             q.add(<span class="tok-kw">new</span> <span class="tok-type">Object</span>[]{n.left, col - 1, row + 1});
             q.add(<span class="tok-kw">new</span> <span class="tok-type">Object</span>[]{n.right, col + 1, row + 1});
         }
-        cells.sort((a, b) -&gt; a[0] != b[0] ? a[0] - b[0] : a[1] != b[1] ? a[1] - b[1] : a[2] - b[2]);
+        cells.sort((a, b) -&gt; a[0] != b[0] ? <span class="tok-type">Integer</span>.compare(a[0], b[0]) : a[1] != b[1] ? <span class="tok-type">Integer</span>.compare(a[1], b[1]) : <span class="tok-type">Integer</span>.compare(a[2], b[2]));
         <span class="tok-type">List</span>&lt;<span class="tok-type">List</span>&lt;<span class="tok-type">Integer</span>&gt;&gt; res = <span class="tok-kw">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;();
         <span class="tok-kw">int</span> prev = <span class="tok-type">Integer</span>.MIN_VALUE;
         <span class="tok-kw">for</span> (<span class="tok-kw">int</span>[] c : cells) {
@@ -7089,7 +7090,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 
 <span class="m-anchor" id="m-BinaryTree-robTree"></span>    <span class="tok-com">// ---------- Tree DP: House Robber III (LC 337) -&gt; {rob this, skip this} ----------</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> robTree(<span class="tok-type">TreeNode</span> root) {
         <span class="tok-kw">int</span>[] r = robDfs(root);
         <span class="tok-kw">return</span> <span class="tok-type">Math</span>.max(r[0], r[1]);
@@ -7254,7 +7255,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 
 <span class="m-anchor" id="m-BST-sortedArrayToBST"></span>    <span class="tok-com">// ---------- Sorted array -&gt; height-balanced BST (LC 108) ----------</span>
-    <span class="tok-com">// Same as TreesVariants.sortedArrayToBST; kept in both so each file compiles alone.</span>
+    <span class="tok-com">// Same as TreesVariants.sortedArrayToBST; kept in both so each view shows a complete template.</span>
     <span class="tok-kw">static</span> <span class="tok-type">BinaryTree</span>.<span class="tok-type">TreeNode</span> sortedArrayToBST(<span class="tok-kw">int</span>[] a) { <span class="tok-kw">return</span> arr(a, 0, a.length - 1); }
 
 <span class="fold-mark">    // … arr(): helper hidden
@@ -7294,7 +7295,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 
 <span class="m-anchor" id="m-BST-largestBSTSubtree"></span>    <span class="tok-com">// ---------- Largest BST subtree (LC 333): post-order returns {min, max, isBST, size} ----------</span>
-    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
+    <span class="tok-com">// DEPTH: recursion n deep; at n &gt;= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> largestBSTSubtree(<span class="tok-type">BinaryTree</span>.<span class="tok-type">TreeNode</span> root) { <span class="tok-kw">return</span> (<span class="tok-kw">int</span>) lb(root)[3]; }
 
 <span class="fold-mark">    // … lb(): helper hidden
@@ -7467,7 +7468,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 </span>
 <span class="m-anchor" id="m-Trie-findMaximumXOR"></span>    <span class="tok-com">// ---------- Binary trie: Maximum XOR of two numbers (LC 421) ----------</span>
     <span class="tok-com">// Assumes non-negative ints (bits 30..0 only; a sign bit would need bit 31).</span>
-    <span class="tok-com">// Memory: allocates (n * 32 + 2) x 2 ints up front, about 256 bytes per number.</span>
+    <span class="tok-com">// Memory: allocates (n * 32 + 2) x 2 ints up front, roughly 1 KB per number once Java array headers are counted.</span>
     <span class="tok-kw">static</span> <span class="tok-kw">int</span> findMaximumXOR(<span class="tok-kw">int</span>[] nums) {
         <span class="tok-kw">int</span>[][] ch = <span class="tok-kw">new</span> <span class="tok-kw">int</span>[nums.length * 32 + 2][2];
         <span class="tok-kw">int</span> cnt = 1, best = 0;
@@ -8146,7 +8147,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
     }
 
 <span class="m-anchor" id="m-TreesVariants-sortedArrayToBST"></span>    <span class="tok-com">// LC 108</span>
-    <span class="tok-com">// Same as BST.sortedArrayToBST; kept in both so each file compiles alone.</span>
+    <span class="tok-com">// Same as BST.sortedArrayToBST; kept in both so each view shows a complete template.</span>
     <span class="tok-kw">static</span> <span class="tok-type">BinaryTree</span>.<span class="tok-type">TreeNode</span> sortedArrayToBST(<span class="tok-kw">int</span>[] a) { <span class="tok-kw">return</span> sortedBuild(a, 0, a.length - 1); }
 
 <span class="fold-mark">    // … sortedBuild(): helper hidden
@@ -10579,7 +10580,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
         <span class="tok-kw">int</span> e = 0, cur = 0, best = 0;
         <span class="tok-kw">for</span> (<span class="tok-kw">int</span> i = 0; i &lt; starts.length; i++) {
             <span class="tok-kw">int</span> s = starts[i];
-            <span class="tok-com">// e &lt; i: only pop ends of intervals already started (a zero-length [5,5] never goes negative); e &lt; n guards the scan</span>
+            <span class="tok-com">// e &lt; i: only pop ends of intervals already started (also keeps e in range, so a zero-length [5,5] no longer throws; it counts as 1 here, outside LC limits)</span>
             <span class="tok-kw">while</span> (e &lt; ends.length &amp;&amp; e &lt; i &amp;&amp; ends[e] &lt;= s) { e++; cur--; }
             cur++;
             best = <span class="tok-type">Math</span>.max(best, cur);
@@ -15023,7 +15024,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
             <span class="tok-kw">if</span> (cur != <span class="tok-kw">null</span>) cur = cur.kids.get(c);
             <span class="tok-kw">if</span> (cur == <span class="tok-kw">null</span>) <span class="tok-kw">return</span> <span class="tok-kw">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;();
             <span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; all = <span class="tok-kw">new</span> <span class="tok-type">ArrayList</span>&lt;&gt;(cur.hot.keySet());
-            all.sort((a, b) -&gt; cur.hot.get(a).equals(cur.hot.get(b)) ? a.compareTo(b) : cur.hot.get(b) - cur.hot.get(a));
+            all.sort((a, b) -&gt; cur.hot.get(a).equals(cur.hot.get(b)) ? a.compareTo(b) : <span class="tok-type">Integer</span>.compare(cur.hot.get(b), cur.hot.get(a)));
             <span class="tok-kw">return</span> all.subList(0, <span class="tok-type">Math</span>.min(3, all.size()));
         }
 
@@ -15311,18 +15312,18 @@ if (typeof module !== "undefined" && module.exports) module.exports = CRSearch; 
   if (printBtn) printBtn.addEventListener("click", function(){ window.print(); });
 
   // ---------- Hide niche (Cheat Sheet + decision tree) ----------
-  var nicheBtn = document.getElementById("hideNiche");
+  var nicheBtns = document.querySelectorAll(".niche-toggle");   // Cheat Sheet + overview decision tree
   function applyNiche(on){
     document.documentElement.classList.toggle("hide-niche", on);
-    if (nicheBtn) { nicheBtn.textContent = on ? "Show niche" : "Hide niche"; nicheBtn.setAttribute("aria-pressed", on ? "true" : "false"); }
+    nicheBtns.forEach(function(b){ b.textContent = on ? "Show niche" : "Hide niche"; b.setAttribute("aria-pressed", on ? "true" : "false"); });
   }
   var nicheOn = false;
   try { nicheOn = localStorage.getItem("coding-review-hide-niche") === "1"; } catch(e) {}
   applyNiche(nicheOn);
-  if (nicheBtn) nicheBtn.addEventListener("click", function(){
+  nicheBtns.forEach(function(b){ b.addEventListener("click", function(){
     nicheOn = !nicheOn; applyNiche(nicheOn);
     try { localStorage.setItem("coding-review-hide-niche", nicheOn ? "1" : "0"); } catch(e) {}
-  });
+  }); });
 
   // ---------- Copy buttons ----------
   // Text of a code element without the fold marks, so a copy is always the full file.

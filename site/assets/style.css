@@ -794,6 +794,7 @@ table.cov-table { width: 100%; border-collapse: collapse; font-size: 12.5px; fon
 
 /* ---------- Niche tag and Hide niche toggle ---------- */
 .cs-actions { display: flex; gap: 8px; align-items: center; }
+h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight: 500; }
 .niche-tag { display: inline-block; margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px;
   font-size: 10.5px; color: var(--text-muted); letter-spacing: 0.03em; vertical-align: 1px; }
 .hide-niche .niche { display: none; }

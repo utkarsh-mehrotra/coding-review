@@ -14,7 +14,7 @@ public class SCC_Bridges_2SAT {
 
     // ---------- Tarjan's Algorithm (SCC, single-pass) ----------
     // All DFS state lives in a per-call holder, so nothing leaks between calls or between algorithms.
-    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
+    // DEPTH: recursion n deep; at n >= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     private static final class TarjanState {
         int[] disc, low;
         boolean[] onStack;
@@ -116,7 +116,7 @@ public class SCC_Bridges_2SAT {
     // Multi-edges: the parent is skipped by EDGE id, not by vertex, so a doubled edge is not a bridge.
     // Edge ids are built internally: each undirected edge u-v must appear once in adj[u] and once in adj[v];
     // the k-th occurrence of v in adj[u] is paired with the k-th occurrence of u in adj[v].
-    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
+    // DEPTH: recursion n deep; at n >= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static List<int[]> bridges;
     static Set<Integer> articulationPoints;
 
@@ -185,7 +185,7 @@ public class SCC_Bridges_2SAT {
     // ---------- 2-SAT ----------
     // n variables; each clause is {a, negA, b, negB} meaning (lit(a) OR lit(b)), where neg = 1 means the literal is NOT var.
     // Build implication graph: for clause (a OR b): ¬a -> b, ¬b -> a
-    // DEPTH: recursion 2*numVars deep (Tarjan); at >= 1e4 variables run inside a big-stack thread.
+    // DEPTH: recursion 2*numVars deep (Tarjan); at >= 5e3 variables run inside a big-stack thread.
     static boolean solve2SAT(int numVars, List<int[]> clauses) {
         return solve2SATAssignment(numVars, clauses) != null;
     }

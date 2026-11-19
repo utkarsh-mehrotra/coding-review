@@ -75,7 +75,7 @@ public class Intervals {
         int e = 0, cur = 0, best = 0;
         for (int i = 0; i < starts.length; i++) {
             int s = starts[i];
-            // e < i: only pop ends of intervals already started (a zero-length [5,5] never goes negative); e < n guards the scan
+            // e < i: only pop ends of intervals already started (also keeps e in range, so a zero-length [5,5] no longer throws; it counts as 1 here, outside LC limits)
             while (e < ends.length && e < i && ends[e] <= s) { e++; cur--; }
             cur++;
             best = Math.max(best, cur);

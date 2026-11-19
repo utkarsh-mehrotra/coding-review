@@ -376,6 +376,7 @@ class BuildTest(unittest.TestCase):
         cs = self._cheatsheet()
         self.assertEqual(cs.count('class="sig-row niche"'), len(niche))
         self.assertIn('id="hideNiche"', cs)
+        self.assertEqual(self.page.count('class="theme-toggle niche-toggle"'), 2)   # Cheat Sheet + overview
         self.assertIn(".hide-niche .niche { display: none; }", (SITE / "assets" / "style.css").read_text())
 
     def test_niche_names_must_be_decisions(self):

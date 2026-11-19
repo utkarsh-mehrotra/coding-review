@@ -202,7 +202,7 @@ public class DesignVariants {
             if (cur != null) cur = cur.kids.get(c);
             if (cur == null) return new ArrayList<>();
             List<String> all = new ArrayList<>(cur.hot.keySet());
-            all.sort((a, b) -> cur.hot.get(a).equals(cur.hot.get(b)) ? a.compareTo(b) : cur.hot.get(b) - cur.hot.get(a));
+            all.sort((a, b) -> cur.hot.get(a).equals(cur.hot.get(b)) ? a.compareTo(b) : Integer.compare(cur.hot.get(b), cur.hot.get(a)));
             return all.subList(0, Math.min(3, all.size()));
         }
 

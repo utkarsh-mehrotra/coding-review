@@ -450,7 +450,7 @@ public class DPVariants {
     }
 
     // ---------- Count Vowels Permutation (LC 1220) ----------
-    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
+    // DEPTH: recursion n deep; at n >= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int countVowelPermutation(int n) {
         final long MOD = 1_000_000_007L;
         Integer[][] memo = new Integer[n][5];
@@ -471,7 +471,7 @@ public class DPVariants {
     }
 
     // ---------- Student Attendance Record II (LC 552): state = (days left, absences 0..1, trailing lates 0..2) ----------
-    // DEPTH: recursion n deep; at n >= 1e4 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
+    // DEPTH: recursion n deep; at n >= 5e3 run inside a big-stack thread (see SCC_Bridges_2SAT.runWithBigStack).
     static int checkRecord(int n) {
         return records(n, 0, 0, new Integer[n + 1][2][3]);
     }

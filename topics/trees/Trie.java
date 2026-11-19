@@ -78,7 +78,7 @@ public class Trie {
 
     // ---------- Binary trie: Maximum XOR of two numbers (LC 421) ----------
     // Assumes non-negative ints (bits 30..0 only; a sign bit would need bit 31).
-    // Memory: allocates (n * 32 + 2) x 2 ints up front, about 256 bytes per number.
+    // Memory: allocates (n * 32 + 2) x 2 ints up front, roughly 1 KB per number once Java array headers are counted.
     static int findMaximumXOR(int[] nums) {
         int[][] ch = new int[nums.length * 32 + 2][2];
         int cnt = 1, best = 0;

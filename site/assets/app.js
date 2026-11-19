@@ -51,18 +51,18 @@
   if (printBtn) printBtn.addEventListener("click", function(){ window.print(); });
 
   // ---------- Hide niche (Cheat Sheet + decision tree) ----------
-  var nicheBtn = document.getElementById("hideNiche");
+  var nicheBtns = document.querySelectorAll(".niche-toggle");   // Cheat Sheet + overview decision tree
   function applyNiche(on){
     document.documentElement.classList.toggle("hide-niche", on);
-    if (nicheBtn) { nicheBtn.textContent = on ? "Show niche" : "Hide niche"; nicheBtn.setAttribute("aria-pressed", on ? "true" : "false"); }
+    nicheBtns.forEach(function(b){ b.textContent = on ? "Show niche" : "Hide niche"; b.setAttribute("aria-pressed", on ? "true" : "false"); });
   }
   var nicheOn = false;
   try { nicheOn = localStorage.getItem("coding-review-hide-niche") === "1"; } catch(e) {}
   applyNiche(nicheOn);
-  if (nicheBtn) nicheBtn.addEventListener("click", function(){
+  nicheBtns.forEach(function(b){ b.addEventListener("click", function(){
     nicheOn = !nicheOn; applyNiche(nicheOn);
     try { localStorage.setItem("coding-review-hide-niche", nicheOn ? "1" : "0"); } catch(e) {}
-  });
+  }); });
 
   // ---------- Copy buttons ----------
   // Text of a code element without the fold marks, so a copy is always the full file.

@@ -649,7 +649,8 @@ def build_overview(topics, counts, problems=None):
             counts[t["id"]], "template file" if counts[t["id"]] == 1 else "template files", len(t["decisions"])))
     p.append('</div>')
     niche = load_niche()
-    p.append('<h2 class="section-title">Decision Tree &mdash; &ldquo;which pattern do I reach for?&rdquo;</h2>')
+    p.append('<h2 class="section-title">Decision Tree &mdash; &ldquo;which pattern do I reach for?&rdquo;'
+             '<button type="button" class="theme-toggle niche-toggle" aria-pressed="false">Hide niche</button></h2>')
     for t in topics:
         vf = view_of_file(t)
         p.append('<h3 class="group-title">%s</h3>\n<ol class="decision-list">' % html.escape(t["title"]))
@@ -680,7 +681,7 @@ def build_cheatsheet_view(topics, problems=None):
     niche = load_niche()
     p = ['<div class="page-kicker">CS &mdash; CHEAT SHEET</div>',
          '<div class="cs-head"><h1 class="page-title">Cheat Sheet</h1>'
-         '<div class="cs-actions"><button type="button" class="theme-toggle" id="hideNiche" aria-pressed="false">Hide niche</button>'
+         '<div class="cs-actions"><button type="button" class="theme-toggle niche-toggle" id="hideNiche" aria-pressed="false">Hide niche</button>'
          '<button type="button" class="theme-toggle" id="printCheatsheet">Print</button></div></div>',
          '<p class="page-intro">Every signal, pattern and pitfall in one place. Print it, or save it as a PDF.</p>']
     for t in topics:
