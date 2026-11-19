@@ -37,7 +37,7 @@
         }
       ],
       "pitfalls": [
-        "Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, \"solve\", 1 << 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).",
+        "Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: SCC_Bridges_2SAT.runWithBigStack(r) (new Thread(null, r, \"big-stack\", 512 MB), start, join).",
         "Max product needs both max AND min: a negative flips them.",
         "Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.",
         "Stock with k transactions: if k >= n/2 it degenerates to unlimited."

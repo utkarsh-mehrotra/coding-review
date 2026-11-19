@@ -70,7 +70,7 @@ public class RangeStructures {
         return inv;
     }
 
-    // ---------- Segment tree (iterative, bottom-up): point update, range query (sum; swap combine for min/max) ----------
+    // ---------- Segment tree (iterative, bottom-up): point update, range query (sum; for min/max swap the combine AND the identity: +inf for min, -inf for max, not 0) ----------
     // LC 307
     static class SegTree {
         private final int n;

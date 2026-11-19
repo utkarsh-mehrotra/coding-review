@@ -1478,7 +1478,7 @@ h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight
 <tr><td>Reconstruction</td><td>Supersequence, divisible subset: walk the memo</td><td class="complexity">O(nm)</td></tr>
 </table>
 <ul class="cs-pitfalls">
-<li>Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, "solve", 1 &lt;&lt; 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).</li>
+<li>Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: SCC_Bridges_2SAT.runWithBigStack(r) (new Thread(null, r, "big-stack", 512 MB), start, join).</li>
 <li>Max product needs both max AND min: a negative flips them.</li>
 <li>Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.</li>
 <li>Stock with k transactions: if k &gt;= n/2 it degenerates to unlimited.</li>
@@ -4904,7 +4904,7 @@ h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight
 </div>
 <h2 class="section-title">Pitfalls</h2>
 <ol class="decision-list">
-<li>Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: new Thread(null, r, "solve", 1 &lt;&lt; 26), start, join (same as SCC_Bridges_2SAT.runWithBigStack).</li>
+<li>Recursion depth equals the length of the state chain. A 1 MB thread stack (Linux, CI) overflows near 5,000 memo frames, macOS's main thread near 10^4; at n = 10^5 (LC 53, 198 variants, 1425, 1696) it overflows. Run the solve inside a big-stack thread: SCC_Bridges_2SAT.runWithBigStack(r) (new Thread(null, r, "big-stack", 512 MB), start, join).</li>
 <li>Max product needs both max AND min: a negative flips them.</li>
 <li>Decode ways: a leading zero kills the one-digit option; 10 and 20 are the only valid two-digit zeros.</li>
 <li>Stock with k transactions: if k &gt;= n/2 it degenerates to unlimited.</li>
@@ -7649,7 +7649,7 @@ h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight
         <span class="tok-kw">return</span> inv;
     }
 
-<span class="m-anchor" id="m-RangeStructures-SegTree"></span>    <span class="tok-com">// ---------- Segment tree (iterative, bottom-up): point update, range query (sum; swap combine for min/max) ----------</span>
+<span class="m-anchor" id="m-RangeStructures-SegTree"></span>    <span class="tok-com">// ---------- Segment tree (iterative, bottom-up): point update, range query (sum; for min/max swap the combine AND the identity: +inf for min, -inf for max, not 0) ----------</span>
     <span class="tok-com">// LC 307</span>
     <span class="tok-kw">static</span> <span class="tok-kw">class</span> <span class="tok-type">SegTree</span> {
         <span class="tok-kw">private</span> <span class="tok-kw">final</span> <span class="tok-kw">int</span> n;
@@ -14032,6 +14032,7 @@ h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight
 <span class="m-anchor" id="m-BitsMath-lcm"></span>    <span class="tok-kw">static</span> <span class="tok-kw">long</span> lcm(<span class="tok-kw">long</span> a, <span class="tok-kw">long</span> b) { <span class="tok-kw">return</span> a / gcd(a, b) * b; }
 
 <span class="m-anchor" id="m-BitsMath-powMod"></span>    <span class="tok-com">// Fast power mod (modular; the double version is myPow below). Same as BitsMathVariants.powMod.</span>
+    <span class="tok-com">// Bound: b * b must fit in a long, so m &lt;= ~3e9 (every LC modulus, 1e9+7 and 998244353, is safe).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">long</span> powMod(<span class="tok-kw">long</span> b, <span class="tok-kw">long</span> e, <span class="tok-kw">long</span> m) {
         <span class="tok-kw">long</span> r = 1 % m; <span class="tok-com">// m == 1 -&gt; everything is 0</span>
         b %= m;
@@ -14306,6 +14307,7 @@ h2.section-title .niche-toggle { margin-left: auto; font-size: 12px; font-weight
     }
 
 <span class="m-anchor" id="m-BitsMathVariants-powMod"></span>    <span class="tok-com">// Same as BitsMath.powMod.</span>
+    <span class="tok-com">// Bound: b * b must fit in a long, so m &lt;= ~3e9 (every LC modulus, 1e9+7 and 998244353, is safe).</span>
     <span class="tok-kw">static</span> <span class="tok-kw">long</span> powMod(<span class="tok-kw">long</span> base, <span class="tok-kw">long</span> exp, <span class="tok-kw">long</span> mod) {
         <span class="tok-kw">long</span> r = 1 % mod; <span class="tok-com">// mod == 1 -&gt; everything is 0</span>
         base %= mod;

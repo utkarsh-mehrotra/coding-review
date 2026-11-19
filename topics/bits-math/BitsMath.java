@@ -104,6 +104,7 @@ public class BitsMath {
     static long lcm(long a, long b) { return a / gcd(a, b) * b; }
 
     // Fast power mod (modular; the double version is myPow below). Same as BitsMathVariants.powMod.
+    // Bound: b * b must fit in a long, so m <= ~3e9 (every LC modulus, 1e9+7 and 998244353, is safe).
     static long powMod(long b, long e, long m) {
         long r = 1 % m; // m == 1 -> everything is 0
         b %= m;

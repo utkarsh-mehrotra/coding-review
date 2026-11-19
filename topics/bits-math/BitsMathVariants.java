@@ -105,6 +105,7 @@ public class BitsMathVariants {
     }
 
     // Same as BitsMath.powMod.
+    // Bound: b * b must fit in a long, so m <= ~3e9 (every LC modulus, 1e9+7 and 998244353, is safe).
     static long powMod(long base, long exp, long mod) {
         long r = 1 % mod; // mod == 1 -> everything is 0
         base %= mod;

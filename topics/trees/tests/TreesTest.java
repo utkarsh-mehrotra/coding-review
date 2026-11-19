@@ -154,6 +154,34 @@ public class TreesTest {
         Check.eq("isSameTree values", BinaryTree.isSameTree(T(1, 2, 1), T(1, 1, 2)), false);
         Check.eq("isSameTree both null", BinaryTree.isSameTree(null, null), true);
         Check.eq("isSameTree one null", BinaryTree.isSameTree(T(1), null), false);
+        lopsided();
         Check.done("TreesTest");
+    }
+
+    // Skewed trees: 50-node chains leaning left and right (values 1..50 from the root down) catch base-case and
+    // left/right mix-ups that balanced inputs hide. Small enough to run on any stack.
+    static void lopsided() {
+        for (boolean left : new boolean[]{true, false}) {
+            String side = left ? "left" : "right";
+            BinaryTree.TreeNode root = new BinaryTree.TreeNode(1), cur = root, at25 = null, at50 = null;
+            for (int v = 2; v <= 50; v++) {
+                BinaryTree.TreeNode n = new BinaryTree.TreeNode(v);
+                if (left) cur.left = n; else cur.right = n;
+                cur = n;
+                if (v == 25) at25 = n;
+                if (v == 50) at50 = n;
+            }
+            Check.eq("chain-" + side + " maxDepth", BinaryTree.maxDepth(root), 50);
+            Check.eq("chain-" + side + " diameter", BinaryTree.diameter(root), 49);
+            Check.eq("chain-" + side + " isBalanced", BinaryTree.isBalanced(root), false);
+            Check.eq("chain-" + side + " maxPathSum", BinaryTree.maxPathSum(root), 1275);   // 1 + 2 + ... + 50
+            Check.eq("chain-" + side + " robTree", BinaryTree.robTree(root), 650);          // 2 + 4 + ... + 50
+            Check.eq("chain-" + side + " levelOrder size", BinaryTree.levelOrder(root).size(), 50);
+            List<Integer> in = BinaryTree.inorder(root);
+            Check.eq("chain-" + side + " inorder first", in.get(0), left ? 50 : 1);
+            Check.eq("chain-" + side + " inorder last", in.get(49), left ? 1 : 50);
+            Check.eq("chain-" + side + " lca(25,50)", BinaryTree.lowestCommonAncestor(root, at25, at50).val, 25);
+            Check.eq("chain-" + side + " serialize roundtrip", BinaryTree.isSameTree(root, BinaryTree.deserialize(BinaryTree.serialize(root))), true);
+        }
     }
 }
